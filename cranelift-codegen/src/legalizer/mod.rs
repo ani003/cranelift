@@ -32,7 +32,7 @@ mod table;
 mod control;
 
 use self::call::expand_call;
-use self::control::expand_control;
+use self::control::{expand_control, expand_restore};
 use self::globalvalue::expand_global_value;
 use self::heap::expand_heap_addr;
 use self::libcall::expand_as_libcall;

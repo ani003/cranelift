@@ -63,7 +63,7 @@ use crate::entity::SparseSet;
 use crate::flowgraph::{BasicBlock, ControlFlowGraph};
 use crate::ir;
 use crate::ir::entities::AnyEntity;
-use crate::ir::instructions::{BranchInfo, CallInfo, InstructionFormat, ResolvedConstraint};
+use crate::ir::instructions::{BranchInfo, CallInfo, RestoreInfo, InstructionFormat, ResolvedConstraint};
 use crate::ir::{
     types, ArgumentLoc, Ebb, FuncRef, Function, GlobalValue, Inst, InstructionData, JumpTable,
     Opcode, SigRef, StackSlot, StackSlotKind, Type, Value, ValueDef, ValueList, ValueLoc,
@@ -1177,6 +1177,7 @@ impl<'a> Verifier<'a> {
         inst: Inst,
         errors: &mut VerifierErrors,
     ) -> VerifierStepResult<()> {
+        // println!("typecheck var args: {:?}", self.func.dfg[inst]);
         match self.func.dfg.analyze_branch(inst) {
             BranchInfo::SingleDest(ebb, _) => {
                 let iter = self
@@ -1255,6 +1256,36 @@ impl<'a> Verifier<'a> {
             }
             CallInfo::NotACall => {}
         }
+
+        match self.func.dfg[inst].analyze_restore(&self.func.dfg.value_lists) {
+            RestoreInfo::IsRestore(k, args) => {
+                // let args = self.func.dfg.inst_variable_args(inst);
+                let expected_types = &self.func.signature.returns;
+                if args.len() != expected_types.len() {
+                    return nonfatal!(
+                        errors,
+                        inst,
+                        "arguments of restore must match function signature"
+                    );
+                }
+                for (i, (&arg, &expected_type)) in args.iter().zip(expected_types).enumerate() {
+                    let arg_type = self.func.dfg.value_type(arg);
+                    if arg_type != expected_type.value_type {
+                        report!(
+                            errors,
+                            inst,
+                            "arg {} ({}) has type {}, must match function signature of {}",
+                            i,
+                            arg,
+                            arg_type,
+                            expected_type
+                        );
+                    }
+                }
+            }
+            RestoreInfo::NotARestore => {}
+        }
+
         Ok(())
     }
 
@@ -1373,6 +1404,8 @@ impl<'a> Verifier<'a> {
 
     fn typecheck_return(&self, inst: Inst, errors: &mut VerifierErrors) -> VerifierStepResult<()> {
         if self.func.dfg[inst].opcode().is_return() {
+            println!("Return: {:?}", self.func.dfg[inst]);
+            
             let args = self.func.dfg.inst_variable_args(inst);
             let expected_types = &self.func.signature.returns;
             if args.len() != expected_types.len() {

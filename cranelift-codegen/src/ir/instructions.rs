@@ -282,6 +282,31 @@ impl InstructionData {
             }
         }
     }
+
+
+    /// Info about a restore instruction?
+    pub fn analyze_restore<'a>(&'a self, pool: &'a ValueListPool) -> RestoreInfo<'a> {
+        match *self {
+            InstructionData::MultiAry {
+                opcode: Opcode::Restore, ref args
+            } => {
+                let args_slice = args.as_slice(pool);
+                if args_slice.len() >= 1 {
+                    let k = args_slice[0];
+                    let other_args = &args_slice[1..];
+                    // println!("Self2: {:?}", args);
+                    RestoreInfo::IsRestore(k, other_args)
+                    // unimplemented!();
+                } else {
+                    panic!("Error: restore instruction must have at least one argument")
+                }
+                
+            }
+            _ => {
+                RestoreInfo::NotARestore
+            }
+        }
+    }
 }
 
 /// Information about branch and jump instructions.
@@ -312,6 +337,15 @@ pub enum CallInfo<'a> {
 
     /// This is a direct control call
     DirectControl(FuncRef, &'a [Value]),
+}
+
+/// Information about restore instructions.
+pub enum RestoreInfo<'a> {
+    /// This is not a restore instruction.
+    NotARestore,
+
+    /// This is a restore instruction.
+    IsRestore(Value, &'a [Value])
 }
 
 /// Value type constraints for a given opcode.

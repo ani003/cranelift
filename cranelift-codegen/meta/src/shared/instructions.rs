@@ -515,7 +515,7 @@ pub fn define(
         "#,
         )
         // .operands_in(vec![FN, args])
-        .operands_in(vec![k, rvals])
+        .operands_in(vec![rvals])
         // .is_return(true)
         .is_terminator(true),
         // .is_ghost(true),

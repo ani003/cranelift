@@ -41,6 +41,8 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     );
 
     // List of instructions.
+    let restore = insts.by_name("restore");
+
     let band = insts.by_name("band");
     let band_imm = insts.by_name("band_imm");
     let band_not = insts.by_name("band_not");
@@ -127,6 +129,7 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     // Custom expansions for calls.
     expand.custom_legalize(insts.by_name("call"), "expand_call");
     expand.custom_legalize(insts.by_name("control"), "expand_control");
+    expand.custom_legalize(insts.by_name("restore"), "expand_restore");
 
     // Custom expansions that need to change the CFG.
     // TODO: Add sufficient XForm syntax that we don't need to hand-code these.
@@ -530,7 +533,7 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     );
 
     // expand.legalize(
-    //     def!(a = control(f, x)),
+    //     def!(restore(x)),
     //     vec![
     //         // def!(c = iconst(two)),
     //         // def!(a = iadd(c, c)),
