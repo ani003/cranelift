@@ -1,0 +1,16 @@
+; Test basic code generation for i32 arithmetic WebAssembly instructions.
+; test compile
+
+; target i686 haswell
+; target i686 baseline
+; target x86_64 haswell
+; target x86_64 baseline
+
+; Constants.
+
+
+function %i32_add2_test(i32) -> i32 {
+ebb0(v0: i32):
+    v1 = add2 v0
+    return v1
+}

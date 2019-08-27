@@ -487,6 +487,18 @@ pub fn define(
         .is_call(true),
     );
 
+    ig.push(
+        Inst::new(
+            "control",
+            r#"
+        Transfer control to handler function.
+        "#,
+        )
+        .operands_in(vec![FN, args])
+        .operands_out(vec![rvals])
+        // .is_ghost(true),
+    );
+
     let SIG = &operand_doc("SIG", sig_ref, "function signature");
     let callee = &operand_doc("callee", iAddr, "address of function to call");
 
@@ -2226,6 +2238,17 @@ pub fn define(
         Starting from the MSB in ``x``, count the number of zero bits before
         reaching the first one bit. When ``x`` is zero, returns the size of x
         in bits.
+        "#,
+        )
+        .operands_in(vec![x])
+        .operands_out(vec![a]),
+    );
+
+    ig.push(
+        Inst::new(
+            "add2",
+            r#"
+        Add 2.
         "#,
         )
         .operands_in(vec![x])

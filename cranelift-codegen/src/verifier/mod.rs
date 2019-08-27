@@ -1216,6 +1216,7 @@ impl<'a> Verifier<'a> {
             BranchInfo::NotABranch => {}
         }
 
+
         match self.func.dfg[inst].analyze_call(&self.func.dfg.value_lists) {
             CallInfo::Direct(func_ref, _) => {
                 let sig_ref = self.func.dfg.ext_funcs[func_ref].signature;
@@ -1223,6 +1224,7 @@ impl<'a> Verifier<'a> {
                     .params
                     .iter()
                     .map(|a| a.value_type);
+
                 self.typecheck_variable_args_iterator(inst, arg_types, errors)?;
                 self.check_outgoing_args(inst, sig_ref, errors)?;
             }
@@ -1233,6 +1235,23 @@ impl<'a> Verifier<'a> {
                     .map(|a| a.value_type);
                 self.typecheck_variable_args_iterator(inst, arg_types, errors)?;
                 self.check_outgoing_args(inst, sig_ref, errors)?;
+            }
+            CallInfo::DirectControl(func_ref, _) => {
+                // let dead_store = 5;
+
+                let sig_ref = self.func.dfg.ext_funcs[func_ref].signature;
+                let arg_types = self.func.dfg.signatures[sig_ref]
+                    .params
+                    .iter()
+                    .skip(1) // Remove the first element of the signature since that is the continuation ID
+                    .map(|a| a.value_type);
+
+                // println!("Here 2: inst = {:?}, arg types = {:?}", self.func.dfg[inst], arg_types);
+
+                self.typecheck_variable_args_iterator(inst, arg_types, errors)?;
+                self.check_outgoing_args(inst, sig_ref, errors)?;
+
+                // panic!("NOT HANDLED!")
             }
             CallInfo::NotACall => {}
         }

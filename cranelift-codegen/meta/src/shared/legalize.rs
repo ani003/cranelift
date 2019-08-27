@@ -57,6 +57,8 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     let bxor_not = insts.by_name("bxor_not");
     let cls = insts.by_name("cls");
     let clz = insts.by_name("clz");
+    let add2 = insts.by_name("add2");
+    let control = insts.by_name("control");
     let ctz = insts.by_name("ctz");
     let fabs = insts.by_name("fabs");
     let f32const = insts.by_name("f32const");
@@ -124,6 +126,7 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
 
     // Custom expansions for calls.
     expand.custom_legalize(insts.by_name("call"), "expand_call");
+    expand.custom_legalize(insts.by_name("control"), "expand_control");
 
     // Custom expansions that need to change the CFG.
     // TODO: Add sufficient XForm syntax that we don't need to hand-code these.
@@ -142,6 +145,7 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     expand.custom_legalize(insts.by_name("stack_store"), "expand_stack_store");
 
     // List of immediates.
+        // let imm64 = immediates.by_name("imm64");
     let imm64 = immediates.by_name("imm64");
     let ieee32 = immediates.by_name("ieee32");
     let ieee64 = immediates.by_name("ieee64");
@@ -513,6 +517,30 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
             def!(b = bor(b1, b2)),
         ],
     );
+
+
+    let two = Literal::constant(imm64, 2);
+
+    expand.legalize(
+        def!(a = add2(x)),
+        vec![
+            def!(c = iconst(two)),
+            def!(a = iadd(c, x)),
+        ],
+    );
+
+    // expand.legalize(
+    //     def!(a = control(f, x)),
+    //     vec![
+    //         // def!(c = iconst(two)),
+    //         // def!(a = iadd(c, c)),
+    //     ],
+    // );
+
+    // expand.legalize(
+    //     def!(a = con), dst: Vec<DummyDef>)
+
+
 
     // Expansions for fcvt_from_{u,s}int for smaller integer types.
     // These use expand and not widen because the controlling type variable for

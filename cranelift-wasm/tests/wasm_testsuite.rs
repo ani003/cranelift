@@ -29,8 +29,10 @@ fn testsuite() {
         .collect();
     paths.sort_by_key(|dir| dir.path());
     let flags = Flags::new(settings::builder());
+    // println!("PRINTING:");
     for path in paths {
         let path = path.path();
+        // println!("PATH: {:?}", path)
         handle_module(&path, &flags, ReturnMode::NormalReturns);
     }
 }
@@ -71,7 +73,8 @@ fn handle_module(path: &Path, flags: &Flags, return_mode: ReturnMode) {
             None | Some(&_) => panic!("the file extension for {:?} is not wasm or wat", path),
         },
     };
-    let triple = triple!("riscv64");
+    let triple = triple!("riscv32");
+    println!("triple: {:?}", triple);
     let isa = isa::lookup(triple).unwrap().finish(flags.clone());
     let mut dummy_environ = DummyEnvironment::new(isa.frontend_config(), return_mode, false);
 

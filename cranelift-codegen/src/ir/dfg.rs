@@ -671,6 +671,12 @@ impl DataFlowGraph {
             CallInfo::NotACall => None,
             CallInfo::Direct(f, _) => Some(self.ext_funcs[f].signature),
             CallInfo::Indirect(s, _) => Some(s),
+            CallInfo::DirectControl(f, _) => {
+                let sig = self.ext_funcs[f].signature;
+                // let dead_store = 5;
+                Some(sig)
+                // panic!("NOT HANDLED!")
+            }
         }
     }
 

@@ -552,6 +552,10 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             let arg = state.pop1();
             state.push1(builder.ins().clz(arg));
         }
+        // Operator::I32Add2 | Operator::I64Add2 => {
+        //     let arg = state.pop1();
+        //     state.push1(builder.ins().add2(arg));
+        // }
         Operator::I32Ctz | Operator::I64Ctz => {
             let arg = state.pop1();
             state.push1(builder.ins().ctz(arg));
@@ -1057,8 +1061,17 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         | Operator::F32x4ConvertUI32x4
         | Operator::F64x2ConvertSI64x2
         | Operator::F64x2ConvertUI64x2
-        | Operator::V8x16Shuffle1
-        | Operator::V8x16Shuffle2Imm { .. } => {
+        | Operator::I8x16LoadSplat { .. }
+        | Operator::I16x8LoadSplat { .. }
+        | Operator::I32x4LoadSplat { .. }
+        | Operator::I64x2LoadSplat { .. }
+        | Operator::V8x16Swizzle
+        | Operator::Fence { .. } 
+        // | Operator::V8x16Shuffle
+        // | Operator::V8x16Shuffle { .. } => {
+        //     return Err(WasmError::Unsupported("proposed SIMD operators"));
+        // }
+            => {
             return Err(WasmError::Unsupported("proposed SIMD operators"));
         }
     };

@@ -401,6 +401,9 @@ fn check_call_signature(dfg: &DataFlowGraph, inst: Inst) -> Result<(), SigRef> {
     let (sig_ref, args) = match dfg[inst].analyze_call(&dfg.value_lists) {
         CallInfo::Direct(func, args) => (dfg.ext_funcs[func].signature, args),
         CallInfo::Indirect(sig_ref, args) => (sig_ref, args),
+        CallInfo::DirectControl(_, _) => {
+                panic!("NOT HANDLED: DID NOT EXPECT CONTROL OPERATOR AFTER RE-WRITING!");
+            }
         CallInfo::NotACall => panic!("Expected call, got {:?}", dfg[inst]),
     };
     let sig = &dfg.signatures[sig_ref];
@@ -519,6 +522,7 @@ fn legalize_inst_arguments<ArgType>(
 ///
 /// Returns `true` if any instructions were inserted.
 pub fn handle_call_abi(mut inst: Inst, func: &mut Function, cfg: &ControlFlowGraph) -> bool {
+    
     let pos = &mut FuncCursor::new(func).at_inst(inst);
     pos.use_srcloc(inst);
 
