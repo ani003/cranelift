@@ -6,7 +6,12 @@
 use crate::cursor::{Cursor, FuncCursor};
 use crate::flowgraph::ControlFlowGraph;
 use crate::ir::{self, InstBuilder};
-use crate::isa::TargetIsa;
+use crate::isa::{TargetIsa, RegUnit};
+use crate::ir::types::{I32, I64};
+
+use crate::isa::StackBase;
+
+// use crate::isa::{CallConv, RegClass, RegUnit, TargetIsa};
 
 /// Expand a `call` instruction. This lowers it to a `call_indirect`, which
 /// is only done if the ABI doesn't support direct calls.
@@ -34,7 +39,6 @@ pub fn expand_control(
     };
 
     let ptr_ty = isa.pointer_type();
-
     let sig = func.dfg.ext_funcs[func_ref].signature;
 
     let callee = {
@@ -46,16 +50,19 @@ pub fn expand_control(
     let mut pos = FuncCursor::new(func).at_inst(inst);
     pos.use_srcloc(inst);
 
-    use crate::ir::types::I32;
-    let const0 = pos.ins().iconst(I32, 0);
+    let k = pos.ins().iconst(I32, 0); // TODO: generate continuation id
 
+    let newSP = pos.ins().iconst(I64, 321); // TODO: alloc stack
+
+    // pos.
+
+    // pos.ins()
+    //     .copy_special(StackBase::SP as RegUnit, RU::rbp as RegUnit);
+
+    // Emit a function call to the given function, with continuation id as first arg, and provided args after.
     let mut new_args = ir::ValueList::default();
     new_args.push(callee, &mut func.dfg.value_lists);
-    new_args.push(const0, &mut func.dfg.value_lists);
-    // new_args.push(old_arg, &mut func.dfg.value_lists);
-
-    // let mut new_args = ir::ValueList::default();
-    // new_args.push(callee, &mut func.dfg.value_lists);
+    new_args.push(k, &mut func.dfg.value_lists);
     for i in 0..old_args.len(&func.dfg.value_lists) {
         new_args.push(
             old_args.as_slice(&func.dfg.value_lists)[i],

@@ -11,25 +11,26 @@
 ; First param is continuation id
 ; Second param is arbitrary value (usually void* to env)
 
-function %restore200(i32, i64) -> i32 {
-ebb0(v0: i32, v1: i64):
-	v2 = iconst.i32 200
-	; return v2
-	restore v0, v2
-	; return
-}
-
-
-; function %control_test() -> i32 {
-; 	fn0 = %restore200(i32, i64) -> i32
-
-; ebb0:
-; 	v9 = iconst.i32 0
-; 	v0 = iconst.i64 0
-; 	v1 = control fn0(v0)
-; 	; v1 = control fn0(v9, v0)
-; 	; v1 = iconst.i32 200
-; 	v2 = iconst.i32 5
-; 	v3 = iadd v1, v2
-; 	return v3
+; function %restore200(i32, i64) -> i32 {
+; ebb0(v0: i32, v1: i64):
+; 	v2 = iconst.i32 200
+; 	; return v2
+; 	restore v0, v2
+; 	; return
 ; }
+
+
+function %control_test() -> i32 {
+	fn0 = %restore200(i32, i64) -> i32
+
+ebb0:
+	; v9 = iconst.i32 0
+	v0 = iconst.i64 123
+	v1 = control fn0(v0)
+	; v1 = control fn0(v9, v0)
+	; v1 = iconst.i32 200
+	v2 = iconst.i32 5
+	; v4 = call fn0(v2, v0)
+	v3 = iadd v1, v2
+	return v3
+}
