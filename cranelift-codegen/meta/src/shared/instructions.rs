@@ -79,6 +79,12 @@ pub fn define(
         TypeSetBuilder::new().ints(Interval::All).build(),
     );
 
+    let kId = &TypeVar::new(
+        "kId",
+        "A continuation ID type",
+        TypeSetBuilder::new().ints(64..64).build(),
+    );
+
     let iAddr = &TypeVar::new(
         "iAddr",
         "An integer address type",
@@ -496,6 +502,22 @@ pub fn define(
         )
         .operands_in(vec![FN, args])
         .operands_out(vec![rvals])
+        // .is_ghost(true),
+    );
+
+    let k = &operand("k", Int);
+
+    ig.push(
+        Inst::new(
+            "restore",
+            r#"
+        Transfer control to given continuation.
+        "#,
+        )
+        // .operands_in(vec![FN, args])
+        .operands_in(vec![k, rvals])
+        // .is_return(true)
+        .is_terminator(true),
         // .is_ghost(true),
     );
 

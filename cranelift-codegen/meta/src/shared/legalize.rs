@@ -58,7 +58,7 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     let cls = insts.by_name("cls");
     let clz = insts.by_name("clz");
     let add2 = insts.by_name("add2");
-    let control = insts.by_name("control");
+    // let control = insts.by_name("control");
     let ctz = insts.by_name("ctz");
     let fabs = insts.by_name("fabs");
     let f32const = insts.by_name("f32const");
