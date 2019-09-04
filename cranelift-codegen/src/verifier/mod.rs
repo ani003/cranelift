@@ -1255,16 +1255,16 @@ impl<'a> Verifier<'a> {
                     .skip(1) // Remove the first element of the signature since that is the continuation ID
                     .map(|a| a.value_type);
 
-                println!("Here 2: inst = {:?}, arg types = {:?}, errors = {:?}", self.func.dfg[inst], arg_types, errors);
+                // println!("Here 2: inst = {:?}, arg types = {:?}, errors = {:?}", self.func.dfg[inst], arg_types, errors);
 
                                 // println!("analyze_call CONTROL, self = {:?}", self);
 
 
                 self.typecheck_variable_args_iterator(inst, arg_types, errors)?;
-                println!("Here 3: inst = {:?}, sig ref = {:?}, errors: {:?}", self.func.dfg[inst], sig_ref, errors);
+                // println!("Here 3: inst = {:?}, sig ref = {:?}, errors: {:?}", self.func.dfg[inst], sig_ref, errors);
                 self.check_outgoing_args(inst, sig_ref, errors)?;
 
-                println!("Here 4: inst = {:?}, errors: {:?}", self.func.dfg[inst], errors);
+                // println!("Here 4: inst = {:?}, errors: {:?}", self.func.dfg[inst], errors);
                 
 
                 // panic!("NOT HANDLED!")
@@ -1327,7 +1327,7 @@ impl<'a> Verifier<'a> {
         let variable_args = self.func.dfg.inst_variable_args(inst);
         let mut i = 0;
 
-        println!("typecheck_variable_args_iterator: inst = {:?}, arg types = {:?}, var args = {:?}", self.func.dfg[inst], iter, variable_args);
+        // println!("typecheck_variable_args_iterator: inst = {:?}, arg types = {:?}, var args = {:?}", self.func.dfg[inst], iter, variable_args);
 
         for expected_type in iter {
             if i >= variable_args.len() {

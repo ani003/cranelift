@@ -470,7 +470,7 @@ impl DataFlowGraph {
             .constraints()
             .num_fixed_value_arguments();
 
-        println!("inst_variable_args: num_fixed = {}, inst = {:?}, inst_args = {:?}", num_fixed_args, inst, self.inst_args(inst));
+        // println!("inst_variable_args: num_fixed = {}, inst = {:?}, inst_args = {:?}", num_fixed_args, inst, self.inst_args(inst));
 
         &self.inst_args(inst)[num_fixed_args..]
     }
