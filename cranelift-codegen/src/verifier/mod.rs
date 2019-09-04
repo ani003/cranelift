@@ -638,6 +638,9 @@ impl<'a> Verifier<'a> {
             }
             Call {
                 func_ref, ref args, ..
+            } 
+            | Control {
+                func_ref, ref args, ..
             } => {
                 self.verify_func_ref(inst, func_ref, errors)?;
                 self.verify_value_list(inst, args, errors)?;
@@ -1247,10 +1250,17 @@ impl<'a> Verifier<'a> {
                     .skip(1) // Remove the first element of the signature since that is the continuation ID
                     .map(|a| a.value_type);
 
-                // println!("Here 2: inst = {:?}, arg types = {:?}", self.func.dfg[inst], arg_types);
+                println!("Here 2: inst = {:?}, arg types = {:?}, errors = {:?}", self.func.dfg[inst], arg_types, errors);
+
+                                // println!("analyze_call CONTROL, self = {:?}", self);
+
 
                 self.typecheck_variable_args_iterator(inst, arg_types, errors)?;
+                println!("Here 3: inst = {:?}, sig ref = {:?}, errors: {:?}", self.func.dfg[inst], sig_ref, errors);
                 self.check_outgoing_args(inst, sig_ref, errors)?;
+
+                println!("Here 4: inst = {:?}, errors: {:?}", self.func.dfg[inst], errors);
+                
 
                 // panic!("NOT HANDLED!")
             }
@@ -1294,9 +1304,22 @@ impl<'a> Verifier<'a> {
         inst: Inst,
         iter: I,
         errors: &mut VerifierErrors,
-    ) -> VerifierStepResult<()> {
+    ) -> VerifierStepResult<()> where I: core::fmt::Debug {
+        // let fixed_args = self.func.dfg.inst_fixed_args(inst);
+        // if fixed_args.len() != 1 {
+        //     return nonfatal!(
+        //         errors,
+        //         inst,
+        //         "for instruction: {}, expected a function to control switch to",
+        //         self.func.dfg.display_inst(inst, None)
+        //     );
+        // }
+        // let func = fixed_args[0];
+
         let variable_args = self.func.dfg.inst_variable_args(inst);
         let mut i = 0;
+
+        println!("typecheck_variable_args_iterator: inst = {:?}, arg types = {:?}, var args = {:?}", self.func.dfg[inst], iter, variable_args);
 
         for expected_type in iter {
             if i >= variable_args.len() {
@@ -1404,8 +1427,8 @@ impl<'a> Verifier<'a> {
 
     fn typecheck_return(&self, inst: Inst, errors: &mut VerifierErrors) -> VerifierStepResult<()> {
         if self.func.dfg[inst].opcode().is_return() {
-            println!("Return: {:?}", self.func.dfg[inst]);
-            
+            // println!("Return: {:?}", self.func.dfg[inst]);
+
             let args = self.func.dfg.inst_variable_args(inst);
             let expected_types = &self.func.signature.returns;
             if args.len() != expected_types.len() {

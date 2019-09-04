@@ -2360,6 +2360,19 @@ impl<'a> Parser<'a> {
                     args: args.into_value_list(&[], &mut ctx.function.dfg.value_lists),
                 }
             }
+            InstructionFormat::Control => {
+                let func_ref = self.match_fn("expected function reference")?;
+                ctx.check_fn(func_ref, self.loc)?;
+                self.match_token(Token::LPar, "expected '(' before arguments")?;
+                let args = self.parse_value_list()?;
+                self.match_token(Token::RPar, "expected ')' after arguments")?;
+                let dummy = Value::with_number(0).unwrap();
+                InstructionData::Control {
+                    opcode,
+                    func_ref,
+                    args: args.into_value_list(&[dummy], &mut ctx.function.dfg.value_lists),
+                }
+            }
             InstructionFormat::CallIndirect => {
                 let sig_ref = self.match_sig("expected signature reference")?;
                 ctx.check_sig(sig_ref, self.loc)?;

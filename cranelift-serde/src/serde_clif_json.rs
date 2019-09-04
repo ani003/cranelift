@@ -143,6 +143,11 @@ pub enum SerInstData {
         args: Vec<String>,
         func_ref: String,
     },
+    Control {
+        opcode: String,
+        args: Vec<String>,
+        func_ref: String,
+    },
     CallIndirect {
         opcode: String,
         args: Vec<String>,
@@ -507,6 +512,22 @@ pub fn get_inst_data(inst_index: Inst, func: &Function) -> SerInstData {
                 hold_args.push(arg.to_string());
             }
             SerInstData::Call {
+                opcode: opcode.to_string(),
+                args: hold_args,
+                func_ref: func_ref.to_string(),
+            }
+        }
+        InstructionData::Control {
+            opcode,
+            ref args,
+            func_ref,
+        } => {
+            let mut hold_args = Vec::new();
+            let args_iter = args.as_slice(&func.dfg.value_lists);
+            for arg in args_iter {
+                hold_args.push(arg.to_string());
+            }
+            SerInstData::Control {
                 opcode: opcode.to_string(),
                 args: hold_args,
                 func_ref: func_ref.to_string(),

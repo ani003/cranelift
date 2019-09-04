@@ -19,6 +19,8 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
 
     // List of instructions.
     let insts = &shared.instructions;
+    let control = insts.by_name("control");
+    let restore = insts.by_name("restore");
     let band = insts.by_name("band");
     let bitcast = insts.by_name("bitcast");
     let bor = insts.by_name("bor");
@@ -64,6 +66,12 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     let intcc = shared.operand_kinds.by_name("intcc");
     let uimm8 = shared.operand_kinds.by_name("uimm8");
     let ieee64 = shared.operand_kinds.by_name("ieee64");
+
+
+    group.custom_legalize(control, "expand_control_x86");
+    group.custom_legalize(restore, "expand_restore_x86");
+
+
 
     // Division and remainder.
     //

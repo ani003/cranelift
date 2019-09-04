@@ -85,6 +85,12 @@ pub fn define(
         TypeSetBuilder::new().ints(64..64).build(),
     );
 
+    // let handler = &TypeVar::new(
+    //     "handler",
+    //     "A handler type",
+    //     TypeSetBuilder::new().
+    // )
+
     let iAddr = &TypeVar::new(
         "iAddr",
         "An integer address type",
@@ -493,6 +499,8 @@ pub fn define(
         .is_call(true),
     );
 
+    let garbage = &operand_doc("garbage", iAddr, "useless value...");
+
     ig.push(
         Inst::new(
             "control",
@@ -500,9 +508,9 @@ pub fn define(
         Transfer control to handler function.
         "#,
         )
-        .operands_in(vec![FN, args])
+        .operands_in(vec![garbage, FN, args])
         .operands_out(vec![rvals])
-        // .is_ghost(true),
+        .is_control(true),
     );
 
     let k = &operand("k", Int);
@@ -524,8 +532,8 @@ pub fn define(
     let SIG = &operand_doc("SIG", sig_ref, "function signature");
     let callee = &operand_doc("callee", iAddr, "address of function to call");
 
-    ig.push(
-        Inst::new(
+
+    let call_indirect = Inst::new(
             "call_indirect",
             r#"
         Indirect function call.
@@ -538,10 +546,13 @@ pub fn define(
         `table_addr` and `load` are used to obtain a native address
         from a table.
         "#,
-        )
-        .operands_in(vec![SIG, callee, args])
+    ).operands_in(vec![SIG, callee, args])
         .operands_out(vec![rvals])
-        .is_call(true),
+        .is_call(true);
+
+    // println!("call_indirect: {:?}", call_indirect);
+    ig.push(
+       call_indirect 
     );
 
     ig.push(

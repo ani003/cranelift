@@ -46,6 +46,8 @@ fn legalize_inst(
     cfg: &mut ControlFlowGraph,
     isa: &dyn TargetIsa,
 ) -> bool {
+    println!("Legalize: {:?}", pos.func.dfg[inst]);
+
     let opcode = pos.func.dfg[inst].opcode();
 
     // Check for ABI boundaries that need to be converted to the legalized signature.

@@ -21,6 +21,9 @@ use std::process;
 use std::time::Instant;
 
 fn main() {
+    eprintln!("GEN!");
+    // process::exit(1);
+
     let start_time = Instant::now();
 
     let out_dir = env::var("OUT_DIR").expect("The OUT_DIR environment variable must be set");

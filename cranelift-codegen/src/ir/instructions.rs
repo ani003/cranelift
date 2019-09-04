@@ -263,15 +263,15 @@ impl InstructionData {
     /// Any instruction that can call another function reveals its call signature here.
     pub fn analyze_call<'a>(&'a self, pool: &'a ValueListPool) -> CallInfo<'a> {
         match *self {
+            InstructionData::Control {
+                opcode, func_ref, ref args, ..
+            } => {
+                CallInfo::DirectControl(func_ref, args.as_slice(pool))
+            },
             InstructionData::Call {
                 opcode, func_ref, ref args, ..
             } => {
-                println!("analyze_call, self = {:?}", self);
-                if opcode == Opcode::Control {
-                    CallInfo::DirectControl(func_ref, args.as_slice(pool))
-                } else {
-                    CallInfo::Direct(func_ref, args.as_slice(pool))
-                }
+                CallInfo::Direct(func_ref, args.as_slice(pool))
             },
             InstructionData::CallIndirect {
                 sig_ref, ref args, ..

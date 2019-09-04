@@ -464,10 +464,14 @@ impl DataFlowGraph {
 
     /// Get the variable value arguments on `inst` as a slice.
     pub fn inst_variable_args(&self, inst: Inst) -> &[Value] {
+
         let num_fixed_args = self[inst]
             .opcode()
             .constraints()
             .num_fixed_value_arguments();
+
+        println!("inst_variable_args: num_fixed = {}, inst = {:?}, inst_args = {:?}", num_fixed_args, inst, self.inst_args(inst));
+
         &self.inst_args(inst)[num_fixed_args..]
     }
 
@@ -716,6 +720,8 @@ impl DataFlowGraph {
 
     /// Get the controlling type variable, or `INVALID` if `inst` isn't polymorphic.
     pub fn ctrl_typevar(&self, inst: Inst) -> Type {
+        println!("ctrl_typevar = {:?}", self[inst]);
+
         let constraints = self[inst].opcode().constraints();
 
         if !constraints.is_polymorphic() {
@@ -729,7 +735,9 @@ impl DataFlowGraph {
                     .expect("Instruction format doesn't have a designated operand, bad opcode."),
             )
         } else {
-            self.value_type(self.first_result(inst))
+            let vt = self.value_type(self.first_result(inst));
+            println!("result = {:?}", vt);
+            vt
         }
     }
 }

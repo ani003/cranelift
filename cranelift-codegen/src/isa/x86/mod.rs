@@ -4,6 +4,7 @@ mod abi;
 mod binemit;
 mod enc_tables;
 mod registers;
+mod control;
 pub mod settings;
 
 use super::super::settings as shared_settings;

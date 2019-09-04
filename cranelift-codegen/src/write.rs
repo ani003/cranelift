@@ -572,6 +572,9 @@ pub fn write_operands(
         IndirectJump { arg, table, .. } => write!(w, " {}, {}", arg, table),
         Call {
             func_ref, ref args, ..
+        }
+        | Control {
+            func_ref, ref args, ..
         } => write!(w, " {}({})", func_ref, DisplayValues(args.as_slice(pool))),
         CallIndirect {
             sig_ref, ref args, ..

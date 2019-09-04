@@ -22,7 +22,7 @@ pub fn expand_control(
     isa: &dyn TargetIsa,
 ) {
     println!("Expanding control!");
-
+    panic!();
     // Unpack the instruction.
     let (func_ref, old_args) = match func.dfg[inst] {
         ir::InstructionData::Call {

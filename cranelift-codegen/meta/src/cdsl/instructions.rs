@@ -84,6 +84,7 @@ impl InstructionGroup {
     }
 }
 
+#[derive(Debug)]
 pub struct PolymorphicInfo {
     pub use_typevar_operand: bool,
     pub ctrl_typevar: TypeVar,
@@ -125,6 +126,8 @@ pub struct InstructionContent {
     pub is_indirect_branch: bool,
     /// Is this a call instruction?
     pub is_call: bool,
+    /// Is this a control instruction?
+    pub is_control: bool,
     /// Is this a return instruction?
     pub is_return: bool,
     /// Is this a ghost instruction?
@@ -228,7 +231,9 @@ pub struct InstructionBuilder {
     is_branch: bool,
     is_indirect_branch: bool,
     is_call: bool,
+    is_control: bool,
     is_return: bool,
+
     is_ghost: bool,
     can_load: bool,
     can_store: bool,
@@ -249,6 +254,7 @@ impl InstructionBuilder {
             is_branch: false,
             is_indirect_branch: false,
             is_call: false,
+            is_control: false,
             is_return: false,
             is_ghost: false,
             can_load: false,
@@ -288,6 +294,10 @@ impl InstructionBuilder {
     }
     pub fn is_call(mut self, val: bool) -> Self {
         self.is_call = val;
+        self
+    }
+    pub fn is_control(mut self, val: bool) -> Self {
+        self.is_control = val;
         self
     }
     pub fn is_return(mut self, val: bool) -> Self {
@@ -367,6 +377,7 @@ impl InstructionBuilder {
                 is_branch: self.is_branch,
                 is_indirect_branch: self.is_indirect_branch,
                 is_call: self.is_call,
+                is_control: self.is_control,
                 is_return: self.is_return,
                 is_ghost: self.is_ghost,
                 can_load: self.can_load,

@@ -68,6 +68,11 @@ pub fn define() -> Definitions {
         &immediates,
         &entities,
     );
+
+    for inst in all_instructions.values() {
+        println!("define; inst = {}, poly = {:#?}", inst, inst.polymorphic_info);
+    }
+
     let transform_groups = legalize::define(&instructions, &immediates);
 
     Definitions {

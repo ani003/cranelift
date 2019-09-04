@@ -710,6 +710,8 @@ fn gen_type_constraints(all_inst: &AllInstructions, fmt: &mut Formatter) {
     );
     fmt.indent(|fmt| {
         for inst in all_inst.values() {
+            // TODO: figure out where inst.polymorphic_info is coming from
+            // println!("gen_type_constraints: inst = {}, poly = {:#?}", inst, &inst.polymorphic_info);
             let (ctrl_typevar, ctrl_typeset) = if let Some(poly) = &inst.polymorphic_info {
                 let index = type_sets.add(&*poly.ctrl_typevar.get_raw_typeset());
                 (Some(&poly.ctrl_typevar), index)
