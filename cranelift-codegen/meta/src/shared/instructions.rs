@@ -523,9 +523,10 @@ pub fn define(
         "#,
         )
         // .operands_in(vec![FN, args])
-        .operands_in(vec![rvals])
+        .operands_in(vec![garbage, k, rvals])
         // .is_return(true)
-        .is_terminator(true),
+        .is_terminator(true)
+        .is_restore(true),
         // .is_ghost(true),
     );
 

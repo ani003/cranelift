@@ -287,13 +287,13 @@ impl InstructionData {
     /// Info about a restore instruction?
     pub fn analyze_restore<'a>(&'a self, pool: &'a ValueListPool) -> RestoreInfo<'a> {
         match *self {
-            InstructionData::MultiAry {
+            InstructionData::Restore {
                 opcode: Opcode::Restore, ref args
             } => {
                 let args_slice = args.as_slice(pool);
-                if args_slice.len() >= 1 {
-                    let k = args_slice[0];
-                    let other_args = &args_slice[1..];
+                if args_slice.len() >= 2 {
+                    let k = args_slice[1];
+                    let other_args = &args_slice[2..];
                     // println!("Self2: {:?}", args);
                     RestoreInfo::IsRestore(k, other_args)
                     // unimplemented!();

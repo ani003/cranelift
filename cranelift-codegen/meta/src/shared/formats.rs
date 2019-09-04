@@ -108,6 +108,7 @@ pub fn define(immediates: &OperandKinds, entities: &OperandKinds) -> FormatRegis
     registry.insert(Builder::new("IndirectJump").value().imm(jump_table));
 
     registry.insert(Builder::new("Control").value().imm(func_ref).varargs());
+    registry.insert(Builder::new("Restore").value().value().varargs());
     registry.insert(Builder::new("Call").imm(func_ref).varargs());
     registry.insert(Builder::new("CallIndirect").imm(sig_ref).value().varargs());
     registry.insert(Builder::new("FuncAddr").imm(func_ref));

@@ -576,6 +576,9 @@ pub fn write_operands(
         | Control {
             func_ref, ref args, ..
         } => write!(w, " {}({})", func_ref, DisplayValues(args.as_slice(pool))),
+        Restore {
+            ref args, ..
+        } => write!(w, " restore {}", DisplayValues(args.as_slice(pool))),
         CallIndirect {
             sig_ref, ref args, ..
         } => {

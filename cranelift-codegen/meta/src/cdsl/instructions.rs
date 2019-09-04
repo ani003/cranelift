@@ -130,6 +130,8 @@ pub struct InstructionContent {
     pub is_control: bool,
     /// Is this a return instruction?
     pub is_return: bool,
+    /// Is this a restore instruction?
+    pub is_restore: bool,
     /// Is this a ghost instruction?
     pub is_ghost: bool,
     /// Can this instruction read from memory?
@@ -233,6 +235,7 @@ pub struct InstructionBuilder {
     is_call: bool,
     is_control: bool,
     is_return: bool,
+    is_restore: bool,
 
     is_ghost: bool,
     can_load: bool,
@@ -256,6 +259,7 @@ impl InstructionBuilder {
             is_call: false,
             is_control: false,
             is_return: false,
+            is_restore: false,
             is_ghost: false,
             can_load: false,
             can_store: false,
@@ -302,6 +306,10 @@ impl InstructionBuilder {
     }
     pub fn is_return(mut self, val: bool) -> Self {
         self.is_return = val;
+        self
+    }
+    pub fn is_restore(mut self, val: bool) -> Self {
+        self.is_restore = val;
         self
     }
     pub fn is_ghost(mut self, val: bool) -> Self {
@@ -379,6 +387,7 @@ impl InstructionBuilder {
                 is_call: self.is_call,
                 is_control: self.is_control,
                 is_return: self.is_return,
+                is_restore: self.is_restore,
                 is_ghost: self.is_ghost,
                 can_load: self.can_load,
                 can_store: self.can_store,

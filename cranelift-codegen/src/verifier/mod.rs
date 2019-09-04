@@ -645,6 +645,11 @@ impl<'a> Verifier<'a> {
                 self.verify_func_ref(inst, func_ref, errors)?;
                 self.verify_value_list(inst, args, errors)?;
             }
+            Restore {
+                ref args, ..
+            } => {
+                self.verify_value_list(inst, args, errors)?;
+            }
             CallIndirect {
                 sig_ref, ref args, ..
             } => {
@@ -1275,7 +1280,7 @@ impl<'a> Verifier<'a> {
                     return nonfatal!(
                         errors,
                         inst,
-                        "arguments of restore must match function signature"
+                        "argument count of restore must match function signature return count"
                     );
                 }
                 for (i, (&arg, &expected_type)) in args.iter().zip(expected_types).enumerate() {

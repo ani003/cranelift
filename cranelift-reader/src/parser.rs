@@ -2373,6 +2373,16 @@ impl<'a> Parser<'a> {
                     args: args.into_value_list(&[dummy], &mut ctx.function.dfg.value_lists),
                 }
             }
+            InstructionFormat::Restore => {
+                let cont_id = self.match_value("expected SSA value first operand")?;
+                self.match_token(Token::Comma, "expected ',' after continuation id")?;
+                let args = self.parse_value_list()?;
+                let dummy = Value::with_number(0).unwrap();
+                InstructionData::Restore {
+                    opcode,
+                    args: args.into_value_list(&[dummy, cont_id], &mut ctx.function.dfg.value_lists),
+                }
+            }
             InstructionFormat::CallIndirect => {
                 let sig_ref = self.match_sig("expected signature reference")?;
                 ctx.check_sig(sig_ref, self.loc)?;
