@@ -720,8 +720,6 @@ impl DataFlowGraph {
 
     /// Get the controlling type variable, or `INVALID` if `inst` isn't polymorphic.
     pub fn ctrl_typevar(&self, inst: Inst) -> Type {
-        println!("ctrl_typevar = {:?}", self[inst]);
-
         let constraints = self[inst].opcode().constraints();
 
         if !constraints.is_polymorphic() {
@@ -736,7 +734,6 @@ impl DataFlowGraph {
             )
         } else {
             let vt = self.value_type(self.first_result(inst));
-            println!("result = {:?}", vt);
             vt
         }
     }

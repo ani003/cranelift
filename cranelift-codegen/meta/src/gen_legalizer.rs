@@ -469,7 +469,6 @@ fn gen_transform_group<'a>(
                 for (inst_camel_name, func_name) in &group.custom_legalizes {
                     fmtln!(fmt, "ir::Opcode::{} => {{", inst_camel_name);
                     fmt.indent(|fmt| {
-                        fmtln!(fmt, "println!(\"transforming {} with {}\");", inst_camel_name, func_name);
                         fmtln!(fmt, "{}(inst, pos.func, cfg, isa);", func_name);
                         // println!("Transform: {}", camel_name);
                         fmt.line("return true;");

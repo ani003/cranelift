@@ -79,7 +79,7 @@ pub fn define(
         TypeSetBuilder::new().ints(Interval::All).build(),
     );
 
-    let kId = &TypeVar::new(
+    let _kId = &TypeVar::new(
         "kId",
         "A continuation ID type",
         TypeSetBuilder::new().ints(64..64).build(),

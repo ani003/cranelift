@@ -6,16 +6,17 @@
 use crate::cursor::{Cursor, FuncCursor};
 use crate::flowgraph::ControlFlowGraph;
 use crate::ir::{self, InstBuilder};
-use crate::isa::{TargetIsa, RegUnit};
+use crate::isa::{TargetIsa};
 use crate::ir::types::{I32, I64};
 
-use crate::isa::StackBase;
+// use crate::isa::StackBase;
 
 // use crate::isa::{CallConv, RegClass, RegUnit, TargetIsa};
 
 /// Expand a `call` instruction. This lowers it to a `call_indirect`, which
 /// is only done if the ABI doesn't support direct calls.
-pub fn expand_control(
+
+fn _expand_control(
     inst: ir::Inst,
     func: &mut ir::Function,
     _cfg: &mut ControlFlowGraph,
@@ -78,7 +79,7 @@ pub fn expand_control(
 
 
 /// Expand a `restore` instruction...
-pub fn expand_restore(
+fn _expand_restore(
     inst: ir::Inst,
     func: &mut ir::Function,
     _cfg: &mut ControlFlowGraph,

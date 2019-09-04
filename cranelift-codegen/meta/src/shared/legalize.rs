@@ -41,8 +41,6 @@ pub fn define(insts: &InstructionGroup, immediates: &OperandKinds) -> TransformG
     );
 
     // List of instructions.
-    let restore = insts.by_name("restore");
-
     let band = insts.by_name("band");
     let band_imm = insts.by_name("band_imm");
     let band_not = insts.by_name("band_not");

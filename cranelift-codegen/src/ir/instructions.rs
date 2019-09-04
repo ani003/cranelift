@@ -264,12 +264,12 @@ impl InstructionData {
     pub fn analyze_call<'a>(&'a self, pool: &'a ValueListPool) -> CallInfo<'a> {
         match *self {
             InstructionData::Control {
-                opcode, func_ref, ref args, ..
+                func_ref, ref args, ..
             } => {
                 CallInfo::DirectControl(func_ref, args.as_slice(pool))
             },
             InstructionData::Call {
-                opcode, func_ref, ref args, ..
+                func_ref, ref args, ..
             } => {
                 CallInfo::Direct(func_ref, args.as_slice(pool))
             },

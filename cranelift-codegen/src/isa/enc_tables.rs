@@ -119,10 +119,6 @@ where
     OffT1: Into<u32> + Copy,
     OffT2: Into<u32> + Copy,
 {
-    println!("Lookup enclist: inst = {:?}, ctrl_t = {:?}", inst, ctrl_typevar);
-
-    let dead = 5;
-
     let (offset, legalize) = match probe(level1_table, ctrl_typevar, ctrl_typevar.index()) {
         Err(l1idx) => {
             // No level 1 entry found for the type.
@@ -149,8 +145,6 @@ where
             (offset, leg)
         }
     };
-
-    println!("Lookup enclist: inst = {:?}, ctrl_t = {:?}, legalize = {}", inst, ctrl_typevar, legalize);
 
     // Now we have an offset into `enclist` that is `!0` when no encoding list could be found.
     // The default legalization code is always valid.
@@ -256,8 +250,6 @@ impl<'a> Iterator for Encodings<'a> {
     type Item = Encoding;
 
     fn next(&mut self) -> Option<Encoding> {
-        println!("Next enc for: {:?}, offset = {}", self.inst, self.offset);
-
         while let Some(entryref) = self.enclist.get(self.offset) {
             let entry = *entryref as usize;
 

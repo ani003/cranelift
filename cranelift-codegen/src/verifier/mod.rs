@@ -1273,7 +1273,10 @@ impl<'a> Verifier<'a> {
         }
 
         match self.func.dfg[inst].analyze_restore(&self.func.dfg.value_lists) {
-            RestoreInfo::IsRestore(k, args) => {
+            RestoreInfo::IsRestore(_k, args) => {
+                // TODO: check the type of _k???
+
+
                 // let args = self.func.dfg.inst_variable_args(inst);
                 let expected_types = &self.func.signature.returns;
                 if args.len() != expected_types.len() {

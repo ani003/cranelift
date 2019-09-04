@@ -29,10 +29,10 @@ mod heap;
 mod libcall;
 mod split;
 mod table;
-mod control;
+// mod control;
 
 use self::call::expand_call;
-use self::control::{expand_control, expand_restore};
+// use self::control::{expand_control, expand_restore};
 use self::globalvalue::expand_global_value;
 use self::heap::expand_heap_addr;
 use self::libcall::expand_as_libcall;
@@ -46,8 +46,6 @@ fn legalize_inst(
     cfg: &mut ControlFlowGraph,
     isa: &dyn TargetIsa,
 ) -> bool {
-    println!("Legalize: {:?}", pos.func.dfg[inst]);
-
     let opcode = pos.func.dfg[inst].opcode();
 
     // Check for ABI boundaries that need to be converted to the legalized signature.
