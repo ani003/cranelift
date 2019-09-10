@@ -44,18 +44,39 @@ pub fn expand_control_x86(
     println!("func_ref: {:?}, args: {:?}", func_ref, old_args.len(&func.dfg.value_lists));
 
 
-    // Code generation
+    // let header_pos = FuncCursor::new(func).at_inst(inst);
+
+    // --------------- Code generation ------------------
+
     let mut pos = FuncCursor::new(func).at_inst(inst);
     pos.use_srcloc(inst);
 
     // get the function address
     let callee = pos.ins().func_addr(ptr_ty, func_ref);
 
-    // compute the continuation id
-    let k = pos.ins().iconst(I32, 0); // TODO: generate continuation id
+    // Get the current continuation id
+    let k_addr = pos.ins().global_value(I64, ir::GlobalValue::with_number(0).unwrap());
+    let k = pos.ins().load(I32, ir::MemFlags::trusted(), k_addr, 0);
+
+    // Save the current context into index k in the table
+    let cont_table_addr = pos.ins().global_value(I64, ir::GlobalValue::with_number(1).unwrap());
+    let entry_offset = pos.ins().imul_imm(k, 10 * 8); // TODO: 10 * 8 should be the size in bytes of each context entry.
+    let entry_addr = pos.ins().iadd(cont_table_addr, entry_offset);
+
+    
+    // let rax_val = pos.ins().copy_to_ssa(I64, RU::rax);
+
+    // Increment the in-memory continuation id
+    let k_updated = pos.ins().iadd_imm(k, 1);
+    pos.ins().store(ir::MemFlags::trusted(), k_updated, k_addr, 0);
+
 
     // alloc the stack, and setup %rsp
-    let newSP = pos.ins().iconst(I64, 321); // TODO: alloc stack
+    // TODO: alloc stack, so we have someething other than i64.const 0 here
+    let newSP = pos.ins().iconst(I64, 321);
+
+    // let stack_loc = func.locations[newSP];
+    // println!("newSP loc = {:?}", stack_loc);
 
     pos.ins().copy_special(RU::rsp, RU::rsp);
 
