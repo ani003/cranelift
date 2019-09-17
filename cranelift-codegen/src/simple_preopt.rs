@@ -16,7 +16,23 @@ use crate::ir::{
     types::{I16, I32, I64, I8},
     DataFlowGraph, Ebb, Function, Inst, InstBuilder, InstructionData, Type, Value,
 };
+use crate::isa::TargetIsa;
 use crate::timing;
+
+#[inline]
+/// Replaces the unique result of the instruction inst to an alias of the given value, and
+/// replaces the instruction with a nop. Can be used only on instructions producing one unique
+/// result, otherwise will assert.
+fn replace_single_result_with_alias(dfg: &mut DataFlowGraph, inst: Inst, value: Value) {
+    // Replace the result value by an alias.
+    let results = dfg.detach_results(inst);
+    debug_assert!(results.len(&dfg.value_lists) == 1);
+    let result = results.get(0, &dfg.value_lists).unwrap();
+    dfg.change_to_alias(result, value);
+
+    // Replace instruction by a nop.
+    dfg.replace(inst).nop();
+}
 
 //----------------------------------------------------------------------
 //
@@ -171,7 +187,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
             if is_rem {
                 pos.func.dfg.replace(inst).iconst(I32, 0);
             } else {
-                pos.func.dfg.replace(inst).copy(n1);
+                replace_single_result_with_alias(&mut pos.func.dfg, inst, n1);
             }
         }
 
@@ -226,7 +242,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
                 let tt = pos.ins().imul_imm(qf, d as i64);
                 pos.func.dfg.replace(inst).isub(n1, tt);
             } else {
-                pos.func.dfg.replace(inst).copy(qf);
+                replace_single_result_with_alias(&mut pos.func.dfg, inst, qf);
             }
         }
 
@@ -241,7 +257,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
             if is_rem {
                 pos.func.dfg.replace(inst).iconst(I64, 0);
             } else {
-                pos.func.dfg.replace(inst).copy(n1);
+                replace_single_result_with_alias(&mut pos.func.dfg, inst, n1);
             }
         }
 
@@ -296,7 +312,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
                 let tt = pos.ins().imul_imm(qf, d as i64);
                 pos.func.dfg.replace(inst).isub(n1, tt);
             } else {
-                pos.func.dfg.replace(inst).copy(qf);
+                replace_single_result_with_alias(&mut pos.func.dfg, inst, qf);
             }
         }
 
@@ -314,7 +330,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
             if is_rem {
                 pos.func.dfg.replace(inst).iconst(I32, 0);
             } else {
-                pos.func.dfg.replace(inst).copy(n1);
+                replace_single_result_with_alias(&mut pos.func.dfg, inst, n1);
             }
         }
 
@@ -340,7 +356,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
                     if is_negative {
                         pos.func.dfg.replace(inst).irsub_imm(t4, 0);
                     } else {
-                        pos.func.dfg.replace(inst).copy(t4);
+                        replace_single_result_with_alias(&mut pos.func.dfg, inst, t4);
                     }
                 }
             } else {
@@ -370,7 +386,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
                     let tt = pos.ins().imul_imm(qf, d as i64);
                     pos.func.dfg.replace(inst).isub(n1, tt);
                 } else {
-                    pos.func.dfg.replace(inst).copy(qf);
+                    replace_single_result_with_alias(&mut pos.func.dfg, inst, qf);
                 }
             }
         }
@@ -389,7 +405,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
             if is_rem {
                 pos.func.dfg.replace(inst).iconst(I64, 0);
             } else {
-                pos.func.dfg.replace(inst).copy(n1);
+                replace_single_result_with_alias(&mut pos.func.dfg, inst, n1);
             }
         }
 
@@ -415,7 +431,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
                     if is_negative {
                         pos.func.dfg.replace(inst).irsub_imm(t4, 0);
                     } else {
-                        pos.func.dfg.replace(inst).copy(t4);
+                        replace_single_result_with_alias(&mut pos.func.dfg, inst, t4);
                     }
                 }
             } else {
@@ -445,7 +461,7 @@ fn do_divrem_transformation(divrem_info: &DivRemByConstInfo, pos: &mut FuncCurso
                     let tt = pos.ins().imul_imm(qf, d);
                     pos.func.dfg.replace(inst).isub(n1, tt);
                 } else {
-                    pos.func.dfg.replace(inst).copy(qf);
+                    replace_single_result_with_alias(&mut pos.func.dfg, inst, qf);
                 }
             }
         }
@@ -518,9 +534,14 @@ fn try_fold_extended_move(
 
 /// Apply basic simplifications.
 ///
-/// This folds constants with arithmetic to form `_imm` instructions, and other
-/// minor simplifications.
-fn simplify(pos: &mut FuncCursor, inst: Inst) {
+/// This folds constants with arithmetic to form `_imm` instructions, and other minor
+/// simplifications.
+///
+/// Doesn't apply some simplifications if the native word width (in bytes) is smaller than the
+/// controlling type's width of the instruction. This would result in an illegal instruction that
+/// would likely be expanded back into an instruction on smaller types with the same initial
+/// opcode, creating unnecessary churn.
+fn simplify(pos: &mut FuncCursor, inst: Inst, native_word_width: u32) {
     match pos.func.dfg[inst] {
         InstructionData::Binary { opcode, args } => {
             if let Some(mut imm) = resolve_imm64_value(&pos.func.dfg, args[1]) {
@@ -547,13 +568,15 @@ fn simplify(pos: &mut FuncCursor, inst: Inst) {
                     _ => return,
                 };
                 let ty = pos.func.dfg.ctrl_typevar(inst);
-                pos.func
-                    .dfg
-                    .replace(inst)
-                    .BinaryImm(new_opcode, ty, imm, args[0]);
+                if ty.bytes() <= native_word_width {
+                    pos.func
+                        .dfg
+                        .replace(inst)
+                        .BinaryImm(new_opcode, ty, imm, args[0]);
 
-                // Repeat for BinaryImm simplification.
-                simplify(pos, inst);
+                    // Repeat for BinaryImm simplification.
+                    simplify(pos, inst, native_word_width);
+                }
             } else if let Some(imm) = resolve_imm64_value(&pos.func.dfg, args[0]) {
                 let new_opcode = match opcode {
                     Opcode::Iadd => Opcode::IaddImm,
@@ -565,10 +588,12 @@ fn simplify(pos: &mut FuncCursor, inst: Inst) {
                     _ => return,
                 };
                 let ty = pos.func.dfg.ctrl_typevar(inst);
-                pos.func
-                    .dfg
-                    .replace(inst)
-                    .BinaryImm(new_opcode, ty, imm, args[1]);
+                if ty.bytes() <= native_word_width {
+                    pos.func
+                        .dfg
+                        .replace(inst)
+                        .BinaryImm(new_opcode, ty, imm, args[1]);
+                }
             }
         }
 
@@ -628,7 +653,9 @@ fn simplify(pos: &mut FuncCursor, inst: Inst) {
                 }
 
                 Opcode::UshrImm | Opcode::SshrImm => {
-                    if try_fold_extended_move(pos, inst, opcode, arg, imm) {
+                    if pos.func.dfg.ctrl_typevar(inst).bytes() <= native_word_width
+                        && try_fold_extended_move(pos, inst, opcode, arg, imm)
+                    {
                         return;
                     }
                 }
@@ -651,13 +678,7 @@ fn simplify(pos: &mut FuncCursor, inst: Inst) {
                 | (Opcode::UshrImm, 0)
                 | (Opcode::SshrImm, 0) => {
                     // Alias the result value with the original argument.
-                    let results = pos.func.dfg.detach_results(inst);
-                    debug_assert!(results.len(&pos.func.dfg.value_lists) == 1);
-                    let first_result = results.get(0, &pos.func.dfg.value_lists).unwrap();
-                    pos.func.dfg.change_to_alias(first_result, arg);
-
-                    // Replace instruction by a nop.
-                    pos.func.dfg.replace(inst).nop();
+                    replace_single_result_with_alias(&mut pos.func.dfg, inst, arg);
                     return;
                 }
                 (Opcode::ImulImm, 0) | (Opcode::BandImm, 0) => {
@@ -677,7 +698,9 @@ fn simplify(pos: &mut FuncCursor, inst: Inst) {
         InstructionData::IntCompare { opcode, cond, args } => {
             debug_assert_eq!(opcode, Opcode::Icmp);
             if let Some(imm) = resolve_imm64_value(&pos.func.dfg, args[1]) {
-                pos.func.dfg.replace(inst).icmp_imm(cond, args[0], imm);
+                if pos.func.dfg.ctrl_typevar(inst).bytes() <= native_word_width {
+                    pos.func.dfg.replace(inst).icmp_imm(cond, args[0], imm);
+                }
             }
         }
 
@@ -928,13 +951,14 @@ fn branch_order(pos: &mut FuncCursor, cfg: &mut ControlFlowGraph, ebb: Ebb, inst
 }
 
 /// The main pre-opt pass.
-pub fn do_preopt(func: &mut Function, cfg: &mut ControlFlowGraph) {
+pub fn do_preopt(func: &mut Function, cfg: &mut ControlFlowGraph, isa: &dyn TargetIsa) {
     let _tt = timing::preopt();
     let mut pos = FuncCursor::new(func);
+    let native_word_width = isa.pointer_bytes();
     while let Some(ebb) = pos.next_ebb() {
         while let Some(inst) = pos.next_inst() {
             // Apply basic simplifications.
-            simplify(&mut pos, inst);
+            simplify(&mut pos, inst, native_word_width as u32);
 
             // Try to transform divide-by-constant into simpler operations.
             if let Some(divrem_info) = get_div_info(inst, &pos.func.dfg) {

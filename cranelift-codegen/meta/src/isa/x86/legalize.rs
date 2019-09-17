@@ -6,7 +6,7 @@ use crate::shared::types::Float::F64;
 use crate::shared::types::Int::{I32, I64};
 use crate::shared::Definitions as SharedDefinitions;
 
-pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGroup) {
+pub(crate) fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGroup) {
     let mut group = TransformGroupBuilder::new(
         "x86_expand",
         r#"
@@ -22,10 +22,10 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     let control = insts.by_name("control");
     let restore = insts.by_name("restore");
     let band = insts.by_name("band");
-    let bitcast = insts.by_name("bitcast");
     let bor = insts.by_name("bor");
     let clz = insts.by_name("clz");
     let ctz = insts.by_name("ctz");
+    let extractlane = insts.by_name("extractlane");
     let f64const = insts.by_name("f64const");
     let fcmp = insts.by_name("fcmp");
     let fcvt_from_uint = insts.by_name("fcvt_from_uint");
@@ -60,12 +60,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     let x86_umulx = x86_instructions.by_name("x86_umulx");
     let x86_smulx = x86_instructions.by_name("x86_smulx");
 
-    // List of immediates.
-    let floatcc = shared.operand_kinds.by_name("floatcc");
-    let imm64 = shared.operand_kinds.by_name("imm64");
-    let intcc = shared.operand_kinds.by_name("intcc");
-    let uimm8 = shared.operand_kinds.by_name("uimm8");
-    let ieee64 = shared.operand_kinds.by_name("ieee64");
+    let imm = &shared.imm;
 
 
     group.custom_legalize(control, "expand_control_x86");
@@ -107,12 +102,12 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     // `ucomiss` or `ucomisd` instruction. The remaining codes need legalization
     // patterns.
 
-    let floatcc_eq = Literal::enumerator_for(floatcc, "eq");
-    let floatcc_ord = Literal::enumerator_for(floatcc, "ord");
-    let floatcc_ueq = Literal::enumerator_for(floatcc, "ueq");
-    let floatcc_ne = Literal::enumerator_for(floatcc, "ne");
-    let floatcc_uno = Literal::enumerator_for(floatcc, "uno");
-    let floatcc_one = Literal::enumerator_for(floatcc, "one");
+    let floatcc_eq = Literal::enumerator_for(&imm.floatcc, "eq");
+    let floatcc_ord = Literal::enumerator_for(&imm.floatcc, "ord");
+    let floatcc_ueq = Literal::enumerator_for(&imm.floatcc, "ueq");
+    let floatcc_ne = Literal::enumerator_for(&imm.floatcc, "ne");
+    let floatcc_uno = Literal::enumerator_for(&imm.floatcc, "uno");
+    let floatcc_one = Literal::enumerator_for(&imm.floatcc, "one");
 
     // Equality needs an explicit `ord` test which checks the parity bit.
     group.legalize(
@@ -132,14 +127,14 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
         ],
     );
 
-    let floatcc_lt = &Literal::enumerator_for(floatcc, "lt");
-    let floatcc_gt = &Literal::enumerator_for(floatcc, "gt");
-    let floatcc_le = &Literal::enumerator_for(floatcc, "le");
-    let floatcc_ge = &Literal::enumerator_for(floatcc, "ge");
-    let floatcc_ugt = &Literal::enumerator_for(floatcc, "ugt");
-    let floatcc_ult = &Literal::enumerator_for(floatcc, "ult");
-    let floatcc_uge = &Literal::enumerator_for(floatcc, "uge");
-    let floatcc_ule = &Literal::enumerator_for(floatcc, "ule");
+    let floatcc_lt = &Literal::enumerator_for(&imm.floatcc, "lt");
+    let floatcc_gt = &Literal::enumerator_for(&imm.floatcc, "gt");
+    let floatcc_le = &Literal::enumerator_for(&imm.floatcc, "le");
+    let floatcc_ge = &Literal::enumerator_for(&imm.floatcc, "ge");
+    let floatcc_ugt = &Literal::enumerator_for(&imm.floatcc, "ugt");
+    let floatcc_ult = &Literal::enumerator_for(&imm.floatcc, "ult");
+    let floatcc_uge = &Literal::enumerator_for(&imm.floatcc, "uge");
+    let floatcc_ule = &Literal::enumerator_for(&imm.floatcc, "ule");
 
     // Inequalities that need to be reversed.
     for &(cc, rev_cc) in &[
@@ -173,9 +168,9 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     let r2flags = var("r2flags");
     let index2 = var("index2");
 
-    let intcc_eq = Literal::enumerator_for(intcc, "eq");
-    let imm64_minus_one = Literal::constant(imm64, -1);
-    let imm64_63 = Literal::constant(imm64, 63);
+    let intcc_eq = Literal::enumerator_for(&imm.intcc, "eq");
+    let imm64_minus_one = Literal::constant(&imm.imm64, -1);
+    let imm64_63 = Literal::constant(&imm.imm64, 63);
     group.legalize(
         def!(a = clz.I64(x)),
         vec![
@@ -187,7 +182,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
         ],
     );
 
-    let imm64_31 = Literal::constant(imm64, 31);
+    let imm64_31 = Literal::constant(&imm.imm64, 31);
     group.legalize(
         def!(a = clz.I32(x)),
         vec![
@@ -199,7 +194,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
         ],
     );
 
-    let imm64_64 = Literal::constant(imm64, 64);
+    let imm64_64 = Literal::constant(&imm.imm64, 64);
     group.legalize(
         def!(a = ctz.I64(x)),
         vec![
@@ -209,7 +204,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
         ],
     );
 
-    let imm64_32 = Literal::constant(imm64, 32);
+    let imm64_32 = Literal::constant(&imm.imm64, 32);
     group.legalize(
         def!(a = ctz.I32(x)),
         vec![
@@ -240,13 +235,13 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     let qc0F = var("qc0F");
     let qc01 = var("qc01");
 
-    let imm64_1 = Literal::constant(imm64, 1);
-    let imm64_4 = Literal::constant(imm64, 4);
+    let imm64_1 = Literal::constant(&imm.imm64, 1);
+    let imm64_4 = Literal::constant(&imm.imm64, 4);
     group.legalize(
         def!(qv16 = popcnt.I64(qv1)),
         vec![
             def!(qv3 = ushr_imm(qv1, imm64_1)),
-            def!(qc77 = iconst(Literal::constant(imm64, 0x7777777777777777))),
+            def!(qc77 = iconst(Literal::constant(&imm.imm64, 0x7777777777777777))),
             def!(qv4 = band(qv3, qc77)),
             def!(qv5 = isub(qv1, qv4)),
             def!(qv6 = ushr_imm(qv4, imm64_1)),
@@ -257,11 +252,11 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
             def!(qv11 = isub(qv8, qv10)),
             def!(qv12 = ushr_imm(qv11, imm64_4)),
             def!(qv13 = iadd(qv11, qv12)),
-            def!(qc0F = iconst(Literal::constant(imm64, 0x0F0F0F0F0F0F0F0F))),
+            def!(qc0F = iconst(Literal::constant(&imm.imm64, 0x0F0F0F0F0F0F0F0F))),
             def!(qv14 = band(qv13, qc0F)),
-            def!(qc01 = iconst(Literal::constant(imm64, 0x0101010101010101))),
+            def!(qc01 = iconst(Literal::constant(&imm.imm64, 0x0101010101010101))),
             def!(qv15 = imul(qv14, qc01)),
-            def!(qv16 = ushr_imm(qv15, Literal::constant(imm64, 56))),
+            def!(qv16 = ushr_imm(qv15, Literal::constant(&imm.imm64, 56))),
         ],
     );
 
@@ -289,7 +284,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
         def!(lv16 = popcnt.I32(lv1)),
         vec![
             def!(lv3 = ushr_imm(lv1, imm64_1)),
-            def!(lc77 = iconst(Literal::constant(imm64, 0x77777777))),
+            def!(lc77 = iconst(Literal::constant(&imm.imm64, 0x77777777))),
             def!(lv4 = band(lv3, lc77)),
             def!(lv5 = isub(lv1, lv4)),
             def!(lv6 = ushr_imm(lv4, imm64_1)),
@@ -300,11 +295,11 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
             def!(lv11 = isub(lv8, lv10)),
             def!(lv12 = ushr_imm(lv11, imm64_4)),
             def!(lv13 = iadd(lv11, lv12)),
-            def!(lc0F = iconst(Literal::constant(imm64, 0x0F0F0F0F))),
+            def!(lc0F = iconst(Literal::constant(&imm.imm64, 0x0F0F0F0F))),
             def!(lv14 = band(lv13, lc0F)),
-            def!(lc01 = iconst(Literal::constant(imm64, 0x01010101))),
+            def!(lc01 = iconst(Literal::constant(&imm.imm64, 0x01010101))),
             def!(lv15 = imul(lv14, lc01)),
-            def!(lv16 = ushr_imm(lv15, Literal::constant(imm64, 24))),
+            def!(lv16 = ushr_imm(lv15, Literal::constant(&imm.imm64, 24))),
         ],
     );
 
@@ -318,22 +313,27 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
     Use x86-specific instructions if needed."#,
     )
     .isa("x86")
-    .chain_with(shared.transform_groups.by_name("narrow").id);
+    .chain_with(shared.transform_groups.by_name("narrow_flags").id);
 
     // SIMD
-    let uimm8_zero = Literal::constant(uimm8, 0x00);
-    let uimm8_one = Literal::constant(uimm8, 0x01);
-    let ieee64_zero = Literal::constant(ieee64, 0x00);
+    let uimm8_zero = Literal::constant(&imm.uimm8, 0x00);
+    let uimm8_one = Literal::constant(&imm.uimm8, 0x01);
+    let ieee64_zero = Literal::constant(&imm.ieee64, 0x00);
     let b = var("b");
     let c = var("c");
     let d = var("d");
 
+    // SIMD vector size: eventually multiple vector sizes may be supported but for now only SSE-sized vectors are available
+    let sse_vector_size: u64 = 128;
+
     // SIMD splat: 8-bits
     for ty in ValueType::all_lane_types().filter(|t| t.lane_bits() == 8) {
-        let splat_x8x16 = splat.bind_vector(ty, 128 / ty.lane_bits());
-        let bitcast_f64_to_any8x16 = bitcast.bind_vector(ty, 128 / ty.lane_bits()).bind(F64);
+        let splat_any8x16 = splat.bind_vector_from_lane(ty, sse_vector_size);
+        let bitcast_f64_to_any8x16 = raw_bitcast
+            .bind_vector_from_lane(ty, sse_vector_size)
+            .bind(F64);
         narrow.legalize(
-            def!(y = splat_x8x16(x)),
+            def!(y = splat_any8x16(x)),
             vec![
                 def!(a = scalar_to_vector(x)), // move into the lowest 8 bits of an XMM register
                 def!(b = f64const(ieee64_zero)), // zero out a different XMM register; the shuffle mask for moving the lowest byte to all other byte lanes is 0x0
@@ -345,13 +345,13 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
 
     // SIMD splat: 16-bits
     for ty in ValueType::all_lane_types().filter(|t| t.lane_bits() == 16) {
-        let splat_x16x8 = splat.bind_vector(ty, 128 / ty.lane_bits());
+        let splat_x16x8 = splat.bind_vector_from_lane(ty, sse_vector_size);
         let raw_bitcast_any16x8_to_i32x4 = raw_bitcast
-            .bind_vector(I32, 4)
-            .bind_vector(ty, 128 / ty.lane_bits());
+            .bind_vector_from_lane(I32, sse_vector_size)
+            .bind_vector_from_lane(ty, sse_vector_size);
         let raw_bitcast_i32x4_to_any16x8 = raw_bitcast
-            .bind_vector(ty, 128 / ty.lane_bits())
-            .bind_vector(I32, 4);
+            .bind_vector_from_lane(ty, sse_vector_size)
+            .bind_vector_from_lane(I32, sse_vector_size);
         narrow.legalize(
             def!(y = splat_x16x8(x)),
             vec![
@@ -366,7 +366,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
 
     // SIMD splat: 32-bits
     for ty in ValueType::all_lane_types().filter(|t| t.lane_bits() == 32) {
-        let splat_any32x4 = splat.bind_vector(ty, 128 / ty.lane_bits());
+        let splat_any32x4 = splat.bind_vector_from_lane(ty, sse_vector_size);
         narrow.legalize(
             def!(y = splat_any32x4(x)),
             vec![
@@ -378,7 +378,7 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
 
     // SIMD splat: 64-bits
     for ty in ValueType::all_lane_types().filter(|t| t.lane_bits() == 64) {
-        let splat_any64x2 = splat.bind_vector(ty, 128 / ty.lane_bits());
+        let splat_any64x2 = splat.bind_vector_from_lane(ty, sse_vector_size);
         narrow.legalize(
             def!(y = splat_any64x2(x)),
             vec![
@@ -387,6 +387,9 @@ pub fn define(shared: &mut SharedDefinitions, x86_instructions: &InstructionGrou
             ],
         );
     }
+
+    narrow.custom_legalize(extractlane, "convert_extractlane");
+    narrow.custom_legalize(insertlane, "convert_insertlane");
 
     narrow.build_and_add_to(&mut shared.transform_groups);
 }

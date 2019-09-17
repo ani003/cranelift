@@ -1,11 +1,14 @@
 //! Defines `SimpleJITBackend`.
 
 use crate::memory::Memory;
-use cranelift_codegen::binemit::{Addend, CodeOffset, NullTrapSink, Reloc, RelocSink};
+use cranelift_codegen::binemit::{
+    Addend, CodeOffset, NullTrapSink, Reloc, RelocSink, Stackmap, StackmapSink,
+};
 use cranelift_codegen::isa::TargetIsa;
 use cranelift_codegen::{self, ir, settings};
 use cranelift_module::{
-    Backend, DataContext, DataDescription, Init, Linkage, ModuleNamespace, ModuleResult,
+    Backend, DataContext, DataDescription, DataId, FuncId, Init, Linkage, ModuleNamespace,
+    ModuleResult,
 };
 use cranelift_native;
 #[cfg(not(windows))]
@@ -128,6 +131,13 @@ struct RelocRecord {
     addend: Addend,
 }
 
+struct StackmapRecord {
+    #[allow(dead_code)]
+    offset: CodeOffset,
+    #[allow(dead_code)]
+    stackmap: Stackmap,
+}
+
 pub struct SimpleJITCompiledFunction {
     code: *mut u8,
     size: usize,
@@ -213,12 +223,13 @@ impl<'simple_jit_backend> Backend for SimpleJITBackend {
         &*self.isa
     }
 
-    fn declare_function(&mut self, _name: &str, _linkage: Linkage) {
+    fn declare_function(&mut self, _id: FuncId, _name: &str, _linkage: Linkage) {
         // Nothing to do.
     }
 
     fn declare_data(
         &mut self,
+        _id: DataId,
         _name: &str,
         _linkage: Linkage,
         _writable: bool,
@@ -229,6 +240,7 @@ impl<'simple_jit_backend> Backend for SimpleJITBackend {
 
     fn define_function(
         &mut self,
+        _id: FuncId,
         name: &str,
         ctx: &cranelift_codegen::Context,
         _namespace: &ModuleNamespace<Self>,
@@ -254,7 +266,16 @@ impl<'simple_jit_backend> Backend for SimpleJITBackend {
         // Ignore traps for now. For now, frontends should just avoid generating code
         // that traps.
         let mut trap_sink = NullTrapSink {};
-        unsafe { ctx.emit_to_memory(&*self.isa, ptr, &mut reloc_sink, &mut trap_sink) };
+        let mut stackmap_sink = SimpleJITStackmapSink::new();
+        unsafe {
+            ctx.emit_to_memory(
+                &*self.isa,
+                ptr,
+                &mut reloc_sink,
+                &mut trap_sink,
+                &mut stackmap_sink,
+            )
+        };
 
         Ok(Self::CompiledFunction {
             code: ptr,
@@ -265,6 +286,7 @@ impl<'simple_jit_backend> Backend for SimpleJITBackend {
 
     fn define_data(
         &mut self,
+        _id: DataId,
         _name: &str,
         writable: bool,
         align: Option<u8>,
@@ -354,6 +376,7 @@ impl<'simple_jit_backend> Backend for SimpleJITBackend {
 
     fn finalize_function(
         &mut self,
+        _id: FuncId,
         func: &Self::CompiledFunction,
         namespace: &ModuleNamespace<Self>,
     ) -> Self::FinalizedFunction {
@@ -407,6 +430,7 @@ impl<'simple_jit_backend> Backend for SimpleJITBackend {
 
     fn finalize_data(
         &mut self,
+        _id: DataId,
         data: &Self::CompiledData,
         namespace: &ModuleNamespace<Self>,
     ) -> Self::FinalizedData {
@@ -547,5 +571,35 @@ impl RelocSink for SimpleJITRelocSink {
                 panic!("Unhandled reloc");
             }
         }
+    }
+
+    fn reloc_constant(&mut self, _offset: CodeOffset, reloc: Reloc, _constant: ir::ConstantOffset) {
+        match reloc {
+            Reloc::X86PCRelRodata4 => {
+                // Not necessary to record this unless we are going to split apart code and its
+                // jumptbl/rodata.
+            }
+            _ => {
+                panic!("Unhandled reloc");
+            }
+        }
+    }
+}
+
+struct SimpleJITStackmapSink {
+    pub stackmaps: Vec<StackmapRecord>,
+}
+
+impl SimpleJITStackmapSink {
+    pub fn new() -> Self {
+        Self {
+            stackmaps: Vec::new(),
+        }
+    }
+}
+
+impl StackmapSink for SimpleJITStackmapSink {
+    fn add_stackmap(&mut self, offset: CodeOffset, stackmap: Stackmap) {
+        self.stackmaps.push(StackmapRecord { offset, stackmap });
     }
 }

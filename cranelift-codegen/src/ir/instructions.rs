@@ -488,6 +488,8 @@ pub struct ValueTypeSet {
     pub floats: BitSet8,
     /// Allowed bool widths
     pub bools: BitSet8,
+    /// Allowed ref widths
+    pub refs: BitSet8,
 }
 
 impl ValueTypeSet {
@@ -502,6 +504,8 @@ impl ValueTypeSet {
             self.floats.contains(l2b)
         } else if scalar.is_bool() {
             self.bools.contains(l2b)
+        } else if scalar.is_ref() {
+            self.refs.contains(l2b)
         } else {
             false
         }
@@ -696,6 +700,7 @@ mod tests {
             ints: BitSet8::from_range(4, 7),
             floats: BitSet8::from_range(0, 0),
             bools: BitSet8::from_range(3, 7),
+            refs: BitSet8::from_range(5, 7),
         };
         assert!(!vts.contains(I8));
         assert!(vts.contains(I32));
@@ -705,6 +710,8 @@ mod tests {
         assert!(!vts.contains(B1));
         assert!(vts.contains(B8));
         assert!(vts.contains(B64));
+        assert!(vts.contains(R32));
+        assert!(vts.contains(R64));
         assert_eq!(vts.example().to_string(), "i32");
 
         let vts = ValueTypeSet {
@@ -712,6 +719,7 @@ mod tests {
             ints: BitSet8::from_range(0, 0),
             floats: BitSet8::from_range(5, 7),
             bools: BitSet8::from_range(3, 7),
+            refs: BitSet8::from_range(0, 0),
         };
         assert_eq!(vts.example().to_string(), "f32");
 
@@ -720,6 +728,7 @@ mod tests {
             ints: BitSet8::from_range(0, 0),
             floats: BitSet8::from_range(5, 7),
             bools: BitSet8::from_range(3, 7),
+            refs: BitSet8::from_range(0, 0),
         };
         assert_eq!(vts.example().to_string(), "f32x2");
 
@@ -728,6 +737,7 @@ mod tests {
             ints: BitSet8::from_range(0, 0),
             floats: BitSet8::from_range(0, 0),
             bools: BitSet8::from_range(3, 7),
+            refs: BitSet8::from_range(0, 0),
         };
         assert!(!vts.contains(B32X2));
         assert!(vts.contains(B32X4));
@@ -739,8 +749,11 @@ mod tests {
             ints: BitSet8::from_range(3, 7),
             floats: BitSet8::from_range(0, 0),
             bools: BitSet8::from_range(0, 0),
+            refs: BitSet8::from_range(0, 0),
         };
         assert!(vts.contains(I32));
         assert!(vts.contains(I32X4));
+        assert!(!vts.contains(R32));
+        assert!(!vts.contains(R64));
     }
 }

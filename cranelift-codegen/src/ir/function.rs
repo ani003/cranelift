@@ -8,19 +8,19 @@ use crate::entity::{PrimaryMap, SecondaryMap};
 use crate::ir;
 use crate::ir::{DataFlowGraph, ExternalName, Layout, Signature};
 use crate::ir::{
-    Ebb, ExtFuncData, FuncRef, GlobalValue, GlobalValueData, Heap, HeapData, JumpTable,
+    Ebb, ExtFuncData, FuncRef, GlobalValue, GlobalValueData, Heap, HeapData, Inst, JumpTable,
     JumpTableData, SigRef, StackSlot, StackSlotData, Table, TableData,
 };
 use crate::ir::{EbbOffsets, InstEncodings, SourceLocs, StackSlots, ValueLocations};
 use crate::ir::{JumpTableOffsets, JumpTables};
 use crate::isa::{CallConv, EncInfo, Encoding, Legalize, TargetIsa};
-use crate::regalloc::RegDiversions;
+use crate::regalloc::{EntryRegDiversions, RegDiversions};
 use crate::value_label::ValueLabelsRanges;
 use crate::write::write_function;
 use core::fmt;
 
 #[cfg(feature = "basic-blocks")]
-use crate::ir::{Inst, Opcode};
+use crate::ir::Opcode;
 
 /// A function.
 ///
@@ -62,6 +62,12 @@ pub struct Function {
     /// Location assigned to every value.
     pub locations: ValueLocations,
 
+    /// Non-default locations assigned to value at the entry of basic blocks.
+    ///
+    /// At the entry of each basic block, we might have values which are not in their default
+    /// ValueLocation. This field records these register-to-register moves as Diversions.
+    pub entry_diversions: EntryRegDiversions,
+
     /// Code offsets of the EBB headers.
     ///
     /// This information is only transiently available after the `binemit::relax_branches` function
@@ -94,6 +100,7 @@ impl Function {
             layout: Layout::new(),
             encodings: SecondaryMap::new(),
             locations: SecondaryMap::new(),
+            entry_diversions: EntryRegDiversions::new(),
             offsets: SecondaryMap::new(),
             jt_offsets: SecondaryMap::new(),
             srclocs: SecondaryMap::new(),
@@ -112,7 +119,9 @@ impl Function {
         self.layout.clear();
         self.encodings.clear();
         self.locations.clear();
+        self.entry_diversions.clear();
         self.offsets.clear();
+        self.jt_offsets.clear();
         self.srclocs.clear();
     }
 
@@ -197,10 +206,12 @@ impl Function {
             !self.offsets.is_empty(),
             "Code layout must be computed first"
         );
+        let mut divert = RegDiversions::new();
+        divert.at_ebb(&self.entry_diversions, ebb);
         InstOffsetIter {
             encinfo: encinfo.clone(),
             func: self,
-            divert: RegDiversions::new(),
+            divert,
             encodings: &self.encodings,
             offset: self.offsets[ebb],
             iter: self.layout.ebb_insts(ebb),
@@ -221,6 +232,15 @@ impl Function {
     /// Starts collection of debug information.
     pub fn collect_debug_info(&mut self) {
         self.dfg.collect_debug_info();
+    }
+
+    /// Changes the destination of a jump or branch instruction.
+    /// Does nothing if called with a non-jump or non-branch instruction.
+    pub fn change_branch_destination(&mut self, inst: Inst, new_dest: Ebb) {
+        match self.dfg[inst].branch_destination_mut() {
+            None => (),
+            Some(inst_dest) => *inst_dest = new_dest,
+        }
     }
 
     /// Checks that the specified EBB can be encoded as a basic block.

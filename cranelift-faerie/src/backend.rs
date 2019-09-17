@@ -2,12 +2,14 @@
 
 use crate::container;
 use crate::traps::{FaerieTrapManifest, FaerieTrapSink};
-use cranelift_codegen::binemit::{Addend, CodeOffset, NullTrapSink, Reloc, RelocSink};
+use cranelift_codegen::binemit::{
+    Addend, CodeOffset, NullStackmapSink, NullTrapSink, Reloc, RelocSink, Stackmap, StackmapSink,
+};
 use cranelift_codegen::isa::TargetIsa;
 use cranelift_codegen::{self, binemit, ir};
 use cranelift_module::{
-    Backend, DataContext, DataDescription, Init, Linkage, ModuleError, ModuleNamespace,
-    ModuleResult,
+    Backend, DataContext, DataDescription, DataId, FuncId, Init, Linkage, ModuleError,
+    ModuleNamespace, ModuleResult,
 };
 use faerie;
 use failure::Error;
@@ -36,7 +38,7 @@ pub struct FaerieBuilder {
 impl FaerieBuilder {
     /// Create a new `FaerieBuilder` using the given Cranelift target, that
     /// can be passed to
-    /// [`Module::new`](cranelift_module/struct.Module.html#method.new].
+    /// [`Module::new`](cranelift_module::Module::new)
     ///
     /// Faerie output requires that TargetIsa have PIC (Position Independent Code) enabled.
     ///
@@ -121,13 +123,20 @@ impl Backend for FaerieBackend {
         &*self.isa
     }
 
-    fn declare_function(&mut self, name: &str, linkage: Linkage) {
+    fn declare_function(&mut self, _id: FuncId, name: &str, linkage: Linkage) {
         self.artifact
             .declare(name, translate_function_linkage(linkage))
             .expect("inconsistent declarations");
     }
 
-    fn declare_data(&mut self, name: &str, linkage: Linkage, writable: bool, align: Option<u8>) {
+    fn declare_data(
+        &mut self,
+        _id: DataId,
+        name: &str,
+        linkage: Linkage,
+        writable: bool,
+        align: Option<u8>,
+    ) {
         self.artifact
             .declare(name, translate_data_linkage(linkage, writable, align))
             .expect("inconsistent declarations");
@@ -135,12 +144,15 @@ impl Backend for FaerieBackend {
 
     fn define_function(
         &mut self,
+        _id: FuncId,
         name: &str,
         ctx: &cranelift_codegen::Context,
         namespace: &ModuleNamespace<Self>,
         total_size: u32,
     ) -> ModuleResult<FaerieCompiledFunction> {
         let mut code: Vec<u8> = vec![0; total_size as usize];
+        // TODO: Replace this with FaerieStackmapSink once it is implemented.
+        let mut stackmap_sink = NullStackmapSink {};
 
         // Non-lexical lifetimes would obviate the braces here.
         {
@@ -160,6 +172,7 @@ impl Backend for FaerieBackend {
                         code.as_mut_ptr(),
                         &mut reloc_sink,
                         &mut trap_sink,
+                        &mut stackmap_sink,
                     )
                 };
                 trap_manifest.add_sink(trap_sink);
@@ -171,6 +184,7 @@ impl Backend for FaerieBackend {
                         code.as_mut_ptr(),
                         &mut reloc_sink,
                         &mut trap_sink,
+                        &mut stackmap_sink,
                     )
                 };
             }
@@ -188,6 +202,7 @@ impl Backend for FaerieBackend {
 
     fn define_data(
         &mut self,
+        _id: DataId,
         name: &str,
         _writable: bool,
         _align: Option<u8>,
@@ -268,6 +283,7 @@ impl Backend for FaerieBackend {
 
     fn finalize_function(
         &mut self,
+        _id: FuncId,
         _func: &FaerieCompiledFunction,
         _namespace: &ModuleNamespace<Self>,
     ) {
@@ -278,7 +294,12 @@ impl Backend for FaerieBackend {
         // Nothing to do.
     }
 
-    fn finalize_data(&mut self, _data: &FaerieCompiledData, _namespace: &ModuleNamespace<Self>) {
+    fn finalize_data(
+        &mut self,
+        _id: DataId,
+        _data: &FaerieCompiledData,
+        _namespace: &ModuleNamespace<Self>,
+    ) {
         // Nothing to do.
     }
 
@@ -336,7 +357,7 @@ fn translate_function_linkage(linkage: Linkage) -> faerie::Decl {
 }
 
 fn translate_data_linkage(linkage: Linkage, writable: bool, align: Option<u8>) -> faerie::Decl {
-    let align = align.map(|align| usize::from(align));
+    let align = align.map(|align| u64::from(align));
     match linkage {
         Linkage::Import => faerie::Decl::data_import().into(),
         Linkage::Local => faerie::Decl::data()
@@ -423,5 +444,30 @@ impl<'a> RelocSink for FaerieRelocSink<'a> {
                 panic!("Unhandled reloc");
             }
         }
+    }
+
+    fn reloc_constant(&mut self, _offset: CodeOffset, reloc: Reloc, _jt: ir::ConstantOffset) {
+        match reloc {
+            Reloc::X86PCRelRodata4 => {
+                // Not necessary to record this unless we are going to split apart code and its
+                // jumptbl/rodata.
+            }
+            _ => {
+                panic!("Unhandled reloc");
+            }
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct FaerieStackmapSink<'a> {
+    artifact: &'a mut faerie::Artifact,
+    namespace: &'a ModuleNamespace<'a, FaerieBackend>,
+}
+
+/// Faerie is currently not used in SpiderMonkey. Methods are unimplemented.
+impl<'a> StackmapSink for FaerieStackmapSink<'a> {
+    fn add_stackmap(&mut self, _: CodeOffset, _: Stackmap) {
+        unimplemented!("faerie support for stackmaps");
     }
 }

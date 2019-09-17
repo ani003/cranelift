@@ -684,9 +684,30 @@ impl<'a> Verifier<'a> {
                 self.verify_value_list(inst, args, errors)?;
             }
 
+            NullAry {
+                opcode: Opcode::GetPinnedReg,
+            }
+            | Unary {
+                opcode: Opcode::SetPinnedReg,
+                ..
+            } => {
+                if let Some(isa) = &self.isa {
+                    if !isa.flags().enable_pinned_reg() {
+                        return fatal!(
+                            errors,
+                            inst,
+                            "GetPinnedReg/SetPinnedReg cannot be used without enable_pinned_reg"
+                        );
+                    }
+                } else {
+                    return fatal!(errors, inst, "GetPinnedReg/SetPinnedReg need an ISA!");
+                }
+            }
+
             // Exhaustive list so we can't forget to add new formats
             Unary { .. }
             | UnaryImm { .. }
+            | UnaryImm128 { .. }
             | UnaryIeee32 { .. }
             | UnaryIeee64 { .. }
             | UnaryBool { .. }
@@ -705,6 +726,7 @@ impl<'a> Verifier<'a> {
             | Store { .. }
             | RegMove { .. }
             | CopySpecial { .. }
+            | CopyToSsa { .. }
             | Trap { .. }
             | CondTrap { .. }
             | IntCondTrap { .. }
@@ -1755,9 +1777,12 @@ impl<'a> Verifier<'a> {
         // Instructions with side effects are not allowed to be ghost instructions.
         let opcode = self.func.dfg[inst].opcode();
 
-        // The `fallthrough` and `fallthrough_return` instructions are marked as terminators and
-        // branches, but they are not required to have an encoding.
-        if opcode == Opcode::Fallthrough || opcode == Opcode::FallthroughReturn {
+        // The `fallthrough`, `fallthrough_return`, and `safepoint` instructions are not required
+        // to have an encoding.
+        if opcode == Opcode::Fallthrough
+            || opcode == Opcode::FallthroughReturn
+            || opcode == Opcode::Safepoint
+        {
             return Ok(());
         }
 
@@ -1822,6 +1847,24 @@ impl<'a> Verifier<'a> {
         }
     }
 
+    fn verify_safepoint_unused(
+        &self,
+        inst: Inst,
+        errors: &mut VerifierErrors,
+    ) -> VerifierStepResult<()> {
+        if let Some(isa) = self.isa {
+            if !isa.flags().enable_safepoints() && self.func.dfg[inst].opcode() == Opcode::Safepoint
+            {
+                return fatal!(
+                    errors,
+                    inst,
+                    "safepoint instruction cannot be used when it is not enabled."
+                );
+            }
+        }
+        Ok(())
+    }
+
     pub fn run(&self, errors: &mut VerifierErrors) -> VerifierStepResult<()> {
         self.verify_global_values(errors)?;
         self.verify_heaps(errors)?;
@@ -1833,6 +1876,7 @@ impl<'a> Verifier<'a> {
             for inst in self.func.layout.ebb_insts(ebb) {
                 self.ebb_integrity(ebb, inst, errors)?;
                 self.instruction_integrity(inst, errors)?;
+                self.verify_safepoint_unused(inst, errors)?;
                 self.typecheck(inst, errors)?;
                 self.verify_encoding(inst, errors)?;
                 self.immediate_constraints(inst, errors)?;
