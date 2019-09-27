@@ -725,6 +725,7 @@ impl<'a> Verifier<'a> {
             | Load { .. }
             | Store { .. }
             | RegMove { .. }
+            | StoreReg { .. }
             | CopySpecial { .. }
             | CopyToSsa { .. }
             | Trap { .. }

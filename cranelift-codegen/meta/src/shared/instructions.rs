@@ -1337,6 +1337,25 @@ pub(crate) fn define(
 
     ig.push(
         Inst::new(
+            "copy_reg_to_mem",
+            r#"
+        Copies the contents of ''src'' register to ''a'' address.
+
+        This instruction copies the contents of one register, regardless of its SSA name, to
+        another register, creating a new SSA name.  In that sense it is a one-sided version
+        of ''copy_special''.  This instruction is internal and should not be created by
+        Cranelift users.
+        "#,
+        )
+        .operands_in(vec![MemFlags, src, p, Offset])
+        // .operands_out(vec![a])
+        // .other_side_effects(true),
+        // .operands_in(vec![MemFlags, x, p, Offset])
+        .can_store(true),
+    );
+
+    ig.push(
+        Inst::new(
             "copy_nop",
             r#"
         Stack-slot-to-the-same-stack-slot copy, which is guaranteed to turn

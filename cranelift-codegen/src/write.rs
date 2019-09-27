@@ -649,6 +649,28 @@ pub fn write_operands(
                 offset
             )
         }
+        StoreReg {
+            flags,
+            src,
+            arg,
+            offset,
+            ..
+        } => {
+            if let Some(isa) = isa {
+                let regs = isa.register_info();
+                write!(
+                    w,
+                    " {}, {} -> {}{}",
+                    flags,
+                    regs.display_regunit(src),
+                    arg,
+                    offset
+                )
+            } else {
+                write!(w, "NO INSTRUCTION SET :(")
+            }
+            // write!(w, "{} {}, {}{}", flags, args[0], args[1], offset),
+        }
         RegMove { arg, src, dst, .. } => {
             if let Some(isa) = isa {
                 let regs = isa.register_info();

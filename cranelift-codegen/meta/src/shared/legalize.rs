@@ -124,6 +124,9 @@ pub(crate) fn define(insts: &InstructionGroup, imm: &Immediates) -> TransformGro
     let trapnz = insts.by_name("trapnz");
     let trapz = insts.by_name("trapz");
 
+    let copy_reg_to_mem = insts.by_name("copy_reg_to_mem");
+
+
     // Custom expansions for memory objects.
     expand.custom_legalize(insts.by_name("global_value"), "expand_global_value");
     expand.custom_legalize(insts.by_name("heap_addr"), "expand_heap_addr");
@@ -205,6 +208,8 @@ pub(crate) fn define(insts: &InstructionGroup, imm: &Immediates) -> TransformGro
     let flags = var("flags");
     let offset = var("off");
     let vararg = var("vararg");
+    let src = var("src");
+
 
     narrow.custom_legalize(load, "narrow_load");
     narrow.custom_legalize(store, "narrow_store");
@@ -501,6 +506,18 @@ pub(crate) fn define(insts: &InstructionGroup, imm: &Immediates) -> TransformGro
         }
     }
 
+    let imm64_2 = Literal::constant(&imm.imm64, 2);
+
+    // expand.legalize(
+    //     def!(copy_reg_to_mem(flags, src, ptr, offset)),
+    //     vec![
+    //         def!(a = iconst(imm64_2)),
+    //         def!(store(flags, a, ptr, offset)),
+
+    //     ],
+    // );
+
+
     // Expand integer operations with carry for RISC architectures that don't have
     // the flags.
     let intcc_ult = Literal::enumerator_for(&imm.intcc, "ult");
@@ -554,7 +571,6 @@ pub(crate) fn define(insts: &InstructionGroup, imm: &Immediates) -> TransformGro
     );
 
 
-    // let two = Literal::constant(imm64, 2);
 
     // expand.legalize(
     //     def!(a = add2(x)),

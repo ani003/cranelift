@@ -180,6 +180,13 @@ pub enum SerInstData {
         flags: String,
         offset: String,
     },
+    StoreReg {
+        opcode: String,
+        flags: String,
+        src: String,
+        arg: String,
+        offset: String,
+    },
     StoreComplex {
         opcode: String,
         args: Vec<String>,
@@ -626,6 +633,24 @@ pub fn get_inst_data(inst_index: Inst, func: &Function) -> SerInstData {
                 flags: flags.to_string(),
                 offset: offset.to_string(),
             }
+        }
+
+        InstructionData::StoreReg {
+            opcode,
+            arg,
+            flags,
+            src,
+            offset,
+        } => {
+            panic!()
+
+            // SerInstData::StoreReg {
+            //     opcode: opcode.to_string(),
+            //     arg: arg.to_string(),
+            //     flags: flags.to_string(),
+            //     src: src.to_string(),
+            //     offset: offset.to_string(),
+            // }
         }
         InstructionData::StoreComplex {
             opcode,

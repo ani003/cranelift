@@ -21,6 +21,7 @@ pub(crate) fn define(shared: &mut SharedDefinitions, x86_instructions: &Instruct
     let insts = &shared.instructions;
     let control = insts.by_name("control");
     let restore = insts.by_name("restore");
+    let copy_reg_to_mem = insts.by_name("copy_reg_to_mem");
     let band = insts.by_name("band");
     let bor = insts.by_name("bor");
     let clz = insts.by_name("clz");
@@ -65,6 +66,7 @@ pub(crate) fn define(shared: &mut SharedDefinitions, x86_instructions: &Instruct
 
     group.custom_legalize(control, "expand_control_x86");
     group.custom_legalize(restore, "expand_restore_x86");
+    group.custom_legalize(copy_reg_to_mem, "expand_copy_reg_to_mem_x86");
 
 
 

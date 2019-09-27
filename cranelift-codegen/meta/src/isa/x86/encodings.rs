@@ -443,6 +443,7 @@ pub(crate) fn define(
     let sshr = shared.by_name("sshr");
     let sshr_imm = shared.by_name("sshr_imm");
     let stack_addr = shared.by_name("stack_addr");
+    let copy_reg_to_mem = shared.by_name("copy_reg_to_mem");
     let store = shared.by_name("store");
     let store_complex = shared.by_name("store_complex");
     let symbol_value = shared.by_name("symbol_value");
@@ -975,6 +976,19 @@ pub(crate) fn define(
         e.enc_x86_64(istore32.bind(I64).bind_any(), recipe.opcodes(vec![0x89]));
         e.enc_i32_i64_ld_st(istore16, false, recipe.opcodes(vec![0x66, 0x89]));
     }
+
+
+    // Sketchy stuff for copy_reg_to_mem
+    for recipe in &[rec_st, rec_stDisp8, rec_stDisp32] {
+        eprintln!("loop");
+        // e.enc64(copy_reg_to_mem.clone().bind(I64), recipe.opcodes(vec![0x89]).rex().w());
+        // e.enc_i32_i64_ld_st(copy_reg_to_mem, true, recipe.opcodes(vec![0x89]));
+        // e.enc_x86_64(istore32.bind(I64).bind_any(), recipe.opcodes(vec![0x89]));
+        // e.enc_i32_i64_ld_st(istore16, false, recipe.opcodes(vec![0x66, 0x89]));
+    }
+
+
+
 
     // Byte stores are more complicated because the registers they can address
     // depends of the presence of a REX prefix. The st*_abcd recipes fall back to

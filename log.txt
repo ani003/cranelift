@@ -1,0 +1,2986 @@
+[cranelift-codegen 0.42.0] cargo:rerun-if-changed=/Users/donaldpinckney/UMass/research/WasmContinuations/cranelift/cranelift-codegen/build.rs
+[cranelift-codegen 0.42.0] define; inst = jump EBB, args, poly = None
+[cranelift-codegen 0.42.0] define; inst = fallthrough EBB, args, poly = None
+[cranelift-codegen 0.42.0] define; inst = brz c, EBB, args, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Testable",
+[cranelift-codegen 0.42.0]                     doc: "A scalar boolean or integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = brnz c, EBB, args, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Testable",
+[cranelift-codegen 0.42.0]                     doc: "A scalar boolean or integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = br_icmp Cond, x, y, EBB, args, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = brif Cond, f, EBB, args, poly = None
+[cranelift-codegen 0.42.0] define; inst = brff Cond, f, EBB, args, poly = None
+[cranelift-codegen 0.42.0] define; inst = br_table x, EBB, JT, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = entry = jump_table_entry x, addr, Size, JT, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = addr = jump_table_base JT, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = indirect_jump_table_br addr, JT, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = debugtrap, poly = None
+[cranelift-codegen 0.42.0] define; inst = trap code, poly = None
+[cranelift-codegen 0.42.0] define; inst = trapz c, code, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Testable",
+[cranelift-codegen 0.42.0]                     doc: "A scalar boolean or integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = resumable_trap code, poly = None
+[cranelift-codegen 0.42.0] define; inst = trapnz c, code, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Testable",
+[cranelift-codegen 0.42.0]                     doc: "A scalar boolean or integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = trapif Cond, f, code, poly = None
+[cranelift-codegen 0.42.0] define; inst = trapff Cond, f, code, poly = None
+[cranelift-codegen 0.42.0] define; inst = return rvals, poly = None
+[cranelift-codegen 0.42.0] define; inst = fallthrough_return rvals, poly = None
+[cranelift-codegen 0.42.0] define; inst = rvals = call FN, args, poly = None
+[cranelift-codegen 0.42.0] define; inst = rvals = control garbage, FN, args, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = restore garbage, k, rvals, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Int",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = rvals = call_indirect SIG, callee, args, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = addr = func_addr FN, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = load MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = load_complex MemFlags, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = store MemFlags, x, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = store_complex MemFlags, x, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uload8 MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt8",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 8 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uload8_complex MemFlags, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt8",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 8 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sload8 MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt8",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 8 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sload8_complex MemFlags, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt8",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 8 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = istore8 MemFlags, x, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt8",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 8 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = istore8_complex MemFlags, x, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt8",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 8 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uload16 MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt16",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 16 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uload16_complex MemFlags, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt16",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 16 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sload16 MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt16",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 16 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sload16_complex MemFlags, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt16",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 16 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = istore16 MemFlags, x, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt16",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 16 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = istore16_complex MemFlags, x, args, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt16",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 16 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uload32 MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uload32_complex MemFlags, args, Offset, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = sload32 MemFlags, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sload32_complex MemFlags, args, Offset, poly = None
+[cranelift-codegen 0.42.0] define; inst = istore32 MemFlags, x, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iExt32",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with more than 32 bits",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iAddr",
+[cranelift-codegen 0.42.0]                         doc: "An integer address type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = istore32_complex MemFlags, x, args, Offset, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = stack_load SS, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = stack_store x, SS, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = addr = stack_addr SS, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = global_value GV, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = symbol_value GV, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Mem",
+[cranelift-codegen 0.42.0]                     doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = addr = heap_addr H, p, Size, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "HeapOffset",
+[cranelift-codegen 0.42.0]                         doc: "An unsigned heap offset",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = addr = get_pinned_reg, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = set_pinned_reg addr, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = addr = table_addr T, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "TableOffset",
+[cranelift-codegen 0.42.0]                         doc: "An unsigned table offset",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = iconst N, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = f32const N, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = f64const N, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = bconst N, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Bool",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector boolean type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = vconst N, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = null, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Ref",
+[cranelift-codegen 0.42.0]                     doc: "A scalar reference type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = nop, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = select c, x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Testable",
+[cranelift-codegen 0.42.0]                         doc: "A scalar boolean or integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = selectif cc, flags, x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = copy x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = spill x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fill x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fill_nop x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = regmove x, src, dst, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = copy_special src, dst, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = copy_to_ssa src, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = copy_reg_to_mem MemFlags, src, p, Offset, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TableOffset",
+[cranelift-codegen 0.42.0]                     doc: "An unsigned table offset",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = copy_nop x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = adjust_sp_down delta, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = adjust_sp_up_imm Offset, poly = None
+[cranelift-codegen 0.42.0] define; inst = adjust_sp_down_imm Offset, poly = None
+[cranelift-codegen 0.42.0] define; inst = f = ifcmp_sp addr, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iAddr",
+[cranelift-codegen 0.42.0]                     doc: "An integer address type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = regspill x, src, SS, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = regfill x, SS, dst, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = safepoint args, poly = None
+[cranelift-codegen 0.42.0] define; inst = lo, hi = vsplit x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = vconcat x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Any128",
+[cranelift-codegen 0.42.0]                     doc: "Any scalar or vector type with as most 128 lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = vselect c, x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = splat x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = insertlane x, Idx, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = extractlane x, Idx, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = icmp Cond, x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = icmp_imm Cond, x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = f = ifcmp x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = f = ifcmp_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = iadd x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = isub x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = imul x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = umulhi x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = smulhi x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = udiv x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sdiv x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = urem x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = srem x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = iadd_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = imul_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = udiv_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sdiv_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = urem_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = srem_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = irsub_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = iadd_cin x, y, c_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = iadd_ifcin x, y, c_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, c_out = iadd_cout x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, c_out = iadd_ifcout x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, c_out = iadd_carry x, y, c_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, c_out = iadd_ifcarry x, y, c_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = isub_bin x, y, b_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = isub_ifbin x, y, b_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, b_out = isub_bout x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, b_out = isub_ifbout x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, b_out = isub_borrow x, y, b_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a, b_out = isub_ifborrow x, y, b_in, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = band x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bor x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bxor x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bnot x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = band_not x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bor_not x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bxor_not x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "bits",
+[cranelift-codegen 0.42.0]                     doc: "Any integer, float, or boolean scalar or vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = band_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bor_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bxor_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = rotl x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iB",
+[cranelift-codegen 0.42.0]                         doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = rotr x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iB",
+[cranelift-codegen 0.42.0]                         doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = rotl_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = rotr_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ishl x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iB",
+[cranelift-codegen 0.42.0]                         doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ushr x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iB",
+[cranelift-codegen 0.42.0]                         doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sshr x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "iB",
+[cranelift-codegen 0.42.0]                         doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ishl_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ushr_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sshr_imm x, Y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Int",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bitrev x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = clz x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = add2 x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = cls x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ctz x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = popcnt x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "iB",
+[cranelift-codegen 0.42.0]                     doc: "A scalar integer type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcmp Cond, x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = f = ffcmp x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fadd x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fsub x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fmul x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fdiv x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sqrt x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fma x, y, z, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fneg x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fabs x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcopysign x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fmin x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fmax x, y, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ceil x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = floor x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = trunc x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = nearest x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Float",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = is_null x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "Ref",
+[cranelift-codegen 0.42.0]                     doc: "A scalar reference type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = trueif Cond, f, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = trueff Cond, f, poly = None
+[cranelift-codegen 0.42.0] define; inst = a = bitcast x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "MemTo",
+[cranelift-codegen 0.42.0]                     doc: "",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Mem",
+[cranelift-codegen 0.42.0]                         doc: "Any type that can be stored in memory",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = raw_bitcast x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "AnyTo",
+[cranelift-codegen 0.42.0]                     doc: "",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Any",
+[cranelift-codegen 0.42.0]                         doc: "Any integer, float, boolean, or reference scalar or vector type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}, refs={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = scalar_to_vector s, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "TxN",
+[cranelift-codegen 0.42.0]                     doc: "A SIMD vector type",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}, floats={32, 64}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = breduce x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "BoolTo",
+[cranelift-codegen 0.42.0]                     doc: "A smaller boolean type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Bool",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector boolean type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bextend x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "BoolTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger boolean type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Bool",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector boolean type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bint x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Bool",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector boolean type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = bmask x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Bool",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector boolean type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, bools={1, 8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = ireduce x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A smaller integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Int",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = uextend x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Int",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = sextend x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Int",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fpromote x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "FloatTo",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Float",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fdemote x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "FloatTo",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Float",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcvt_to_uint x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Float",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcvt_to_uint_sat x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Float",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcvt_to_sint x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Float",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcvt_to_sint_sat x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "IntTo",
+[cranelift-codegen 0.42.0]                     doc: "A larger integer type with the same number of lanes",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Float",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcvt_from_uint x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "FloatTo",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Int",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = fcvt_from_sint x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: false,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "FloatTo",
+[cranelift-codegen 0.42.0]                     doc: "A scalar or vector floating point number",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, floats={32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [
+[cranelift-codegen 0.42.0]             TypeVar {
+[cranelift-codegen 0.42.0]                 content: RefCell {
+[cranelift-codegen 0.42.0]                     value: TypeVarContent {
+[cranelift-codegen 0.42.0]                         name: "Int",
+[cranelift-codegen 0.42.0]                         doc: "A scalar or vector integer type",
+[cranelift-codegen 0.42.0]                         type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                         base: None,
+[cranelift-codegen 0.42.0]                     },
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         ],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = lo, hi = isplit x, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "WideInt",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with lanes from `i16` upwards",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={16, 32, 64, 128}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )
+[cranelift-codegen 0.42.0] define; inst = a = iconcat lo, hi, poly = Some(
+[cranelift-codegen 0.42.0]     PolymorphicInfo {
+[cranelift-codegen 0.42.0]         use_typevar_operand: true,
+[cranelift-codegen 0.42.0]         ctrl_typevar: TypeVar {
+[cranelift-codegen 0.42.0]             content: RefCell {
+[cranelift-codegen 0.42.0]                 value: TypeVarContent {
+[cranelift-codegen 0.42.0]                     name: "NarrowInt",
+[cranelift-codegen 0.42.0]                     doc: "An integer type with lanes type to `i64`",
+[cranelift-codegen 0.42.0]                     type_set: TypeSet(lanes={1, 2, 4, 8, 16, 32, 64, 128, 256}, ints={8, 16, 32, 64}),
+[cranelift-codegen 0.42.0]                     base: None,
+[cranelift-codegen 0.42.0]                 },
+[cranelift-codegen 0.42.0]             },
+[cranelift-codegen 0.42.0]         },
+[cranelift-codegen 0.42.0]         other_typevars: [],
+[cranelift-codegen 0.42.0]     },
+[cranelift-codegen 0.42.0] )

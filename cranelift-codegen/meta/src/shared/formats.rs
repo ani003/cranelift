@@ -145,6 +145,14 @@ pub(crate) fn define(imm: &Immediates, entities: &EntityRefs) -> FormatRegistry 
             .imm(&imm.offset32),
     );
     registry.insert(
+        Builder::new("StoreReg")
+            // .value()
+            .imm(&imm.memflags)
+            .imm_with_name("src", &imm.regunit)
+            .value()
+            .imm(&imm.offset32),
+    );
+    registry.insert(
         Builder::new("StoreComplex")
             .imm(&imm.memflags)
             .value()

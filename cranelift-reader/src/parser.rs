@@ -2512,26 +2512,26 @@ impl<'a> Parser<'a> {
                 }
             }
             InstructionFormat::Control => {
+                let context_store = self.match_value("expected SSA value first operand")?;
                 let func_ref = self.match_fn("expected function reference")?;
                 ctx.check_fn(func_ref, self.loc)?;
                 self.match_token(Token::LPar, "expected '(' before arguments")?;
                 let args = self.parse_value_list()?;
                 self.match_token(Token::RPar, "expected ')' after arguments")?;
-                let dummy = Value::with_number(0).unwrap();
                 InstructionData::Control {
                     opcode,
                     func_ref,
-                    args: args.into_value_list(&[dummy], &mut ctx.function.dfg.value_lists),
+                    args: args.into_value_list(&[context_store], &mut ctx.function.dfg.value_lists),
                 }
             }
             InstructionFormat::Restore => {
+                let context_store = self.match_value("expected SSA value first operand")?;
                 let cont_id = self.match_value("expected SSA value first operand")?;
                 self.match_token(Token::Comma, "expected ',' after continuation id")?;
                 let args = self.parse_value_list()?;
-                let dummy = Value::with_number(0).unwrap();
                 InstructionData::Restore {
                     opcode,
-                    args: args.into_value_list(&[dummy, cont_id], &mut ctx.function.dfg.value_lists),
+                    args: args.into_value_list(&[context_store, cont_id], &mut ctx.function.dfg.value_lists),
                 }
             }
             InstructionFormat::CallIndirect => {
@@ -2638,6 +2638,24 @@ impl<'a> Parser<'a> {
                     args: [arg, addr],
                     offset,
                 }
+            }
+
+            InstructionFormat::StoreReg => {
+                panic!()
+
+                // let flags = self.optional_memflags();
+                // // let arg = self.match_value("expected SSA value operand")?;
+                // let src = self.match_regunit(ctx.unique_isa)?;
+                // self.match_token(Token::Comma, "expected ',' between operands")?;
+                // let addr = self.match_value("expected SSA value address")?;
+                // let offset = self.optional_offset32()?;
+                // InstructionData::StoreReg {
+                //     opcode,
+                //     flags,
+                //     src,
+                //     args: addr,
+                //     offset,
+                // }
             }
 
             InstructionFormat::StoreComplex => {
