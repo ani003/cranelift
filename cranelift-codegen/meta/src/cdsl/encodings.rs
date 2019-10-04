@@ -135,8 +135,8 @@ impl EncodingBuilder {
         assert!(
             inst.format == recipes[self.recipe].format,
             format!(
-                "Inst {} and recipe {} must have the same format!",
-                inst.name, recipes[self.recipe].name
+                "Inst {} and recipe {} must have the same format ({:?}) vs. ({:?})!",
+                inst.name, recipes[self.recipe].name, inst.format, recipes[self.recipe].format
             )
         );
 

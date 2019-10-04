@@ -598,6 +598,8 @@ pub(crate) fn define(
     let rec_stDisp32 = r.template("stDisp32");
     let rec_stDisp32_abcd = r.template("stDisp32_abcd");
     let rec_stDisp8 = r.template("stDisp8");
+    let rec_stDisp8_reg = r.template("stDisp8_reg");
+    let rec_st_reg = r.template("st_reg");
     let rec_stDisp8_abcd = r.template("stDisp8_abcd");
     let rec_stWithIndex = r.template("stWithIndex");
     let rec_stWithIndexDisp32 = r.template("stWithIndexDisp32");
@@ -979,11 +981,15 @@ pub(crate) fn define(
 
 
     // Sketchy stuff for copy_reg_to_mem
-    for recipe in &[rec_st, rec_stDisp8, rec_stDisp32] {
+    for recipe in &[rec_st_reg, rec_stDisp8_reg] {
         eprintln!("loop");
+        e.enc64(copy_reg_to_mem.clone().bind(I64), recipe.opcodes(vec![0x89]).rex().w());
+        
+        // e.enc_i32_i64_ld_st(copy_reg_to_mem, true, recipe.opcodes(vec![0x89]));
+
         // e.enc64(copy_reg_to_mem.clone().bind(I64), recipe.opcodes(vec![0x89]).rex().w());
         // e.enc_i32_i64_ld_st(copy_reg_to_mem, true, recipe.opcodes(vec![0x89]));
-        // e.enc_x86_64(istore32.bind(I64).bind_any(), recipe.opcodes(vec![0x89]));
+        // e.enc_x86_64(copy_reg_to_mem.bind(I64), recipe.opcodes(vec![0x89]));
         // e.enc_i32_i64_ld_st(istore16, false, recipe.opcodes(vec![0x66, 0x89]));
     }
 

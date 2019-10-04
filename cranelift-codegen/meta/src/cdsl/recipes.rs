@@ -260,8 +260,8 @@ impl EncodingRecipeBuilder {
             assert!(
                 operands_in.len() == format.num_value_operands,
                 format!(
-                    "missing operand constraints for recipe {} (format {})",
-                    self.name, format.name
+                    "missing operand constraints for recipe {} (format {}), {} =/= {}",
+                    self.name, format.name, operands_in.len(), format.num_value_operands
                 )
             );
         }

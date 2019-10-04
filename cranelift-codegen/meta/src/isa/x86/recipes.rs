@@ -391,6 +391,7 @@ pub(crate) fn define<'shared>(
     let f_reg_spill = formats.by_name("RegSpill");
     let f_stack_load = formats.by_name("StackLoad");
     let f_store = formats.by_name("Store");
+    let f_regstore = formats.by_name("StoreReg");
     let f_store_complex = formats.by_name("StoreComplex");
     let f_ternary = formats.by_name("Ternary");
     let f_trap = formats.by_name("Trap");
@@ -1349,9 +1350,11 @@ pub(crate) fn define<'shared>(
     {
         // Simple stores.
         let format = formats.get(f_store);
+        let reg_store_format = formats.get(f_regstore);
 
         // A predicate asking if the offset is zero.
         let has_no_offset = InstructionPredicate::new_is_field_equal(format, "offset", "0".into());
+        let has_no_offset_reg = InstructionPredicate::new_is_field_equal(reg_store_format, "offset", "0".into());
 
         // XX /r register-indirect store with no offset.
         let st = recipes.add_template_recipe(
@@ -1374,6 +1377,36 @@ pub(crate) fn define<'shared>(
                             sink.put1(0);
                         } else {
                             modrm_rm(in_reg1, in_reg0, sink);
+                        }
+                    "#,
+                ),
+        );
+
+        // XX /r register-indirect store with no offset.
+        let st_reg = recipes.add_template_recipe(
+            EncodingRecipeBuilder::new("st_reg", f_regstore, 1)
+                .operands_in(vec![gpr])
+                .inst_predicate(has_no_offset_reg.clone())
+                .clobbers_flags(false)
+                .compute_size("size_plus_maybe_sib_or_offset_for_in_reg_1")
+                .emit(
+                    r#"
+                    // {{PUT_OP}}(bits, rex2(dst, src), sink);
+                    // modrm_rr(dst, src, sink);
+
+
+                        if !flags.notrap() {
+                            sink.trap(TrapCode::HeapOutOfBounds, func.srclocs[inst]);
+                        }
+                        {{PUT_OP}}(bits, rex2(in_reg0, src), sink);
+                        if needs_sib_byte(in_reg0) {
+                            modrm_sib(src, sink);
+                            sib_noindex(in_reg0, sink);
+                        } else if needs_offset(in_reg0) {
+                            modrm_disp8(in_reg0, src, sink);
+                            sink.put1(0);
+                        } else {
+                            modrm_rm(in_reg0, src, sink);
                         }
                     "#,
                 ),
@@ -1457,6 +1490,34 @@ pub(crate) fn define<'shared>(
                             sib_noindex(in_reg1, sink);
                         } else {
                             modrm_disp8(in_reg1, in_reg0, sink);
+                        }
+                        let offset: i32 = offset.into();
+                        sink.put1(offset as u8);
+                    "#,
+                ),
+        );
+
+
+        let has_small_offset_reg = InstructionPredicate::new_is_signed_int(reg_store_format, "offset", 8, 0);
+
+        // XX /r register-indirect store with 8-bit offset.
+        let st_disp8_reg = recipes.add_template_recipe(
+            EncodingRecipeBuilder::new("stDisp8_reg", f_regstore, 2)
+                .operands_in(vec![gpr])
+                .inst_predicate(has_small_offset_reg.clone())
+                .clobbers_flags(false)
+                .compute_size("size_plus_maybe_sib_for_in_reg_1")
+                .emit(
+                    r#"
+                        if !flags.notrap() {
+                            sink.trap(TrapCode::HeapOutOfBounds, func.srclocs[inst]);
+                        }
+                        {{PUT_OP}}(bits, rex2(in_reg0, src), sink);
+                        if needs_sib_byte(in_reg0) {
+                            modrm_sib_disp8(src, sink);
+                            sib_noindex(in_reg0, sink);
+                        } else {
+                            modrm_disp8(in_reg0, src, sink);
                         }
                         let offset: i32 = offset.into();
                         sink.put1(offset as u8);
