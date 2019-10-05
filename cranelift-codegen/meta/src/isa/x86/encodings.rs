@@ -599,6 +599,7 @@ pub(crate) fn define(
     let rec_stDisp32_abcd = r.template("stDisp32_abcd");
     let rec_stDisp8 = r.template("stDisp8");
     let rec_stDisp8_reg = r.template("stDisp8_reg");
+    let rec_stDisp32_reg = r.template("stDisp32_reg");
     let rec_st_reg = r.template("st_reg");
     let rec_stDisp8_abcd = r.template("stDisp8_abcd");
     let rec_stWithIndex = r.template("stWithIndex");
@@ -981,10 +982,32 @@ pub(crate) fn define(
 
 
     // Sketchy stuff for copy_reg_to_mem
-    for recipe in &[rec_st_reg, rec_stDisp8_reg] {
+    for recipe in &[rec_st_reg, rec_stDisp8_reg, rec_stDisp32_reg] {
         eprintln!("loop");
-        e.enc64(copy_reg_to_mem.clone().bind(I64), recipe.opcodes(vec![0x89]).rex().w());
+
+        let template = recipe.opcodes(vec![0x89]);
+
+        e.enc32(copy_reg_to_mem.clone().bind(I32), template.clone());
+
+        // REX-less encoding must come after REX encoding so we don't use it by
+        // default. Otherwise reg-alloc would never use r8 and up.
+        e.enc64(copy_reg_to_mem.clone().bind(I32), template.clone().rex());
+        e.enc64(copy_reg_to_mem.clone().bind(I32), template.clone());
+
+        // if w_bit {
+            e.enc64(copy_reg_to_mem.clone().bind(I64), template.rex().w());
+        // } else {
+        //     e.enc64(store.clone().bind(I64), recipe.clone().rex());
+        //     e.enc64(store.clone().bind(I64), recipe);
+        // }
+
+        // e.enc_i32_i64_ld_st(store, true, recipe.opcodes(vec![0x89]));
+        // e.enc_x86_64(copy_reg_to_mem.bind(I64), recipe.opcodes(vec![0x89]));
+        // e.enc64(copy_reg_to_mem.clone().bind(I64), recipe.opcodes(vec![0x89]).rex().w());
+
         
+
+
         // e.enc_i32_i64_ld_st(copy_reg_to_mem, true, recipe.opcodes(vec![0x89]));
 
         // e.enc64(copy_reg_to_mem.clone().bind(I64), recipe.opcodes(vec![0x89]).rex().w());

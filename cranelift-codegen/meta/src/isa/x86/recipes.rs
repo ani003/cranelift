@@ -1388,7 +1388,7 @@ pub(crate) fn define<'shared>(
                 .operands_in(vec![gpr])
                 .inst_predicate(has_no_offset_reg.clone())
                 .clobbers_flags(false)
-                .compute_size("size_plus_maybe_sib_or_offset_for_in_reg_1")
+                .compute_size("size_plus_maybe_sib_or_offset_for_in_reg_0")
                 .emit(
                     r#"
                     // {{PUT_OP}}(bits, rex2(dst, src), sink);
@@ -1506,7 +1506,7 @@ pub(crate) fn define<'shared>(
                 .operands_in(vec![gpr])
                 .inst_predicate(has_small_offset_reg.clone())
                 .clobbers_flags(false)
-                .compute_size("size_plus_maybe_sib_for_in_reg_1")
+                .compute_size("size_plus_maybe_sib_for_in_reg_0")
                 .emit(
                     r#"
                         if !flags.notrap() {
@@ -1598,6 +1598,29 @@ pub(crate) fn define<'shared>(
                             sib_noindex(in_reg1, sink);
                         } else {
                             modrm_disp32(in_reg1, in_reg0, sink);
+                        }
+                        let offset: i32 = offset.into();
+                        sink.put4(offset as u32);
+                    "#,
+                ),
+        );
+
+        let st_disp32_reg = recipes.add_template_recipe(
+            EncodingRecipeBuilder::new("stDisp32_reg", f_regstore, 5)
+                .operands_in(vec![gpr])
+                .clobbers_flags(false)
+                .compute_size("size_plus_maybe_sib_for_in_reg_0")
+                .emit(
+                    r#"
+                        if !flags.notrap() {
+                            sink.trap(TrapCode::HeapOutOfBounds, func.srclocs[inst]);
+                        }
+                        {{PUT_OP}}(bits, rex2(in_reg0, src), sink);
+                        if needs_sib_byte(in_reg0) {
+                            modrm_sib_disp32(src, sink);
+                            sib_noindex(in_reg0, sink);
+                        } else {
+                            modrm_disp32(in_reg0, src, sink);
                         }
                         let offset: i32 = offset.into();
                         sink.put4(offset as u32);

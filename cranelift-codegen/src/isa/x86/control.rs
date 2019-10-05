@@ -85,12 +85,22 @@ pub fn expand_control_x86(
     // let rax_val = pos.ins().copy_to_ssa(I64, RU::rax);
     // pos.ins().store(ir::MemFlags::trusted(), rax_val, entry_addr, 0);
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rax, entry_addr, 0);
-
-    let rbx_val = pos.ins().copy_to_ssa(I64, RU::rbx);
-    pos.ins().store(ir::MemFlags::trusted(), rbx_val, entry_addr, 8);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rbx, entry_addr, 8);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rcx, entry_addr, 16);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rdx, entry_addr, 24);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rbp, entry_addr, 32);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rsp, entry_addr, 40);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rsi, entry_addr, 48);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rdi, entry_addr, 56);
     
-    let rcx_val = pos.ins().copy_to_ssa(I64, RU::rcx);
-    pos.ins().store(ir::MemFlags::trusted(), rcx_val, entry_addr, 16);
+    // pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rip, entry_addr, 64);
+
+
+    // let rbx_val = pos.ins().copy_to_ssa(I64, RU::rbx);
+    // pos.ins().store(ir::MemFlags::trusted(), rbx_val, entry_addr, 8);
+    
+    // let rcx_val = pos.ins().copy_to_ssa(I64, RU::rcx);
+    // pos.ins().store(ir::MemFlags::trusted(), rcx_val, entry_addr, 16);
 
     func.dfg.replace(inst).iconst(I32, 0xdeadbeef);
 
