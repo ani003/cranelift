@@ -20,7 +20,7 @@
 ; }
 
 
-function %control_test() {
+function %control_test() -> i32 {
 	gv0 = symbol %kid
 	gv1 = symbol %cont_table
 	fn0 = %restore200(i64, i64) -> i32
@@ -28,14 +28,15 @@ function %control_test() {
 ebb0:
 	v0 = iconst.i64 123
 	v123 = global_value.i64 gv1
-	v1 = control v123 fn0(v0)
+	v1 = control v0 fn0(v0)
+	v2 = iadd v1, v1
 	; v1 = control fn0(v9, v0)
 	; v1 = iconst.i32 200
 	; v2 = iconst.i32 5
 	; v4 = call fn0(v2, v0)
 	; v3 = iadd v1, v2
-	
+
 	; v9 = iconst.i64 567
 	; v50 = call fn0(v9, v9)
-	return
+	return v2
 }

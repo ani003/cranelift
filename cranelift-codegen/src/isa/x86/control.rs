@@ -92,8 +92,8 @@ pub fn expand_control_x86(
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rsp, entry_addr, 40);
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rsi, entry_addr, 48);
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rdi, entry_addr, 56);
-
-    pos.ins().ip_to_rax(0x23);
+    pos.ins().ip_to_rax(17);
+    pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rax, entry_addr, 64);
 
     // pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rip, entry_addr, 64);
 
@@ -104,7 +104,7 @@ pub fn expand_control_x86(
     // let rcx_val = pos.ins().copy_to_ssa(I64, RU::rcx);
     // pos.ins().store(ir::MemFlags::trusted(), rcx_val, entry_addr, 16);
 
-    func.dfg.replace(inst).iconst(I32, 0xdeadbeef);
+    func.dfg.replace(inst).iconst(I32, 0);
 
     // ...
 
