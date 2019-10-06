@@ -57,11 +57,12 @@ pub(crate) fn define(
         TypeSetBuilder::new().ints(Interval::All).build(),
     );
 
-    let _kId = &TypeVar::new(
-        "kId",
+    let a64 = &TypeVar::new(
+        "a64",
         "A continuation ID type",
         TypeSetBuilder::new().ints(64..64).build(),
     );
+
 
     // let handler = &TypeVar::new(
     //     "handler",
@@ -496,18 +497,19 @@ pub(crate) fn define(
     let SIG = &operand_doc("SIG", &entities.sig_ref, "function signature");
     let callee = &operand_doc("callee", iAddr, "address of function to call");
 
+    let a64_v = &operand("a64_v", a64);
+
     ig.push(
         Inst::new(
-            "control",
+            "setjmp",
             r#"
         Transfer control to handler function.
         "#,
         )
-        .operands_in(vec![garbage, FN, args])
-        .operands_out(vec![rvals])
+        .operands_in(vec![garbage])
+        .operands_out(vec![a64_v])
         .is_control(true)
         .other_side_effects(true),
-        
     );
 
     let k = &operand("k", Int);
