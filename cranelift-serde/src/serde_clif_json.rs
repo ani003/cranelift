@@ -636,13 +636,13 @@ pub fn get_inst_data(inst_index: Inst, func: &Function) -> SerInstData {
         }
 
         InstructionData::StoreReg {
-            opcode,
-            arg,
-            flags,
-            src,
-            offset,
+            opcode: _,
+            arg: _,
+            flags: _,
+            src: _,
+            offset: _,
         } => {
-            panic!()
+            unimplemented!()
 
             // SerInstData::StoreReg {
             //     opcode: opcode.to_string(),
@@ -652,6 +652,14 @@ pub fn get_inst_data(inst_index: Inst, func: &Function) -> SerInstData {
             //     offset: offset.to_string(),
             // }
         }
+
+        InstructionData::ReadIp {
+            offset: _,
+            opcode: _
+        } => {
+            unimplemented!()
+        }
+
         InstructionData::StoreComplex {
             opcode,
             ref args,

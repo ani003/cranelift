@@ -92,7 +92,9 @@ pub fn expand_control_x86(
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rsp, entry_addr, 40);
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rsi, entry_addr, 48);
     pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rdi, entry_addr, 56);
-    
+
+    pos.ins().ip_to_rax(0x23);
+
     // pos.ins().copy_reg_to_mem(ir::MemFlags::trusted(), RU::rip, entry_addr, 64);
 
 

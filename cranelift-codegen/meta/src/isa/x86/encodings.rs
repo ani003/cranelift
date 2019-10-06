@@ -382,6 +382,7 @@ pub(crate) fn define(
     let fpromote = shared.by_name("fpromote");
     let fsub = shared.by_name("fsub");
     let func_addr = shared.by_name("func_addr");
+    let ip_to_rax = shared.by_name("ip_to_rax");
     let get_pinned_reg = shared.by_name("get_pinned_reg");
     let iadd = shared.by_name("iadd");
     let iadd_ifcout = shared.by_name("iadd_ifcout");
@@ -484,6 +485,7 @@ pub(crate) fn define(
     let x86_umulx = x86.by_name("x86_umulx");
 
     // Shorthands for recipes.
+    let rec_ip_to_rax = r.template("ip_to_rax");
     let rec_adjustsp = r.template("adjustsp");
     let rec_adjustsp_ib = r.template("adjustsp_ib");
     let rec_adjustsp_id = r.template("adjustsp_id");
@@ -1327,6 +1329,16 @@ pub(crate) fn define(
         all_ones_funcaddrs_and_not_is_pic,
     );
 
+
+    // ReadIp
+    let f_read_ip = formats.get(formats.by_name("ReadIp"));
+    e.enc64(
+        ip_to_rax,
+        rec_ip_to_rax.opcodes(vec![0x8d]).rex().w()
+        // is_colocated_func,
+    );
+
+
     // 64-bit, colocated, both PIC and non-PIC. Use the lea instruction's pc-relative field.
     let f_func_addr = formats.get(formats.by_name("FuncAddr"));
     let is_colocated_func = InstructionPredicate::new_is_colocated_func(f_func_addr, "func_ref");
@@ -1335,6 +1347,8 @@ pub(crate) fn define(
         rec_pcrel_fnaddr8.opcodes(vec![0x8d]).rex().w(),
         is_colocated_func,
     );
+
+    
 
     // 64-bit, non-colocated, PIC.
     e.enc64_isap(

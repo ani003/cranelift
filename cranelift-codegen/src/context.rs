@@ -116,6 +116,7 @@ impl Context {
         let new_info = unsafe {
             self.emit_to_memory(isa, mem.as_mut_ptr().add(old_len), relocs, traps, stackmaps)
         };
+        println!("info = {:?}, new_info = {:?}", info, new_info);
         debug_assert!(new_info == info);
         Ok(info)
     }

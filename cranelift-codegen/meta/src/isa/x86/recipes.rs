@@ -374,6 +374,7 @@ pub(crate) fn define<'shared>(
     let f_float_cond = formats.by_name("FloatCond");
     let f_float_cond_trap = formats.by_name("FloatCondTrap");
     let f_func_addr = formats.by_name("FuncAddr");
+    let f_read_ip = formats.by_name("ReadIp");
     let f_indirect_jump = formats.by_name("IndirectJump");
     let f_insert_lane = formats.by_name("InsertLane");
     let f_int_compare = formats.by_name("IntCompare");
@@ -1220,6 +1221,28 @@ pub(crate) fn define<'shared>(
                                         &func.dfg.ext_funcs[func_ref].name,
                                         -4);
                     sink.put4(0);
+                "#,
+            ),
+    );
+
+    recipes.add_template_recipe(
+        EncodingRecipeBuilder::new("ip_to_rax", f_read_ip, 5)
+            // .operands_out(vec![gpr])
+            // rex2 gets passed 0 for r/m register because the upper bit of
+            // r/m doesn't get decoded when in rip-relative addressing mode.
+            .emit(
+                r#"
+                    {{PUT_OP}}(bits, rex2(0, 0), sink); // 2nd rex2 argument is destination
+                    modrm_riprel(0, sink); // 1st argument is destination
+                    // The addend adjusts for the difference between the end of the
+                    // instruction and the beginning of the immediate field.
+                    // sink.reloc_external(Reloc::X86PCRel4,
+                    //                     &func.dfg.ext_funcs[func_ref].name,
+                    //                     -4);
+                    let offset: i32 = offset.into();
+                    sink.put4(offset as u32);
+                    // sink.put4(offset);
+                    // sink.put4(0);
                 "#,
             ),
     );

@@ -2,5 +2,5 @@
 .text
 _uthread_ctx_switch:
     movq %rsp, 16(%rdi)
-    leaq (%rip), %rax
+    leaq 6(%rip), %rax
     movq %rax, 10(%rdi)

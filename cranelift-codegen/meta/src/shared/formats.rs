@@ -153,6 +153,10 @@ pub(crate) fn define(imm: &Immediates, entities: &EntityRefs) -> FormatRegistry 
             .imm(&imm.offset32),
     );
     registry.insert(
+        Builder::new("ReadIp")
+            .imm(&imm.offset32),
+    );
+    registry.insert(
         Builder::new("StoreComplex")
             .imm(&imm.memflags)
             .value()

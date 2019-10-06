@@ -2641,7 +2641,7 @@ impl<'a> Parser<'a> {
             }
 
             InstructionFormat::StoreReg => {
-                panic!()
+                unimplemented!()
 
                 // let flags = self.optional_memflags();
                 // // let arg = self.match_value("expected SSA value operand")?;
@@ -2656,6 +2656,10 @@ impl<'a> Parser<'a> {
                 //     args: addr,
                 //     offset,
                 // }
+            }
+
+            InstructionFormat::ReadIp => {
+                unimplemented!()
             }
 
             InstructionFormat::StoreComplex => {

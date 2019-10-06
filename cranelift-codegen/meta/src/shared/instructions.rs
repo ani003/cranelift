@@ -505,7 +505,9 @@ pub(crate) fn define(
         )
         .operands_in(vec![garbage, FN, args])
         .operands_out(vec![rvals])
-        .is_control(true),
+        .is_control(true)
+        .other_side_effects(true),
+        
     );
 
     let k = &operand("k", Int);
@@ -653,6 +655,19 @@ pub(crate) fn define(
         // .other_side_effects(true),
         // .operands_in(vec![MemFlags, x, p, Offset])
         .can_store(true),
+    );
+
+    ig.push(
+        Inst::new(
+            "ip_to_rax",
+            r#"
+        Copies the contents of ''ip'' by an offset to register %rax.
+        "#,
+        )
+        .operands_in(vec![Offset])
+        .other_side_effects(true),
+        // .operands_in(vec![MemFlags, x, p, Offset])
+        // .can_store(true),
     );
 
     let iExt8 = &TypeVar::new(

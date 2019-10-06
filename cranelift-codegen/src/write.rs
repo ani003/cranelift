@@ -671,6 +671,12 @@ pub fn write_operands(
             }
             // write!(w, "{} {}, {}{}", flags, args[0], args[1], offset),
         }
+        ReadIp {
+            offset,
+            ..
+        } => {
+            write!(w, " rip + {} -> %rax", offset)
+        }
         RegMove { arg, src, dst, .. } => {
             if let Some(isa) = isa {
                 let regs = isa.register_info();
