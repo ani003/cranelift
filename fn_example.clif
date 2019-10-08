@@ -1,0 +1,17 @@
+
+
+function %add4(i64) -> i64 {
+ebb0(v0: i64):
+	v1 = iconst.i64 4
+	v2 = iadd v0, v1
+	return v2
+}
+
+function %call_example() -> i64 {
+	fn0 = %add4(i64) -> i64
+
+ebb0:
+	v0 = iconst.i64 38
+	v1 = call fn0(v0)
+	return v1
+}
