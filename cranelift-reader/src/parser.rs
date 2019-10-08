@@ -2641,25 +2641,28 @@ impl<'a> Parser<'a> {
             }
 
             InstructionFormat::StoreReg => {
-                unimplemented!()
-
                 // let flags = self.optional_memflags();
-                // // let arg = self.match_value("expected SSA value operand")?;
-                // let src = self.match_regunit(ctx.unique_isa)?;
+                let src = self.match_regunit(ctx.unique_isa)?;
+                self.match_token(Token::Comma, "expected ',' between operands")?;
+                let addr = self.match_value("expected SSA value address")?;
                 // self.match_token(Token::Comma, "expected ',' between operands")?;
-                // let addr = self.match_value("expected SSA value address")?;
-                // let offset = self.optional_offset32()?;
-                // InstructionData::StoreReg {
-                //     opcode,
-                //     flags,
-                //     src,
-                //     args: addr,
-                //     offset,
-                // }
+                let offset = self.optional_offset32()?;
+                // let offset = self.match_imm32("expected 32-bit integer size")?;
+                InstructionData::StoreReg {
+                    opcode,
+                    flags: MemFlags::trusted(),
+                    src,
+                    arg: addr,
+                    offset,
+                }
             }
 
             InstructionFormat::ReadIp => {
-                unimplemented!()
+                let offset = self.optional_offset32()?;
+                InstructionData::ReadIp {
+                    opcode,
+                    offset,
+                }
             }
 
             InstructionFormat::StoreComplex => {

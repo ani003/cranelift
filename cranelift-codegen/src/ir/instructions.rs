@@ -284,29 +284,31 @@ impl InstructionData {
     }
 
 
-    /// Info about a restore instruction?
-    pub fn analyze_restore<'a>(&'a self, pool: &'a ValueListPool) -> RestoreInfo<'a> {
-        match *self {
-            InstructionData::Restore {
-                opcode: Opcode::Restore, ref args
-            } => {
-                let args_slice = args.as_slice(pool);
-                if args_slice.len() >= 2 {
-                    let k = args_slice[1];
-                    let other_args = &args_slice[2..];
-                    // println!("Self2: {:?}", args);
-                    RestoreInfo::IsRestore(k, other_args)
-                    // unimplemented!();
-                } else {
-                    panic!("Error: restore instruction must have at least one argument")
-                }
+    ///// Info about a restore instruction?
+    // pub fn analyze_restore<'a>(&'a self, pool: &'a ValueListPool) -> RestoreInfo<'a> {
+    //     panic!()
+
+    //     // match *self {
+    //     //     InstructionData::Restore {
+    //     //         opcode: Opcode::Restore, ref args
+    //     //     } => {
+    //     //         let args_slice = args.as_slice(pool);
+    //     //         if args_slice.len() >= 2 {
+    //     //             let k = args_slice[1];
+    //     //             let other_args = &args_slice[2..];
+    //     //             // println!("Self2: {:?}", args);
+    //     //             RestoreInfo::IsRestore(k, other_args)
+    //     //             // unimplemented!();
+    //     //         } else {
+    //     //             panic!("Error: restore instruction must have at least one argument")
+    //     //         }
                 
-            }
-            _ => {
-                RestoreInfo::NotARestore
-            }
-        }
-    }
+    //     //     }
+    //     //     _ => {
+    //     //         RestoreInfo::NotARestore
+    //     //     }
+    //     // }
+    // }
 }
 
 /// Information about branch and jump instructions.

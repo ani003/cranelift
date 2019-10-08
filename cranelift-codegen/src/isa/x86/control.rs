@@ -71,12 +71,37 @@ pub fn expand_setjmp_x86(
     func.dfg.replace(inst).iconst(I32, 0);
 }
 
-pub fn expand_restore_x86(
-    _inst: ir::Inst,
-    _func: &mut ir::Function,
-    _cfg: &mut ControlFlowGraph,
-    _isa: &dyn TargetIsa,
+pub fn expand_longjmp_x86(
+    inst: ir::Inst,
+    func: &mut ir::Function,
+    cfg: &mut ControlFlowGraph,
+    isa: &dyn TargetIsa,
 ) { 
     println!("x86 expand restore!");
-    unimplemented!()
+
+    let (context_addr, return_val) = match func.dfg[inst] {
+        ir::InstructionData::Binary {
+            opcode,
+            args: [context_addr, ret_val],
+            // func_ref,
+        } => {
+            debug_assert_eq!(opcode, ir::Opcode::Longjmp);
+            // assert!(args.len(&func.dfg.value_lists) == 1);
+            // TODO: also need to verify the type of the arg
+            (context_addr, ret_val)
+        }
+        _ => panic!("Wanted longjmp: {}\n{:?}", func.dfg.display_inst(inst, None), func.dfg[inst]),
+    };
+
+    let mut pos = EncCursor::new(func, isa).at_inst(inst);
+    pos.use_srcloc(inst);
+
+    pos.ins().copy_mem_to_reg(ir::MemFlags::trusted(), RU::rax, context_addr, 0);
+    pos.ins().copy_mem_to_reg(ir::MemFlags::trusted(), RU::rbx, context_addr, 8);
+    pos.ins().copy_mem_to_reg(ir::MemFlags::trusted(), RU::rcx, context_addr, 16);
+
+
+    let tmp = pos.ins().iconst(I32, 567);
+
+    func.dfg.replace(inst).return_(&[return_val]);
 }

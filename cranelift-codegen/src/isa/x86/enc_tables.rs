@@ -19,7 +19,7 @@ use crate::regalloc::RegDiversions;
 include!(concat!(env!("OUT_DIR"), "/encoding-x86.rs"));
 include!(concat!(env!("OUT_DIR"), "/legalize-x86.rs"));
 
-pub use super::control::{expand_setjmp_x86, expand_restore_x86, expand_copy_reg_to_mem_x86};
+pub use super::control::{expand_setjmp_x86, expand_longjmp_x86, expand_copy_reg_to_mem_x86};
 
 pub fn needs_sib_byte(reg: RegUnit) -> bool {
     reg == RU::r12 as RegUnit || reg == RU::rsp as RegUnit

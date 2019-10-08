@@ -1996,9 +1996,11 @@ pub(crate) fn define<'shared>(
     {
         // Simple loads.
         let format = formats.get(f_load);
+        let format_reg = formats.get(f_regstore);
 
         // A predicate asking if the offset is zero.
         let has_no_offset = InstructionPredicate::new_is_field_equal(format, "offset", "0".into());
+        let has_no_offset_reg = InstructionPredicate::new_is_field_equal(format_reg, "offset", "0".into());
 
         // XX /r load with no offset.
         recipes.add_template_recipe(
@@ -2026,6 +2028,36 @@ pub(crate) fn define<'shared>(
                     "#,
                 ),
         );
+
+
+
+        recipes.add_template_recipe(
+            EncodingRecipeBuilder::new("ld_reg", f_regstore, 1)
+                .operands_in(vec![gpr])
+                // .operands_out(vec![gpr])
+                .inst_predicate(has_no_offset_reg.clone())
+                .clobbers_flags(false)
+                .compute_size("size_plus_maybe_sib_or_offset_for_in_reg_0")
+                .emit(
+                    r#"
+                        if !flags.notrap() {
+                            sink.trap(TrapCode::HeapOutOfBounds, func.srclocs[inst]);
+                        }
+                        {{PUT_OP}}(bits, rex2(in_reg0, src), sink);
+                        if needs_sib_byte(in_reg0) {
+                            modrm_sib(src, sink);
+                            sib_noindex(in_reg0, sink);
+                        } else if needs_offset(in_reg0) {
+                            modrm_disp8(in_reg0, src, sink);
+                            sink.put1(0);
+                        } else {
+                            modrm_rm(in_reg0, src, sink);
+                        }
+                    "#,
+                ),
+        );
+
+
 
         // XX /r float load with no offset.
         recipes.add_template_recipe(
@@ -2055,6 +2087,7 @@ pub(crate) fn define<'shared>(
         );
 
         let has_small_offset = InstructionPredicate::new_is_signed_int(format, "offset", 8, 0);
+        let has_small_offset_reg = InstructionPredicate::new_is_signed_int(format_reg, "offset", 8, 0);
 
         // XX /r load with 8-bit offset.
         recipes.add_template_recipe(
@@ -2081,6 +2114,35 @@ pub(crate) fn define<'shared>(
                     "#,
                 ),
         );
+
+
+
+        recipes.add_template_recipe(
+            EncodingRecipeBuilder::new("ldDisp8_reg", f_regstore, 2)
+                .operands_in(vec![gpr])
+                // .operands_out(vec![gpr])
+                .inst_predicate(has_small_offset_reg.clone())
+                .clobbers_flags(false)
+                .compute_size("size_plus_maybe_sib_for_in_reg_0")
+                .emit(
+                    r#"
+                        if !flags.notrap() {
+                            sink.trap(TrapCode::HeapOutOfBounds, func.srclocs[inst]);
+                        }
+                        {{PUT_OP}}(bits, rex2(in_reg0, src), sink);
+                        if needs_sib_byte(in_reg0) {
+                            modrm_sib_disp8(src, sink);
+                            sib_noindex(in_reg0, sink);
+                        } else {
+                            modrm_disp8(in_reg0, src, sink);
+                        }
+                        let offset: i32 = offset.into();
+                        sink.put1(offset as u8);
+                    "#,
+                ),
+        );
+
+
 
         // XX /r float load with 8-bit offset.
         recipes.add_template_recipe(
@@ -2109,6 +2171,7 @@ pub(crate) fn define<'shared>(
         );
 
         let has_big_offset = InstructionPredicate::new_is_signed_int(format, "offset", 32, 0);
+        let has_big_offset_reg = InstructionPredicate::new_is_signed_int(format_reg, "offset", 32, 0);
 
         // XX /r load with 32-bit offset.
         recipes.add_template_recipe(
@@ -2135,6 +2198,33 @@ pub(crate) fn define<'shared>(
                     "#,
                 ),
         );
+
+
+        recipes.add_template_recipe(
+            EncodingRecipeBuilder::new("ldDisp32_reg", f_regstore, 5)
+                .operands_in(vec![gpr])
+                // .operands_out(vec![gpr])
+                .inst_predicate(has_big_offset_reg.clone())
+                .clobbers_flags(false)
+                .compute_size("size_plus_maybe_sib_for_in_reg_0")
+                .emit(
+                    r#"
+                        if !flags.notrap() {
+                            sink.trap(TrapCode::HeapOutOfBounds, func.srclocs[inst]);
+                        }
+                        {{PUT_OP}}(bits, rex2(in_reg0, src), sink);
+                        if needs_sib_byte(in_reg0) {
+                            modrm_sib_disp32(src, sink);
+                            sib_noindex(in_reg0, sink);
+                        } else {
+                            modrm_disp32(in_reg0, src, sink);
+                        }
+                        let offset: i32 = offset.into();
+                        sink.put4(offset as u32);
+                    "#,
+                ),
+        );
+
 
         // XX /r float load with 32-bit offset.
         recipes.add_template_recipe(

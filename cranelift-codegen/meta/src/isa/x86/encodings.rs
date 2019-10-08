@@ -445,6 +445,7 @@ pub(crate) fn define(
     let sshr_imm = shared.by_name("sshr_imm");
     let stack_addr = shared.by_name("stack_addr");
     let copy_reg_to_mem = shared.by_name("copy_reg_to_mem");
+    let copy_mem_to_reg = shared.by_name("copy_mem_to_reg");
     let store = shared.by_name("store");
     let store_complex = shared.by_name("store_complex");
     let symbol_value = shared.by_name("symbol_value");
@@ -551,6 +552,11 @@ pub(crate) fn define(
     let rec_jt_base = r.template("jt_base");
     let rec_jt_entry = r.template("jt_entry");
     let rec_ld = r.template("ld");
+
+    let rec_ldDisp8_reg = r.template("ldDisp8_reg");
+    let rec_ldDisp32_reg = r.template("ldDisp32_reg");
+    let rec_ld_reg = r.template("ld_reg");
+
     let rec_ldDisp32 = r.template("ldDisp32");
     let rec_ldDisp8 = r.template("ldDisp8");
     let rec_ldWithIndex = r.template("ldWithIndex");
@@ -1044,6 +1050,27 @@ pub(crate) fn define(
     for &ty in &[I8, I16] {
         e.enc_both(spill.bind(ty), rec_spillSib32.opcodes(vec![0x89]));
         e.enc_both(regspill.bind(ty), rec_regspill32.opcodes(vec![0x89]));
+    }
+
+
+    for recipe in &[rec_ld_reg, rec_ldDisp8_reg, rec_ldDisp32_reg] {
+        // e.enc_i32_i64_ld_st(load, true, recipe.opcodes(vec![0x8b]));
+
+        let template = recipe.opcodes(vec![0x8b]);
+        
+        e.enc32(copy_mem_to_reg.clone().bind(I32), template.clone());
+
+        // REX-less encoding must come after REX encoding so we don't use it by
+        // default. Otherwise reg-alloc would never use r8 and up.
+        e.enc64(copy_mem_to_reg.clone().bind(I32), template.clone().rex());
+        e.enc64(copy_mem_to_reg.clone().bind(I32), template.clone());
+
+        // if w_bit {
+            e.enc64(copy_mem_to_reg.clone().bind(I64), template.rex().w());
+        // } else {
+        //     self.enc64(inst.clone().bind(I64).bind_any(), template.clone().rex());
+        //     self.enc64(inst.clone().bind(I64).bind_any(), template);
+        // }
     }
 
     for recipe in &[rec_ld, rec_ldDisp8, rec_ldDisp32] {

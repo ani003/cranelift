@@ -1296,37 +1296,37 @@ impl<'a> Verifier<'a> {
             CallInfo::NotACall => {}
         }
 
-        match self.func.dfg[inst].analyze_restore(&self.func.dfg.value_lists) {
-            RestoreInfo::IsRestore(_k, args) => {
-                // TODO: check the type of _k???
+        // match self.func.dfg[inst].analyze_restore(&self.func.dfg.value_lists) {
+        //     RestoreInfo::IsRestore(_k, args) => {
+        //         // TODO: check the type of _k???
 
 
-                // let args = self.func.dfg.inst_variable_args(inst);
-                let expected_types = &self.func.signature.returns;
-                if args.len() != expected_types.len() {
-                    return nonfatal!(
-                        errors,
-                        inst,
-                        "argument count of restore must match function signature return count"
-                    );
-                }
-                for (i, (&arg, &expected_type)) in args.iter().zip(expected_types).enumerate() {
-                    let arg_type = self.func.dfg.value_type(arg);
-                    if arg_type != expected_type.value_type {
-                        report!(
-                            errors,
-                            inst,
-                            "arg {} ({}) has type {}, must match function signature of {}",
-                            i,
-                            arg,
-                            arg_type,
-                            expected_type
-                        );
-                    }
-                }
-            }
-            RestoreInfo::NotARestore => {}
-        }
+        //         // let args = self.func.dfg.inst_variable_args(inst);
+        //         let expected_types = &self.func.signature.returns;
+        //         if args.len() != expected_types.len() {
+        //             return nonfatal!(
+        //                 errors,
+        //                 inst,
+        //                 "argument count of restore must match function signature return count"
+        //             );
+        //         }
+        //         for (i, (&arg, &expected_type)) in args.iter().zip(expected_types).enumerate() {
+        //             let arg_type = self.func.dfg.value_type(arg);
+        //             if arg_type != expected_type.value_type {
+        //                 report!(
+        //                     errors,
+        //                     inst,
+        //                     "arg {} ({}) has type {}, must match function signature of {}",
+        //                     i,
+        //                     arg,
+        //                     arg_type,
+        //                     expected_type
+        //                 );
+        //             }
+        //         }
+        //     }
+        //     RestoreInfo::NotARestore => {}
+        // }
 
         Ok(())
     }

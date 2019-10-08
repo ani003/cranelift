@@ -20,7 +20,7 @@ pub(crate) fn define(shared: &mut SharedDefinitions, x86_instructions: &Instruct
     // List of instructions.
     let insts = &shared.instructions;
     let setjmp = insts.by_name("setjmp");
-    let restore = insts.by_name("restore");
+    let longjmp = insts.by_name("longjmp");
     let copy_reg_to_mem = insts.by_name("copy_reg_to_mem");
     let band = insts.by_name("band");
     let bor = insts.by_name("bor");
@@ -65,7 +65,7 @@ pub(crate) fn define(shared: &mut SharedDefinitions, x86_instructions: &Instruct
 
 
     group.custom_legalize(setjmp, "expand_setjmp_x86");
-    group.custom_legalize(restore, "expand_restore_x86");
+    group.custom_legalize(longjmp, "expand_longjmp_x86");
     group.custom_legalize(copy_reg_to_mem, "expand_copy_reg_to_mem_x86");
 
 

@@ -512,17 +512,17 @@ pub(crate) fn define(
         .other_side_effects(true),
     );
 
-    let k = &operand("k", Int);
+    // let k = &operand("k", Int);
 
     ig.push(
         Inst::new(
-            "restore",
+            "longjmp",
             r#"
         Transfer control to given continuation.
         "#,
         )
         // .operands_in(vec![FN, args])
-        .operands_in(vec![garbage, k, rvals])
+        .operands_in(vec![garbage, a64_v])
         // .is_return(true)
         .is_terminator(true)
         .is_restore(true),
@@ -639,6 +639,7 @@ pub(crate) fn define(
     );
 
     let src = &operand("src", &imm.regunit);
+    let dst = &operand("dst", &imm.regunit);
 
     ig.push(
         Inst::new(
@@ -657,6 +658,45 @@ pub(crate) fn define(
         // .other_side_effects(true),
         // .operands_in(vec![MemFlags, x, p, Offset])
         .can_store(true),
+    );
+
+    ig.push(
+        Inst::new(
+            "copy_mem_to_reg",
+            r#"
+        Copies the contents of ''src'' register to ''a'' address.
+
+        This instruction copies the contents of one register, regardless of its SSA name, to
+        another register, creating a new SSA name.  In that sense it is a one-sided version
+        of ''copy_special''.  This instruction is internal and should not be created by
+        Cranelift users.
+        "#,
+        )
+        .operands_in(vec![MemFlags, dst, p, Offset])
+        // .operands_out(vec![a])
+        .other_side_effects(true)
+        // .operands_in(vec![MemFlags, x, p, Offset])
+        // .can_store(true),
+    );
+
+    ig.push(
+        Inst::new(
+            "reg_jmp",
+            r#"
+        Copies the contents of ''src'' register to ''a'' address.
+
+        This instruction copies the contents of one register, regardless of its SSA name, to
+        another register, creating a new SSA name.  In that sense it is a one-sided version
+        of ''copy_special''.  This instruction is internal and should not be created by
+        Cranelift users.
+        "#,
+        )
+        .operands_in(vec![src])
+        // .operands_out(vec![a])
+        // .other_side_effects(true)
+        .is_terminator(true)
+        // .operands_in(vec![MemFlags, x, p, Offset])
+        // .can_store(true),
     );
 
     ig.push(
