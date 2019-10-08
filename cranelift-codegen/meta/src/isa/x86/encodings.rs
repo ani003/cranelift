@@ -397,6 +397,7 @@ pub(crate) fn define(
     let ifcmp_sp = shared.by_name("ifcmp_sp");
     let imul = shared.by_name("imul");
     let indirect_jump_table_br = shared.by_name("indirect_jump_table_br");
+    let reg_jmp = shared.by_name("reg_jmp");
     let ireduce = shared.by_name("ireduce");
     let ishl = shared.by_name("ishl");
     let ishl_imm = shared.by_name("ishl_imm");
@@ -546,6 +547,7 @@ pub(crate) fn define(
     let rec_icscc_ib = r.template("icscc_ib");
     let rec_icscc_id = r.template("icscc_id");
     let rec_indirect_jmp = r.template("indirect_jmp");
+    let rec_reg_jmp = r.template("reg_jmp");
     let rec_is_zero = r.template("is_zero");
     let rec_jmpb = r.template("jmpb");
     let rec_jmpd = r.template("jmpd");
@@ -1509,6 +1511,12 @@ pub(crate) fn define(
     e.enc32(
         indirect_jump_table_br.bind(I32),
         rec_indirect_jmp.opcodes(vec![0xff]).rrr(4),
+    );
+
+    // reg_jmp
+    e.enc_x86_64(
+        reg_jmp,
+        rec_reg_jmp.opcodes(vec![0xff]).rrr(4),
     );
 
     // Trap as ud2

@@ -369,6 +369,7 @@ pub(crate) fn define<'shared>(
     let f_call_indirect = formats.by_name("CallIndirect");
     let f_copy_special = formats.by_name("CopySpecial");
     let f_copy_to_ssa = formats.by_name("CopyToSsa");
+    let f_reg_jmp = formats.by_name("CopyToSsa");
     let f_extract_lane = formats.by_name("ExtractLane"); // TODO this would preferably retrieve a BinaryImm8 format but because formats are compared structurally and ExtractLane has the same structure this is impossible--if we rename ExtractLane, it may even impact parsing
     let f_float_compare = formats.by_name("FloatCompare");
     let f_float_cond = formats.by_name("FloatCond");
@@ -2607,6 +2608,18 @@ pub(crate) fn define<'shared>(
                 r#"
                     {{PUT_OP}}(bits, rex1(in_reg0), sink);
                     modrm_r_bits(in_reg0, bits, sink);
+                "#,
+            ),
+    );
+
+    recipes.add_template_recipe(
+        EncodingRecipeBuilder::new("reg_jmp", f_reg_jmp, 1)
+            // .operands_in(vec![])
+            .clobbers_flags(false)
+            .emit(
+                r#"
+                    {{PUT_OP}}(bits, rex1(src), sink);
+                    modrm_r_bits(src, bits, sink);
                 "#,
             ),
     );

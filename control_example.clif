@@ -20,25 +20,25 @@ target x86_64 haswell
 ; }
 
 
-function %setjmp_f(i64) -> i64 {
+; function %setjmp_f(i64) -> i64 {
 
-ebb0(v0: i64):
-	copy_reg_to_mem %rax, v0+0
-	copy_reg_to_mem %rbx, v0+8
-	copy_reg_to_mem %rcx, v0+16
-	copy_reg_to_mem %rdx, v0+24
-	copy_reg_to_mem %rbp, v0+32
-	copy_reg_to_mem %rsp, v0+40
-	copy_reg_to_mem %rsi, v0+48
-	copy_reg_to_mem %rdi, v0+56
+; ebb0(v0: i64):
+; 	copy_reg_to_mem %rax, v0+0
+; 	copy_reg_to_mem %rbx, v0+8
+; 	copy_reg_to_mem %rcx, v0+16
+; 	copy_reg_to_mem %rdx, v0+24
+; 	copy_reg_to_mem %rbp, v0+32
+; 	copy_reg_to_mem %rsp, v0+40
+; 	copy_reg_to_mem %rsi, v0+48
+; 	copy_reg_to_mem %rdi, v0+56
 
-	ip_to_rax +17
-	copy_reg_to_mem %rax, v0+64
+; 	ip_to_rax +17
+; 	copy_reg_to_mem %rax, v0+64
 
-	v1 = iconst.i64 0
+; 	v1 = iconst.i64 0
 
-	return v1
-}
+; 	return v1
+; }
 
 
 function %longjmp_f(i64, i64) {
@@ -56,33 +56,33 @@ ebb0(v0: i64, v1: i64): ; (addr, ret_val)
 	copy_mem_to_reg %rdi, v0+56 ; HAVE to do this one last
 
 	; indirect jump to r11
-	
+	reg_jmp %r11
 
-	return
+	; return
 }
 
-function %control_test() -> i64 {
-	gv0 = symbol %kid
-	gv1 = symbol %cont_table
-	fn0 = %setjmp_f(i64) -> i64
-	fn1 = %longjmp_f(i64, i64)
+; function %control_test() -> i64 {
+; 	gv0 = symbol %kid
+; 	gv1 = symbol %cont_table
+; 	fn0 = %setjmp_f(i64) -> i64
+; 	fn1 = %longjmp_f(i64, i64)
 
-ebb0:
-	v0 = iconst.i64 123
-	; v123 = global_value.i64 gv1
-	; v1 = setjmp v0
-	v1 = call fn0(v0)
+; ebb0:
+; 	v0 = iconst.i64 123
+; 	; v123 = global_value.i64 gv1
+; 	; v1 = setjmp v0
+; 	v1 = call fn0(v0)
 
-	v2 = iconst.i64 42
-	call fn1(v0, v2)
+; 	v2 = iconst.i64 42
+; 	call fn1(v0, v2)
 
-	; v1 = control fn0(v9, v0)
-	; v1 = iconst.i32 200
-	; v2 = iconst.i32 5
-	; v4 = call fn0(v2, v0)
-	; v3 = iadd v1, v2
+; 	; v1 = control fn0(v9, v0)
+; 	; v1 = iconst.i32 200
+; 	; v2 = iconst.i32 5
+; 	; v4 = call fn0(v2, v0)
+; 	; v3 = iadd v1, v2
 
-	; v9 = iconst.i64 567
-	; v50 = call fn0(v9, v9)
-	return v1
-}
+; 	; v9 = iconst.i64 567
+; 	; v50 = call fn0(v9, v9)
+; 	return v1
+; }
