@@ -2,8 +2,11 @@
 
 use crate::disasm::{PrintRelocs, PrintStackmaps, PrintTraps};
 use crate::utils::{parse_sets_and_triple, read_to_string};
+use cranelift_codegen::cursor::{Cursor, FuncCursor};
+use cranelift_codegen::flowgraph::ControlFlowGraph;
+use cranelift_codegen::ir::types::{F32, F64};
 use cranelift_codegen::ir::{
-    Ebb, FuncRef, Function, GlobalValueData, Inst, InstBuilder, InstructionData, StackSlots,
+    self, Ebb, FuncRef, Function, GlobalValueData, Inst, InstBuilder, InstructionData, StackSlots,
     TrapCode,
 };
 use cranelift_codegen::isa::TargetIsa;
@@ -48,9 +51,7 @@ pub fn run(
         match reduce(isa, func, verbose) {
             Ok((func, crash_msg)) => {
                 println!("Crash message: {}", crash_msg);
-
                 println!("\n{}", func);
-
                 println!(
                     "{} ebbs {} insts -> {} ebbs {} insts",
                     orig_ebb_count,
@@ -66,81 +67,27 @@ pub fn run(
     Ok(())
 }
 
-enum MutationKind {
-    /// The mutation reduced the amount of instructions or ebbs.
-    Shrinked,
+enum ProgressStatus {
+    /// The mutation raised or reduced the amount of instructions or ebbs.
+    ExpandedOrShrinked,
+
     /// The mutation only changed an instruction. Performing another round of mutations may only
     /// reduce the test case if another mutation shrank the test case.
     Changed,
+
+    /// No need to re-test if the program crashes, because the mutation had no effect, but we want
+    /// to keep on iterating.
+    Skip,
 }
 
 trait Mutator {
     fn name(&self) -> &'static str;
+    fn mutation_count(&self, func: &Function) -> usize;
+    fn mutate(&mut self, func: Function) -> Option<(Function, String, ProgressStatus)>;
 
-    fn mutation_count(&self, func: &Function) -> Option<usize>;
-
-    fn mutate(&mut self, func: Function) -> Option<(Function, String, MutationKind)>;
-
-    fn reduce(
-        &mut self,
-        ccc: &mut CrashCheckContext,
-        mut func: Function,
-        progress_bar_prefix: String,
-        verbose: bool,
-        should_keep_reducing: &mut bool,
-    ) -> Function {
-        let progress = ProgressBar::with_draw_target(
-            self.mutation_count(&func).unwrap_or(0) as u64,
-            ProgressDrawTarget::stdout(),
-        );
-        progress.set_style(
-            ProgressStyle::default_bar().template("{bar:60} {prefix:40} {pos:>4}/{len:>4} {msg}"),
-        );
-
-        progress.set_prefix(&(progress_bar_prefix + &format!(" phase {}", self.name())));
-
-        for _ in 0..10000 {
-            progress.inc(1);
-
-            let (mutated_func, msg, mutation_kind) = match self.mutate(func.clone()) {
-                Some(res) => res,
-                None => {
-                    break;
-                }
-            };
-
-            progress.set_message(&msg);
-
-            match ccc.check_for_crash(&mutated_func) {
-                CheckResult::Succeed => {
-                    // Shrinking didn't hit the problem anymore, discard changes.
-                    continue;
-                }
-                CheckResult::Crash(_) => {
-                    // Panic remained while shrinking, make changes definitive.
-                    func = mutated_func;
-                    match mutation_kind {
-                        MutationKind::Shrinked => {
-                            *should_keep_reducing = true;
-                            if verbose {
-                                progress.println(format!("{}: shrink", msg));
-                            }
-                        }
-                        MutationKind::Changed => {
-                            if verbose {
-                                progress.println(format!("{}: changed", msg));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        progress.set_message("done");
-        progress.finish();
-
-        func
-    }
+    /// Gets called when the returned mutated function kept on causing the crash. This can be used
+    /// to update position of the next item to look at. Does nothing by default.
+    fn did_crash(&mut self) {}
 }
 
 /// Try to remove instructions.
@@ -165,43 +112,32 @@ impl Mutator for RemoveInst {
         "remove inst"
     }
 
-    fn mutation_count(&self, func: &Function) -> Option<usize> {
-        Some(inst_count(func))
+    fn mutation_count(&self, func: &Function) -> usize {
+        inst_count(func)
     }
 
-    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, MutationKind)> {
-        if let Some((prev_ebb, prev_inst)) =
-            next_inst_ret_prev(&func, &mut self.ebb, &mut self.inst)
-        {
+    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, ProgressStatus)> {
+        next_inst_ret_prev(&func, &mut self.ebb, &mut self.inst).map(|(prev_ebb, prev_inst)| {
             func.layout.remove_inst(prev_inst);
-            if func.layout.ebb_insts(prev_ebb).next().is_none() {
+            let msg = if func.layout.ebb_insts(prev_ebb).next().is_none() {
                 // Make sure empty ebbs are removed, as `next_inst_ret_prev` depends on non empty ebbs
                 func.layout.remove_ebb(prev_ebb);
-                Some((
-                    func,
-                    format!("Remove inst {} and empty ebb {}", prev_inst, prev_ebb),
-                    MutationKind::Shrinked,
-                ))
+                format!("Remove inst {} and empty ebb {}", prev_inst, prev_ebb)
             } else {
-                Some((
-                    func,
-                    format!("Remove inst {}", prev_inst),
-                    MutationKind::Shrinked,
-                ))
-            }
-        } else {
-            None
-        }
+                format!("Remove inst {}", prev_inst)
+            };
+            (func, msg, ProgressStatus::ExpandedOrShrinked)
+        })
     }
 }
 
-/// Try to replace instructions with `iconst`.
-struct ReplaceInstWithIconst {
+/// Try to replace instructions with `iconst` or `fconst`.
+struct ReplaceInstWithConst {
     ebb: Ebb,
     inst: Inst,
 }
 
-impl ReplaceInstWithIconst {
+impl ReplaceInstWithConst {
     fn new(func: &Function) -> Self {
         let first_ebb = func.layout.entry_block().unwrap();
         let first_inst = func.layout.first_inst(first_ebb).unwrap();
@@ -210,36 +146,90 @@ impl ReplaceInstWithIconst {
             inst: first_inst,
         }
     }
+
+    fn const_for_type<'f, T: InstBuilder<'f>>(builder: T, ty: ir::Type) -> &'static str {
+        // Try to keep the result type consistent, and default to an integer type
+        // otherwise: this will cover all the cases for f32/f64 and integer types, or
+        // create verifier errors otherwise.
+        if ty == F32 {
+            builder.f32const(0.0);
+            "f32const"
+        } else if ty == F64 {
+            builder.f64const(0.0);
+            "f64const"
+        } else {
+            builder.iconst(ty, 0);
+            "iconst"
+        }
+    }
 }
 
-impl Mutator for ReplaceInstWithIconst {
+impl Mutator for ReplaceInstWithConst {
     fn name(&self) -> &'static str {
-        "replace inst with iconst"
+        "replace inst with const"
     }
 
-    fn mutation_count(&self, func: &Function) -> Option<usize> {
-        Some(inst_count(func))
+    fn mutation_count(&self, func: &Function) -> usize {
+        inst_count(func)
     }
 
-    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, MutationKind)> {
-        if let Some((_prev_ebb, prev_inst)) =
-            next_inst_ret_prev(&func, &mut self.ebb, &mut self.inst)
-        {
-            let results = func.dfg.inst_results(prev_inst);
-            if results.len() == 1 {
-                let ty = func.dfg.value_type(results[0]);
-                func.dfg.replace(prev_inst).iconst(ty, 0);
-                Some((
-                    func,
-                    format!("Replace inst {} with iconst.{}", prev_inst, ty),
-                    MutationKind::Changed,
-                ))
-            } else {
-                Some((func, format!(""), MutationKind::Changed))
+    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, ProgressStatus)> {
+        next_inst_ret_prev(&func, &mut self.ebb, &mut self.inst).map(|(_prev_ebb, prev_inst)| {
+            let num_results = func.dfg.inst_results(prev_inst).len();
+
+            let opcode = func.dfg[prev_inst].opcode();
+            if num_results == 0
+                || opcode == ir::Opcode::Iconst
+                || opcode == ir::Opcode::F32const
+                || opcode == ir::Opcode::F64const
+            {
+                return (func, format!(""), ProgressStatus::Skip);
             }
-        } else {
-            None
-        }
+
+            if num_results == 1 {
+                let ty = func.dfg.value_type(func.dfg.first_result(prev_inst));
+                let new_inst_name = Self::const_for_type(func.dfg.replace(prev_inst), ty);
+                return (
+                    func,
+                    format!("Replace inst {} with {}.", prev_inst, new_inst_name),
+                    ProgressStatus::Changed,
+                );
+            }
+
+            // At least 2 results. Replace each instruction with as many const instructions as
+            // there are results.
+            let mut pos = FuncCursor::new(&mut func).at_inst(prev_inst);
+
+            // Copy result SSA names into our own vector; otherwise we couldn't mutably borrow pos
+            // in the loop below.
+            let results = pos
+                .func
+                .dfg
+                .inst_results(prev_inst)
+                .iter()
+                .cloned()
+                .collect::<Vec<_>>();
+
+            // Detach results from the previous instruction, since we're going to reuse them.
+            pos.func.dfg.clear_results(prev_inst);
+
+            let mut inst_names = Vec::new();
+            for r in results {
+                let ty = pos.func.dfg.value_type(r);
+                let builder = pos.ins().with_results([Some(r)]);
+                let new_inst_name = Self::const_for_type(builder, ty);
+                inst_names.push(new_inst_name);
+            }
+
+            // Remove the instruction.
+            assert_eq!(pos.remove_inst(), prev_inst);
+
+            (
+                func,
+                format!("Replace inst {} with {}", prev_inst, inst_names.join(" / ")),
+                ProgressStatus::ExpandedOrShrinked,
+            )
+        })
     }
 }
 
@@ -265,23 +255,24 @@ impl Mutator for ReplaceInstWithTrap {
         "replace inst with trap"
     }
 
-    fn mutation_count(&self, func: &Function) -> Option<usize> {
-        Some(inst_count(func))
+    fn mutation_count(&self, func: &Function) -> usize {
+        inst_count(func)
     }
 
-    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, MutationKind)> {
-        if let Some((_prev_ebb, prev_inst)) =
-            next_inst_ret_prev(&func, &mut self.ebb, &mut self.inst)
-        {
-            func.dfg.replace(prev_inst).trap(TrapCode::User(0));
-            Some((
+    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, ProgressStatus)> {
+        next_inst_ret_prev(&func, &mut self.ebb, &mut self.inst).map(|(_prev_ebb, prev_inst)| {
+            let status = if func.dfg[prev_inst].opcode() == ir::Opcode::Trap {
+                ProgressStatus::Skip
+            } else {
+                func.dfg.replace(prev_inst).trap(TrapCode::User(0));
+                ProgressStatus::Changed
+            };
+            (
                 func,
                 format!("Replace inst {} with trap", prev_inst),
-                MutationKind::Changed,
-            ))
-        } else {
-            None
-        }
+                status,
+            )
+        })
     }
 }
 
@@ -303,25 +294,23 @@ impl Mutator for RemoveEbb {
         "remove ebb"
     }
 
-    fn mutation_count(&self, func: &Function) -> Option<usize> {
-        Some(ebb_count(func))
+    fn mutation_count(&self, func: &Function) -> usize {
+        ebb_count(func)
     }
 
-    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, MutationKind)> {
-        if let Some(next_ebb) = func.layout.next_ebb(self.ebb) {
+    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, ProgressStatus)> {
+        func.layout.next_ebb(self.ebb).map(|next_ebb| {
             self.ebb = next_ebb;
             while let Some(inst) = func.layout.last_inst(self.ebb) {
                 func.layout.remove_inst(inst);
             }
             func.layout.remove_ebb(self.ebb);
-            Some((
+            (
                 func,
                 format!("Remove ebb {}", next_ebb),
-                MutationKind::Shrinked,
-            ))
-        } else {
-            None
-        }
+                ProgressStatus::ExpandedOrShrinked,
+            )
+        })
     }
 }
 
@@ -341,11 +330,11 @@ impl Mutator for RemoveUnusedEntities {
         "remove unused entities"
     }
 
-    fn mutation_count(&self, _func: &Function) -> Option<usize> {
-        Some(4)
+    fn mutation_count(&self, _func: &Function) -> usize {
+        4
     }
 
-    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, MutationKind)> {
+    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, ProgressStatus)> {
         let name = match self.kind {
             0 => {
                 let mut ext_func_usage_map = HashMap::new();
@@ -559,7 +548,114 @@ impl Mutator for RemoveUnusedEntities {
             _ => return None,
         };
         self.kind += 1;
-        Some((func, name.to_owned(), MutationKind::Changed))
+        Some((func, name.to_owned(), ProgressStatus::Changed))
+    }
+}
+
+struct MergeBlocks {
+    ebb: Ebb,
+    prev_ebb: Option<Ebb>,
+}
+
+impl MergeBlocks {
+    fn new(func: &Function) -> Self {
+        Self {
+            ebb: func.layout.entry_block().unwrap(),
+            prev_ebb: None,
+        }
+    }
+}
+
+impl Mutator for MergeBlocks {
+    fn name(&self) -> &'static str {
+        "merge blocks"
+    }
+
+    fn mutation_count(&self, func: &Function) -> usize {
+        // N ebbs may result in at most N-1 merges.
+        ebb_count(func) - 1
+    }
+
+    fn mutate(&mut self, mut func: Function) -> Option<(Function, String, ProgressStatus)> {
+        let ebb = match func.layout.next_ebb(self.ebb) {
+            Some(ebb) => ebb,
+            None => return None,
+        };
+
+        self.ebb = ebb;
+
+        let mut cfg = ControlFlowGraph::new();
+        cfg.compute(&func);
+
+        if cfg.pred_iter(ebb).count() != 1 {
+            return Some((
+                func,
+                format!("did nothing for {}", ebb),
+                ProgressStatus::Skip,
+            ));
+        }
+
+        let pred = cfg.pred_iter(ebb).next().unwrap();
+
+        #[cfg(feature = "basic-blocks")]
+        {
+            // If the branch instruction that lead us to this block is preceded by another branch
+            // instruction, then we have a conditional jump sequence that we should not break by
+            // replacing the second instruction by more of them.
+            if let Some(pred_pred_inst) = func.layout.prev_inst(pred.inst) {
+                if func.dfg[pred_pred_inst].opcode().is_branch() {
+                    return Some((
+                        func,
+                        format!("did nothing for {}", ebb),
+                        ProgressStatus::Skip,
+                    ));
+                }
+            }
+        }
+
+        assert!(func.dfg.ebb_params(ebb).len() == func.dfg.inst_variable_args(pred.inst).len());
+
+        // If there were any EBB parameters in ebb, then the last instruction in pred will
+        // fill these parameters. Make the EBB params aliases of the terminator arguments.
+        for (ebb_param, arg) in func
+            .dfg
+            .detach_ebb_params(ebb)
+            .as_slice(&func.dfg.value_lists)
+            .iter()
+            .cloned()
+            .zip(func.dfg.inst_variable_args(pred.inst).iter().cloned())
+            .collect::<Vec<_>>()
+        {
+            if ebb_param != arg {
+                func.dfg.change_to_alias(ebb_param, arg);
+            }
+        }
+
+        // Remove the terminator branch to the current EBB.
+        func.layout.remove_inst(pred.inst);
+
+        // Move all the instructions to the predecessor.
+        while let Some(inst) = func.layout.first_inst(ebb) {
+            func.layout.remove_inst(inst);
+            func.layout.append_inst(inst, pred.ebb);
+        }
+
+        // Remove the predecessor EBB.
+        func.layout.remove_ebb(ebb);
+
+        // Record the previous EBB: if we caused a crash (as signaled by a call to did_crash), then
+        // we'll start back to this EBB.
+        self.prev_ebb = Some(pred.ebb);
+
+        return Some((
+            func,
+            format!("merged {} and {}", pred.ebb, ebb),
+            ProgressStatus::ExpandedOrShrinked,
+        ));
+    }
+
+    fn did_crash(&mut self) {
+        self.ebb = self.prev_ebb.unwrap();
     }
 }
 
@@ -568,13 +664,13 @@ fn next_inst_ret_prev(func: &Function, ebb: &mut Ebb, inst: &mut Inst) -> Option
     if let Some(next_inst) = func.layout.next_inst(*inst) {
         *inst = next_inst;
         return Some(prev);
-    } else if let Some(next_ebb) = func.layout.next_ebb(*ebb) {
+    }
+    if let Some(next_ebb) = func.layout.next_ebb(*ebb) {
         *ebb = next_ebb;
         *inst = func.layout.first_inst(*ebb).expect("no inst");
         return Some(prev);
-    } else {
-        return None;
     }
+    None
 }
 
 fn ebb_count(func: &Function) -> usize {
@@ -601,12 +697,12 @@ fn reduce(
     mut func: Function,
     verbose: bool,
 ) -> Result<(Function, String), String> {
-    let mut ccc = CrashCheckContext::new(isa);
+    let mut context = CrashCheckContext::new(isa);
 
-    match ccc.check_for_crash(&func) {
+    match context.check_for_crash(&func) {
         CheckResult::Succeed => {
             return Err(format!(
-                "Given function compiled successfully or gave an verifier error."
+                "Given function compiled successfully or gave a verifier error."
             ));
         }
         CheckResult::Crash(_) => {}
@@ -614,30 +710,92 @@ fn reduce(
 
     resolve_aliases(&mut func);
 
+    let progress_bar = ProgressBar::with_draw_target(0, ProgressDrawTarget::stdout());
+    progress_bar.set_style(
+        ProgressStyle::default_bar().template("{bar:60} {prefix:40} {pos:>4}/{len:>4} {msg}"),
+    );
+
     for pass_idx in 0..100 {
         let mut should_keep_reducing = false;
         let mut phase = 0;
 
         loop {
-            let mut mutator = match phase {
-                0 => Box::new(RemoveInst::new(&func)) as Box<dyn Mutator>,
-                1 => Box::new(ReplaceInstWithIconst::new(&func)) as Box<dyn Mutator>,
-                2 => Box::new(ReplaceInstWithTrap::new(&func)) as Box<dyn Mutator>,
-                3 => Box::new(RemoveEbb::new(&func)) as Box<dyn Mutator>,
-                4 => Box::new(RemoveUnusedEntities::new()) as Box<dyn Mutator>,
+            let mut mutator: Box<dyn Mutator> = match phase {
+                0 => Box::new(RemoveInst::new(&func)),
+                1 => Box::new(ReplaceInstWithConst::new(&func)),
+                2 => Box::new(ReplaceInstWithTrap::new(&func)),
+                3 => Box::new(RemoveEbb::new(&func)),
+                4 => Box::new(RemoveUnusedEntities::new()),
+                5 => Box::new(MergeBlocks::new(&func)),
                 _ => break,
             };
 
-            func = mutator.reduce(
-                &mut ccc,
-                func,
-                format!("pass {}", pass_idx),
-                verbose,
-                &mut should_keep_reducing,
-            );
+            progress_bar.set_prefix(&format!("pass {} phase {}", pass_idx, mutator.name()));
+            progress_bar.set_length(mutator.mutation_count(&func) as u64);
+
+            // Reset progress bar.
+            progress_bar.set_position(0);
+            progress_bar.set_draw_delta(0);
+
+            for _ in 0..10000 {
+                progress_bar.inc(1);
+
+                let (mutated_func, msg, mutation_kind) = match mutator.mutate(func.clone()) {
+                    Some(res) => res,
+                    None => {
+                        break;
+                    }
+                };
+
+                if let ProgressStatus::Skip = mutation_kind {
+                    // The mutator didn't change anything, but we want to try more mutator
+                    // iterations.
+                    continue;
+                }
+
+                progress_bar.set_message(&msg);
+
+                match context.check_for_crash(&mutated_func) {
+                    CheckResult::Succeed => {
+                        // Mutating didn't hit the problem anymore, discard changes.
+                        continue;
+                    }
+                    CheckResult::Crash(_) => {
+                        // Panic remained while mutating, make changes definitive.
+                        func = mutated_func;
+
+                        // Notify the mutator that the mutation was successful.
+                        mutator.did_crash();
+
+                        let verb = match mutation_kind {
+                            ProgressStatus::ExpandedOrShrinked => {
+                                should_keep_reducing = true;
+                                "shrink"
+                            }
+                            ProgressStatus::Changed => "changed",
+                            ProgressStatus::Skip => unreachable!(),
+                        };
+                        if verbose {
+                            progress_bar.println(format!("{}: {}", msg, verb));
+                        }
+                    }
+                }
+            }
 
             phase += 1;
         }
+
+        progress_bar.println(format!(
+            "After pass {}, remaining insts/ebbs: {}/{} ({})",
+            pass_idx,
+            inst_count(&func),
+            ebb_count(&func),
+            if should_keep_reducing {
+                "will keep reducing"
+            } else {
+                "stop reducing"
+            }
+        ));
 
         if !should_keep_reducing {
             // No new shrinking opportunities have been found this pass. This means none will ever
@@ -646,7 +804,9 @@ fn reduce(
         }
     }
 
-    let crash_msg = match ccc.check_for_crash(&func) {
+    progress_bar.finish();
+
+    let crash_msg = match context.check_for_crash(&func) {
         CheckResult::Succeed => unreachable!("Used to crash, but doesn't anymore???"),
         CheckResult::Crash(crash_msg) => crash_msg,
     };
@@ -658,18 +818,23 @@ struct CrashCheckContext<'a> {
     /// Cached `Context`, to prevent repeated allocation.
     context: Context,
 
+    /// Cached code memory, to prevent repeated allocation.
+    code_memory: Vec<u8>,
+
     /// The target isa to compile for.
     isa: &'a dyn TargetIsa,
 }
 
 fn get_panic_string(panic: Box<dyn std::any::Any>) -> String {
     let panic = match panic.downcast::<&'static str>() {
-        Ok(panic_msg) => panic_msg.to_owned(),
+        Ok(panic_msg) => {
+            return panic_msg.to_string();
+        }
         Err(panic) => panic,
     };
     match panic.downcast::<String>() {
         Ok(panic_msg) => *panic_msg,
-        Err(_) => "Box<Any>".to_owned(),
+        Err(_) => "Box<Any>".to_string(),
     }
 }
 
@@ -685,6 +850,7 @@ impl<'a> CrashCheckContext<'a> {
     fn new(isa: &'a dyn TargetIsa) -> Self {
         CrashCheckContext {
             context: Context::new(),
+            code_memory: Vec::new(),
             isa,
         }
     }
@@ -692,6 +858,8 @@ impl<'a> CrashCheckContext<'a> {
     #[cfg_attr(test, allow(unreachable_code))]
     fn check_for_crash(&mut self, func: &Function) -> CheckResult {
         self.context.clear();
+        self.code_memory.clear();
+
         self.context.func = func.clone();
 
         use std::io::Write;
@@ -702,9 +870,9 @@ impl<'a> CrashCheckContext<'a> {
         })) {
             Ok(Some(_)) => return CheckResult::Succeed,
             Ok(None) => {}
-            // The verifier panicked. compiling it will probably give the same panic.
+            // The verifier panicked. Compiling it will probably give the same panic.
             // We treat it as succeeding to make it possible to reduce for the actual error.
-            // FIXME prevent verifier panic on removing ebb1
+            // FIXME prevent verifier panic on removing ebb0.
             Err(_) => return CheckResult::Succeed,
         }
 
@@ -732,11 +900,10 @@ impl<'a> CrashCheckContext<'a> {
             let mut relocs = PrintRelocs::new(false);
             let mut traps = PrintTraps::new(false);
             let mut stackmaps = PrintStackmaps::new(false);
-            let mut mem = vec![];
 
             let _ = self.context.compile_and_emit(
                 self.isa,
-                &mut mem,
+                &mut self.code_memory,
                 &mut relocs,
                 &mut traps,
                 &mut stackmaps,
@@ -759,7 +926,8 @@ mod tests {
 
     #[test]
     fn test_reduce() {
-        const TEST: &'static str = include_str!("./bugpoint_test.clif");
+        const TEST: &'static str = include_str!("../tests/bugpoint_test.clif");
+        const EXPECTED: &'static str = include_str!("../tests/bugpoint_test_expected.clif");
 
         let test_file = parse_test(TEST, ParseOptions::default()).unwrap();
 
@@ -768,90 +936,26 @@ mod tests {
         let isa = test_file.isa_spec.unique_isa().expect("Unknown isa");
 
         for (func, _) in test_file.functions {
-            let (func, crash_msg) = reduce(isa, func, false).expect("Couldn't reduce test case");
+            let (reduced_func, crash_msg) =
+                reduce(isa, func, false).expect("Couldn't reduce test case");
+            assert_eq!(crash_msg, "test crash");
 
+            let (func_reduced_twice, crash_msg) =
+                reduce(isa, reduced_func.clone(), false).expect("Couldn't re-reduce test case");
             assert_eq!(crash_msg, "test crash");
 
             assert_eq!(
-                format!("{}", func),
-                "function u0:0(i64, i64, i64) system_v {
-    sig0 = (i64, i64, i16, i64, i64, i64, i64, i64) system_v
-    fn0 = u0:95 sig0
-
-ebb0(v0: i64, v1: i64, v2: i64):
-    v113 -> v1
-    v124 -> v1
-    v136 -> v1
-    v148 -> v1
-    v160 -> v1
-    v185 -> v1
-    v222 -> v1
-    v237 -> v1
-    v241 -> v1
-    v256 -> v1
-    v262 -> v1
-    v105 = iconst.i64 0
-    trap user0
-
-ebb99(v804: i64, v1035: i64, v1037: i64, v1039: i64, v1044: i64, v1052: i16, v1057: i64):
-    v817 -> v1035
-    v830 -> v1037
-    v844 -> v1039
-    v857 -> v1039
-    v939 -> v1039
-    v1042 -> v1039
-    v1050 -> v1039
-    v908 -> v1044
-    v917 -> v1044
-    v921 -> v1044
-    v1043 -> v1044
-    v960 -> v1052
-    v990 -> v1052
-    v1051 -> v1052
-    v1055 -> v1052
-    v963 -> v1057
-    v1056 -> v1057
-    v1060 -> v1057
-    trap user0
-
-ebb101:
-    v829 = iconst.i64 0
-    v935 -> v829
-    v962 -> v829
-    v992 -> v829
-    v1036 -> v829
-    v1049 -> v829
-    trap user0
-
-ebb102:
-    v842 = iconst.i64 0
-    v976 -> v842
-    v989 -> v842
-    v1038 -> v842
-    v1061 -> v842
-    trap user0
-
-ebb105:
-    v883 = iconst.i64 0
-    v934 -> v883
-    v961 -> v883
-    v991 -> v883
-    v1005 -> v883
-    v1048 -> v883
-    trap user0
-
-ebb114:
-    v951 = iconst.i64 0
-    v988 -> v951
-    trap user0
-
-ebb117:
-    v987 = iconst.i64 0
-    call fn0(v0, v105, v1052, v883, v829, v987, v951, v842)
-    trap user0
-}
-"
+                ebb_count(&func_reduced_twice),
+                ebb_count(&reduced_func),
+                "reduction wasn't maximal for ebbs"
             );
+            assert_eq!(
+                inst_count(&func_reduced_twice),
+                inst_count(&reduced_func),
+                "reduction wasn't maximal for insts"
+            );
+
+            assert_eq!(format!("{}", reduced_func), EXPECTED.replace("\r\n", "\n"));
         }
     }
 }

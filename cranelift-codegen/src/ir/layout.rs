@@ -698,7 +698,7 @@ impl Layout {
 
 #[derive(Clone, Debug, Default)]
 struct InstNode {
-    // The Ebb containing this instruction, or `None` if the instruction is not yet inserted.
+    /// The Ebb containing this instruction, or `None` if the instruction is not yet inserted.
     ebb: PackedOption<Ebb>,
     prev: PackedOption<Inst>,
     next: PackedOption<Inst>,
@@ -750,8 +750,8 @@ mod tests {
     use crate::cursor::{Cursor, CursorPosition};
     use crate::entity::EntityRef;
     use crate::ir::{Ebb, Inst, ProgramOrder, SourceLoc};
+    use alloc::vec::Vec;
     use core::cmp::Ordering;
-    use std::vec::Vec;
 
     struct LayoutCursor<'f> {
         /// Borrowed function layout. Public so it can be re-borrowed from this cursor.

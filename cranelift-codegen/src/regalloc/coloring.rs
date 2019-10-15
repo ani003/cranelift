@@ -54,7 +54,7 @@ use crate::regalloc::affinity::Affinity;
 use crate::regalloc::diversion::RegDiversions;
 use crate::regalloc::live_value_tracker::{LiveValue, LiveValueTracker};
 use crate::regalloc::liveness::Liveness;
-use crate::regalloc::liverange::{LiveRange, LiveRangeContext};
+use crate::regalloc::liverange::LiveRange;
 use crate::regalloc::register_set::RegisterSet;
 use crate::regalloc::solver::{Solver, SolverError};
 use crate::timing;
@@ -725,8 +725,8 @@ impl<'a> Context<'a> {
                         // This code runs after calling `solver.inputs_done()` so we must identify
                         // the new variable as killed or live-through. Always special-case the
                         // pinned register as a through variable.
-                        let ctx = self.liveness.context(&self.cur.func.layout);
-                        if self.liveness[value].killed_at(inst, ctx.order.pp_ebb(inst), ctx) {
+                        let layout = &self.cur.func.layout;
+                        if self.liveness[value].killed_at(inst, layout.pp_ebb(inst), layout) {
                             self.solver.add_killed_var(value, op.regclass, cur_reg);
                         } else {
                             self.solver.add_through_var(value, op.regclass, cur_reg);
@@ -755,7 +755,7 @@ impl<'a> Context<'a> {
         //
         // Values with a global live range that are not live in to `dest` could appear as branch
         // arguments, so they can't always be un-diverted.
-        self.undivert_regs(|lr, ctx| lr.is_livein(dest, ctx));
+        self.undivert_regs(|lr, layout| lr.is_livein(dest, layout));
 
         // Now handle the EBB arguments.
         let br_args = self.cur.func.dfg.inst_variable_args(inst);
@@ -825,14 +825,14 @@ impl<'a> Context<'a> {
     /// are reallocated to their global register assignments.
     fn undivert_regs<Pred>(&mut self, mut pred: Pred)
     where
-        Pred: FnMut(&LiveRange, LiveRangeContext<Layout>) -> bool,
+        Pred: FnMut(&LiveRange, &Layout) -> bool,
     {
         for (&value, rdiv) in self.divert.iter() {
             let lr = self
                 .liveness
                 .get(value)
                 .expect("Missing live range for diverted register");
-            if pred(lr, self.liveness.context(&self.cur.func.layout)) {
+            if pred(lr, &self.cur.func.layout) {
                 if let Affinity::Reg(rci) = lr.affinity {
                     let rc = self.reginfo.rc(rci);
                     // Stack diversions should not be possible here. They only live transiently
@@ -1080,20 +1080,20 @@ impl<'a> Context<'a> {
         use crate::ir::instructions::BranchInfo::*;
 
         let inst = self.cur.current_inst().expect("Not on an instruction");
-        let ctx = self.liveness.context(&self.cur.func.layout);
+        let layout = &self.cur.func.layout;
         match self.cur.func.dfg.analyze_branch(inst) {
             NotABranch => false,
             SingleDest(ebb, _) => {
                 let lr = &self.liveness[value];
-                lr.is_livein(ebb, ctx)
+                lr.is_livein(ebb, layout)
             }
             Table(jt, ebb) => {
                 let lr = &self.liveness[value];
                 !lr.is_local()
-                    && (ebb.map_or(false, |ebb| lr.is_livein(ebb, ctx))
+                    && (ebb.map_or(false, |ebb| lr.is_livein(ebb, layout))
                         || self.cur.func.jump_tables[jt]
                             .iter()
-                            .any(|ebb| lr.is_livein(*ebb, ctx)))
+                            .any(|ebb| lr.is_livein(*ebb, layout)))
             }
         }
     }

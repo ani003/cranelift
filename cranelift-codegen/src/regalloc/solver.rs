@@ -104,12 +104,12 @@ use crate::entity::{SparseMap, SparseMapValue};
 use crate::ir::Value;
 use crate::isa::{RegClass, RegUnit};
 use crate::regalloc::register_set::RegSetIter;
+use alloc::vec::Vec;
 use core::cmp;
 use core::fmt;
 use core::mem;
 use core::u16;
 use log::debug;
-use std::vec::Vec;
 
 /// A variable in the constraint problem.
 ///
@@ -1159,8 +1159,8 @@ mod tests {
     use crate::ir::Value;
     use crate::isa::{RegClass, RegInfo, RegUnit, TargetIsa};
     use crate::regalloc::RegisterSet;
+    use alloc::boxed::Box;
     use core::str::FromStr;
-    use std::boxed::Box;
     use target_lexicon::triple;
 
     // Make an arm32 `TargetIsa`, if possible.

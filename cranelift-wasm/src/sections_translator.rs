@@ -8,12 +8,14 @@
 //! is handled, according to the semantics of WebAssembly, to only specific expressions that are
 //! interpreted on the fly.
 use crate::environ::{ModuleEnvironment, WasmResult};
+use crate::state::ModuleTranslationState;
 use crate::translation_utils::{
     tabletype_to_type, type_to_type, FuncIndex, Global, GlobalIndex, GlobalInit, Memory,
     MemoryIndex, SignatureIndex, Table, TableElementType, TableIndex,
 };
 use crate::{wasm_unsupported, HashMap};
 use core::convert::TryFrom;
+use cranelift_codegen::ir::immediates::V128Imm;
 use cranelift_codegen::ir::{self, AbiParam, Signature};
 use cranelift_entity::EntityRef;
 use std::vec::Vec;
@@ -28,16 +30,19 @@ use wasmparser::{
 /// Parses the Type section of the wasm module.
 pub fn parse_type_section(
     types: TypeSectionReader,
+    module_translation_state: &mut ModuleTranslationState,
     environ: &mut dyn ModuleEnvironment,
 ) -> WasmResult<()> {
-    environ.reserve_signatures(types.get_count())?;
+    let count = types.get_count();
+    module_translation_state.wasm_types.reserve(count as usize);
+    environ.reserve_signatures(count)?;
 
     for entry in types {
         match entry? {
             FuncType {
                 form: wasmparser::Type::Func,
-                ref params,
-                ref returns,
+                params,
+                returns,
             } => {
                 let mut sig = Signature::new(environ.target_config().default_call_conv);
                 sig.params.extend(params.iter().map(|ty| {
@@ -51,8 +56,14 @@ pub fn parse_type_section(
                     AbiParam::new(cret_arg)
                 }));
                 environ.declare_signature(sig)?;
+                module_translation_state.wasm_types.push((params, returns));
             }
-            ty => wasm_unsupported!("unsupported type in type section: {:?}", ty),
+            ty => {
+                return Err(wasm_unsupported!(
+                    "unsupported type in type section: {:?}",
+                    ty
+                ))
+            }
         }
     }
     Ok(())
@@ -201,11 +212,17 @@ pub fn parse_global_section(
             Operator::I64Const { value } => GlobalInit::I64Const(value),
             Operator::F32Const { value } => GlobalInit::F32Const(value.bits()),
             Operator::F64Const { value } => GlobalInit::F64Const(value.bits()),
+            Operator::V128Const { value } => {
+                GlobalInit::V128Const(V128Imm::from(value.bytes().to_vec().as_slice()))
+            }
             Operator::GetGlobal { global_index } => {
                 GlobalInit::GetGlobal(GlobalIndex::from_u32(global_index))
             }
             ref s => {
-                wasm_unsupported!("unsupported init expr in global section: {:?}", s);
+                return Err(wasm_unsupported!(
+                    "unsupported init expr in global section: {:?}",
+                    s
+                ));
             }
         };
         let global = Global {
@@ -280,7 +297,10 @@ pub fn parse_element_section<'data>(
                     (Some(GlobalIndex::from_u32(global_index)), 0)
                 }
                 ref s => {
-                    wasm_unsupported!("unsupported init expr in element section: {:?}", s);
+                    return Err(wasm_unsupported!(
+                        "unsupported init expr in element section: {:?}",
+                        s
+                    ));
                 }
             };
             let items_reader = items.get_items_reader()?;
@@ -296,7 +316,10 @@ pub fn parse_element_section<'data>(
                 elems.into_boxed_slice(),
             )?
         } else {
-            wasm_unsupported!("unsupported passive elements section: {:?}", kind);
+            return Err(wasm_unsupported!(
+                "unsupported passive elements section: {:?}",
+                kind
+            ));
         }
     }
     Ok(())
@@ -305,13 +328,14 @@ pub fn parse_element_section<'data>(
 /// Parses the Code section of the wasm module.
 pub fn parse_code_section<'data>(
     code: CodeSectionReader<'data>,
+    module_translation_state: &ModuleTranslationState,
     environ: &mut dyn ModuleEnvironment<'data>,
 ) -> WasmResult<()> {
     for body in code {
         let mut reader = body?.get_binary_reader();
         let size = reader.bytes_remaining();
         let offset = reader.original_position();
-        environ.define_function_body(reader.read_bytes(size)?, offset)?;
+        environ.define_function_body(module_translation_state, reader.read_bytes(size)?, offset)?;
     }
     Ok(())
 }
@@ -336,7 +360,12 @@ pub fn parse_data_section<'data>(
                 Operator::GetGlobal { global_index } => {
                     (Some(GlobalIndex::from_u32(global_index)), 0)
                 }
-                ref s => wasm_unsupported!("unsupported init expr in data section: {:?}", s),
+                ref s => {
+                    return Err(wasm_unsupported!(
+                        "unsupported init expr in data section: {:?}",
+                        s
+                    ))
+                }
             };
             environ.declare_data_initialization(
                 MemoryIndex::from_u32(memory_index),
@@ -345,7 +374,10 @@ pub fn parse_data_section<'data>(
                 data,
             )?;
         } else {
-            wasm_unsupported!("unsupported passive data section: {:?}", kind);
+            return Err(wasm_unsupported!(
+                "unsupported passive data section: {:?}",
+                kind
+            ));
         }
     }
 

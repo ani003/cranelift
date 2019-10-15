@@ -14,19 +14,19 @@
 //! use cranelift_codegen::settings::{self, Configurable};
 //!
 //! let mut b = settings::builder();
-//! b.set("opt_level", "fastest");
+//! b.set("opt_level", "speed_and_size");
 //!
 //! let f = settings::Flags::new(b);
-//! assert_eq!(f.opt_level(), settings::OptLevel::Fastest);
+//! assert_eq!(f.opt_level(), settings::OptLevel::SpeedAndSize);
 //! ```
 
 use crate::constant_hash::{probe, simple_hash};
 use crate::isa::TargetIsa;
+use alloc::boxed::Box;
+use alloc::string::{String, ToString};
 use core::fmt;
 use core::str;
 use failure_derive::Fail;
-use std::boxed::Box;
-use std::string::{String, ToString};
 
 /// A string-based configurator for settings groups.
 ///
@@ -369,7 +369,7 @@ mod tests {
     use super::Configurable;
     use super::SetError::*;
     use super::{builder, Flags};
-    use std::string::ToString;
+    use alloc::string::ToString;
 
     #[test]
     fn display_default() {
@@ -378,7 +378,7 @@ mod tests {
         assert_eq!(
             f.to_string(),
             "[shared]\n\
-             opt_level = \"default\"\n\
+             opt_level = \"none\"\n\
              libcall_call_conv = \"isa_default\"\n\
              baldrdash_prologue_words = 0\n\
              probestack_size_log2 = 12\n\
@@ -398,7 +398,7 @@ mod tests {
              probestack_func_adjusts_sp = false\n\
              jump_tables_enabled = true\n"
         );
-        assert_eq!(f.opt_level(), super::OptLevel::Default);
+        assert_eq!(f.opt_level(), super::OptLevel::None);
         assert_eq!(f.enable_simd(), false);
         assert_eq!(f.baldrdash_prologue_words(), 0);
     }
@@ -428,13 +428,15 @@ mod tests {
         );
         assert_eq!(
             b.set("opt_level", "true"),
-            Err(BadValue("any among default, best, fastest".to_string()))
+            Err(BadValue(
+                "any among none, speed, speed_and_size".to_string()
+            ))
         );
-        assert_eq!(b.set("opt_level", "best"), Ok(()));
+        assert_eq!(b.set("opt_level", "speed"), Ok(()));
         assert_eq!(b.set("enable_simd", "0"), Ok(()));
 
         let f = Flags::new(b);
         assert_eq!(f.enable_simd(), false);
-        assert_eq!(f.opt_level(), super::OptLevel::Best);
+        assert_eq!(f.opt_level(), super::OptLevel::Speed);
     }
 }

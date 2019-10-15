@@ -6,7 +6,7 @@
 //!
 //! [Wasmtime]: https://github.com/CraneStation/wasmtime
 
-use crate::state::VisibleTranslationState;
+use crate::state::{FuncTranslationState, ModuleTranslationState};
 use crate::translation_utils::{
     FuncIndex, Global, GlobalIndex, Memory, MemoryIndex, SignatureIndex, Table, TableIndex,
 };
@@ -80,7 +80,7 @@ pub enum WasmError {
 /// on the arguments to this macro.
 #[macro_export]
 macro_rules! wasm_unsupported {
-    ($($arg:tt)*) => { return Err($crate::environ::WasmError::Unsupported(format!($($arg)*))) }
+    ($($arg:tt)*) => { $crate::environ::WasmError::Unsupported(format!($($arg)*)) }
 }
 
 impl From<BinaryReaderError> for WasmError {
@@ -293,7 +293,7 @@ pub trait FuncEnvironment {
         &mut self,
         _op: &Operator,
         _builder: &mut FunctionBuilder,
-        _state: &VisibleTranslationState,
+        _state: &FuncTranslationState,
     ) -> WasmResult<()> {
         Ok(())
     }
@@ -304,7 +304,7 @@ pub trait FuncEnvironment {
         &mut self,
         _op: &Operator,
         _builder: &mut FunctionBuilder,
-        _state: &VisibleTranslationState,
+        _state: &FuncTranslationState,
     ) -> WasmResult<()> {
         Ok(())
     }
@@ -461,6 +461,7 @@ pub trait ModuleEnvironment<'data> {
     /// functions is already provided by `reserve_func_types`.
     fn define_function_body(
         &mut self,
+        module_translation_state: &ModuleTranslationState,
         body_bytes: &'data [u8],
         body_offset: usize,
     ) -> WasmResult<()>;

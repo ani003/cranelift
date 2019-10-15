@@ -33,8 +33,8 @@ use crate::timing;
 use crate::unreachable_code::eliminate_unreachable_code;
 use crate::value_label::{build_value_labels_ranges, ComparableSourceLoc, ValueLabelsRanges};
 use crate::verifier::{verify_context, verify_locations, VerifierErrors, VerifierResult};
+use alloc::vec::Vec;
 use log::debug;
-use std::vec::Vec;
 
 /// Persistent data structures and compilation pipeline.
 pub struct Context {
@@ -133,18 +133,18 @@ impl Context {
         self.verify_if(isa)?;
         debug!("Compiling:\n{}", self.func.display(isa));
 
+        let opt_level = isa.flags().opt_level();
+
         self.compute_cfg();
-        if isa.flags().opt_level() != OptLevel::Fastest {
+        if opt_level != OptLevel::None {
             self.preopt(isa)?;
         }
         if isa.flags().enable_nan_canonicalization() {
             self.canonicalize_nans(isa)?;
         }
         self.legalize(isa)?;
-        if isa.flags().opt_level() != OptLevel::Fastest {
+        if opt_level != OptLevel::None {
             self.postopt(isa)?;
-        }
-        if isa.flags().opt_level() == OptLevel::Best {
             self.compute_domtree();
             self.compute_loop_analysis();
             self.licm(isa)?;
@@ -152,13 +152,15 @@ impl Context {
         }
         self.compute_domtree();
         self.eliminate_unreachable_code(isa)?;
-        if isa.flags().opt_level() != OptLevel::Fastest {
+        if opt_level != OptLevel::None {
             self.dce(isa)?;
         }
         self.regalloc(isa)?;
         self.prologue_epilogue(isa)?;
-        if isa.flags().opt_level() == OptLevel::Best {
+        if opt_level == OptLevel::Speed || opt_level == OptLevel::SpeedAndSize {
             self.redundant_reload_remover(isa)?;
+        }
+        if opt_level == OptLevel::SpeedAndSize {
             self.shrink_instructions(isa)?;
         }
         let result = self.relax_branches(isa);

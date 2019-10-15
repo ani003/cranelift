@@ -1,7 +1,6 @@
 //! Representation of Cranelift IR functions.
 
 mod builder;
-pub mod condcodes;
 pub mod constant;
 pub mod dfg;
 pub mod entities;
@@ -27,11 +26,14 @@ mod valueloc;
 #[cfg(feature = "enable-serde")]
 use serde::{Deserialize, Serialize};
 
-pub use crate::ir::builder::{InsertBuilder, InstBuilder, InstBuilderBase, InstInserterBase};
+pub use crate::ir::builder::{
+    InsertBuilder, InstBuilder, InstBuilderBase, InstInserterBase, ReplaceBuilder,
+};
 pub use crate::ir::constant::{ConstantData, ConstantOffset, ConstantPool};
 pub use crate::ir::dfg::{DataFlowGraph, ValueDef};
 pub use crate::ir::entities::{
-    Constant, Ebb, FuncRef, GlobalValue, Heap, Inst, JumpTable, SigRef, StackSlot, Table, Value,
+    Constant, Ebb, FuncRef, GlobalValue, Heap, Immediate, Inst, JumpTable, SigRef, StackSlot,
+    Table, Value,
 };
 pub use crate::ir::extfunc::{
     AbiParam, ArgumentExtension, ArgumentPurpose, ExtFuncData, Signature,
@@ -54,6 +56,7 @@ pub use crate::ir::table::TableData;
 pub use crate::ir::trapcode::TrapCode;
 pub use crate::ir::types::Type;
 pub use crate::ir::valueloc::{ArgumentLoc, ValueLoc};
+pub use cranelift_codegen_shared::condcodes;
 
 use crate::binemit;
 use crate::entity::{entity_impl, PrimaryMap, SecondaryMap};
@@ -97,7 +100,7 @@ pub struct ValueLabelStart {
 #[derive(Debug, Clone)]
 pub enum ValueLabelAssignments {
     /// Original value labels assigned at transform.
-    Starts(std::vec::Vec<ValueLabelStart>),
+    Starts(alloc::vec::Vec<ValueLabelStart>),
 
     /// A value alias to original value.
     Alias {

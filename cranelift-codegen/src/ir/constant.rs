@@ -9,9 +9,10 @@
 //! - bucketing constants by size.
 
 use crate::ir::Constant;
+use crate::HashMap;
+use alloc::collections::BTreeMap;
+use alloc::vec::Vec;
 use cranelift_entity::EntityRef;
-use std::collections::{BTreeMap, HashMap};
-use std::vec::Vec;
 
 /// This type describes the actual constant data.
 pub type ConstantData = Vec<u8>;

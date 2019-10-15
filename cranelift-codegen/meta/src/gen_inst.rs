@@ -1,5 +1,6 @@
 use std::fmt;
 
+use cranelift_codegen_shared::constant_hash;
 use cranelift_entity::EntityRef;
 
 use crate::cdsl::camel_case;
@@ -10,7 +11,6 @@ use crate::cdsl::typevar::{TypeSet, TypeVar};
 
 use crate::shared::Definitions as SharedDefinitions;
 
-use crate::constant_hash;
 use crate::error;
 use crate::srcgen::{Formatter, Match};
 use crate::unique_table::{UniqueSeqTable, UniqueTable};
@@ -97,9 +97,14 @@ fn gen_instruction_data(registry: &FormatRegistry, fmt: &mut Formatter) {
 
 fn gen_arguments_method(registry: &FormatRegistry, fmt: &mut Formatter, is_mut: bool) {
     let (method, mut_, rslice, as_slice) = if is_mut {
-        ("arguments_mut", "mut ", "ref_slice_mut", "as_mut_slice")
+        (
+            "arguments_mut",
+            "mut ",
+            "core::slice::from_mut",
+            "as_mut_slice",
+        )
     } else {
-        ("arguments", "", "ref_slice", "as_slice")
+        ("arguments", "", "core::slice::from_ref", "as_slice")
     };
 
     fmtln!(

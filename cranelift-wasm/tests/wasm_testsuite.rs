@@ -32,6 +32,7 @@ fn testsuite() {
     // println!("PRINTING:");
     for path in paths {
         let path = path.path();
+        println!("=== {} ===", path.display());
         let data = read_module(&path);
         handle_module(data, &flags, ReturnMode::NormalReturns);
     }

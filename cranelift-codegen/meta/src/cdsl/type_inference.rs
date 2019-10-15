@@ -5,7 +5,7 @@ use std::collections::{HashMap, HashSet};
 use std::iter::FromIterator;
 
 #[derive(Debug, Hash, PartialEq, Eq)]
-pub enum Constraint {
+pub(crate) enum Constraint {
     /// Constraint specifying that a type var tv1 must be wider than or equal to type var tv2 at
     /// runtime. This requires that:
     /// 1) They have the same number of lanes
@@ -122,7 +122,7 @@ enum TypeEnvRank {
 }
 
 /// Class encapsulating the necessary bookkeeping for type inference.
-pub struct TypeEnvironment {
+pub(crate) struct TypeEnvironment {
     vars: HashSet<VarIndex>,
     ranks: HashMap<TypeVar, TypeEnvRank>,
     equivalency_map: HashMap<TypeVar, TypeVar>,
@@ -602,7 +602,7 @@ fn infer_definition(
 }
 
 /// Perform type inference on an transformation. Return an updated type environment or error.
-pub fn infer_transform(
+pub(crate) fn infer_transform(
     src: DefIndex,
     dst: &Vec<DefIndex>,
     def_pool: &DefPool,

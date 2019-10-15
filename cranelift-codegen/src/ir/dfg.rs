@@ -5,7 +5,7 @@ use crate::ir;
 use crate::ir::builder::ReplaceBuilder;
 use crate::ir::extfunc::ExtFuncData;
 use crate::ir::instructions::{BranchInfo, CallInfo, InstructionData};
-use crate::ir::{types, ConstantPool};
+use crate::ir::{types, ConstantPool, Immediate};
 use crate::ir::{
     Ebb, FuncRef, Inst, SigRef, Signature, Type, Value, ValueLabelAssignments, ValueList,
     ValueListPool,
@@ -13,12 +13,13 @@ use crate::ir::{
 use crate::isa::TargetIsa;
 use crate::packed_option::ReservedValue;
 use crate::write::write_operands;
+use crate::HashMap;
+use alloc::vec::Vec;
 use core::fmt;
 use core::iter;
 use core::mem;
 use core::ops::{Index, IndexMut};
 use core::u16;
-use std::collections::HashMap;
 
 /// A data flow graph defines all instructions and extended basic blocks in a function as well as
 /// the data flow dependencies between them. The DFG also tracks values which can be either
@@ -70,6 +71,9 @@ pub struct DataFlowGraph {
 
     /// Constants used within the function
     pub constants: ConstantPool,
+
+    /// Stores large immediates that otherwise will not fit on InstructionData
+    pub immediates: PrimaryMap<Immediate, Vec<u8>>,
 }
 
 impl DataFlowGraph {
@@ -85,6 +89,7 @@ impl DataFlowGraph {
             ext_funcs: PrimaryMap::new(),
             values_labels: None,
             constants: ConstantPool::new(),
+            immediates: PrimaryMap::new(),
         }
     }
 
@@ -98,7 +103,8 @@ impl DataFlowGraph {
         self.signatures.clear();
         self.ext_funcs.clear();
         self.values_labels = None;
-        self.constants.clear()
+        self.constants.clear();
+        self.immediates.clear();
     }
 
     /// Get the total number of instructions created in this function, whether they are currently
@@ -1098,7 +1104,7 @@ mod tests {
     use crate::cursor::{Cursor, FuncCursor};
     use crate::ir::types;
     use crate::ir::{Function, InstructionData, Opcode, TrapCode};
-    use std::string::ToString;
+    use alloc::string::ToString;
 
     #[test]
     fn make_inst() {

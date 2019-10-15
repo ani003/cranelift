@@ -51,6 +51,10 @@ pub enum IntCC {
     UnsignedGreaterThan,
     /// Unsigned `<=`.
     UnsignedLessThanOrEqual,
+    /// Signed Overflow.
+    Overflow,
+    /// Signed No Overflow.
+    NotOverflow,
 }
 
 impl CondCode for IntCC {
@@ -67,6 +71,8 @@ impl CondCode for IntCC {
             UnsignedGreaterThanOrEqual => UnsignedLessThan,
             UnsignedGreaterThan => UnsignedLessThanOrEqual,
             UnsignedLessThanOrEqual => UnsignedGreaterThan,
+            Overflow => NotOverflow,
+            NotOverflow => Overflow,
         }
     }
 
@@ -83,14 +89,43 @@ impl CondCode for IntCC {
             UnsignedGreaterThanOrEqual => UnsignedLessThanOrEqual,
             UnsignedLessThan => UnsignedGreaterThan,
             UnsignedLessThanOrEqual => UnsignedGreaterThanOrEqual,
+            Overflow => Overflow,
+            NotOverflow => NotOverflow,
         }
     }
 }
 
-impl Display for IntCC {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+impl IntCC {
+    /// Get the corresponding IntCC with the equal component removed.
+    /// For conditions without a zero component, this is a no-op.
+    pub fn without_equal(self) -> Self {
         use self::IntCC::*;
-        f.write_str(match *self {
+        match self {
+            SignedGreaterThan | SignedGreaterThanOrEqual => SignedGreaterThan,
+            SignedLessThan | SignedLessThanOrEqual => SignedLessThan,
+            UnsignedGreaterThan | UnsignedGreaterThanOrEqual => UnsignedGreaterThan,
+            UnsignedLessThan | UnsignedLessThanOrEqual => UnsignedLessThan,
+            _ => self,
+        }
+    }
+
+    /// Get the corresponding IntCC with the signed component removed.
+    /// For conditions without a signed component, this is a no-op.
+    pub fn unsigned(self) -> Self {
+        use self::IntCC::*;
+        match self {
+            SignedGreaterThan | UnsignedGreaterThan => UnsignedGreaterThan,
+            SignedGreaterThanOrEqual | UnsignedGreaterThanOrEqual => UnsignedGreaterThanOrEqual,
+            SignedLessThan | UnsignedLessThan => UnsignedLessThan,
+            SignedLessThanOrEqual | UnsignedLessThanOrEqual => UnsignedLessThanOrEqual,
+            _ => self,
+        }
+    }
+
+    /// Get the corresponding string condition code for the IntCC object.
+    pub fn to_static_str(self) -> &'static str {
+        use self::IntCC::*;
+        match self {
             Equal => "eq",
             NotEqual => "ne",
             SignedGreaterThan => "sgt",
@@ -101,7 +136,15 @@ impl Display for IntCC {
             UnsignedGreaterThanOrEqual => "uge",
             UnsignedLessThan => "ult",
             UnsignedLessThanOrEqual => "ule",
-        })
+            Overflow => "of",
+            NotOverflow => "nof",
+        }
+    }
+}
+
+impl Display for IntCC {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        f.write_str(self.to_static_str())
     }
 }
 
@@ -121,6 +164,8 @@ impl FromStr for IntCC {
             "ugt" => Ok(UnsignedGreaterThan),
             "ule" => Ok(UnsignedLessThanOrEqual),
             "ult" => Ok(UnsignedLessThan),
+            "of" => Ok(Overflow),
+            "nof" => Ok(NotOverflow),
             _ => Err(()),
         }
     }
@@ -270,7 +315,7 @@ mod tests {
     use super::*;
     use std::string::ToString;
 
-    static INT_ALL: [IntCC; 10] = [
+    static INT_ALL: [IntCC; 12] = [
         IntCC::Equal,
         IntCC::NotEqual,
         IntCC::SignedLessThan,
@@ -281,6 +326,8 @@ mod tests {
         IntCC::UnsignedGreaterThanOrEqual,
         IntCC::UnsignedGreaterThan,
         IntCC::UnsignedLessThanOrEqual,
+        IntCC::Overflow,
+        IntCC::NotOverflow,
     ];
 
     #[test]

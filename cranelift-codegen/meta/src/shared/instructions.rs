@@ -1217,7 +1217,7 @@ pub(crate) fn define(
 
     let N = &operand_doc(
         "N",
-        &imm.uimm128,
+        &imm.pool_constant,
         "The 16 immediate bytes of a 128-bit vector",
     );
     let a = &operand_doc("a", TxN, "A constant vector value");
@@ -1232,6 +1232,41 @@ pub(crate) fn define(
         "#,
         )
         .operands_in(vec![N])
+        .operands_out(vec![a]),
+    );
+
+    let mask = &operand_doc(
+        "mask",
+        &imm.uimm128,
+        "The 16 immediate bytes used for selecting the elements to shuffle",
+    );
+    let Tx16 = &TypeVar::new(
+        "Tx16",
+        "A SIMD vector with exactly 16 lanes of 8-bit values; eventually this may support other \
+         lane counts and widths",
+        TypeSetBuilder::new()
+            .ints(8..8)
+            .bools(8..8)
+            .simd_lanes(16..16)
+            .includes_scalars(false)
+            .build(),
+    );
+    let a = &operand_doc("a", Tx16, "A vector value");
+    let b = &operand_doc("b", Tx16, "A vector value");
+
+    ig.push(
+        Inst::new(
+            "shuffle",
+            r#"
+        SIMD vector shuffle.
+        
+        Shuffle two vectors using the given immediate bytes. For each of the 16 bytes of the
+        immediate, a value i of 0-15 selects the i-th element of the first vector and a value i of 
+        16-31 selects the (i-16)th element of the second vector. Immediate values outside of the 
+        0-31 range place a 0 in the resulting vector lane.
+        "#,
+        )
+        .operands_in(vec![a, b, mask])
         .operands_out(vec![a]),
     );
 
@@ -1688,16 +1723,21 @@ pub(crate) fn define(
         The condition code determines if the operands are interpreted as signed
         or unsigned integers.
 
-        ====== ======== =========
-        Signed Unsigned Condition
-        ====== ======== =========
-        eq     eq       Equal
-        ne     ne       Not equal
-        slt    ult      Less than
-        sge    uge      Greater than or equal
-        sgt    ugt      Greater than
-        sle    ule      Less than or equal
-        ====== ======== =========
+        | Signed | Unsigned | Condition             |
+        |--------|----------|-----------------------|
+        | eq     | eq       | Equal                 |
+        | ne     | ne       | Not equal             |
+        | slt    | ult      | Less than             |
+        | sge    | uge      | Greater than or equal |
+        | sgt    | ugt      | Greater than          |
+        | sle    | ule      | Less than or equal    |
+        | of     | *        | Overflow              |
+        | nof    | *        | No Overflow           |
+
+        \* The unsigned version of overflow conditions have ISA-specific
+        semantics and thus have been kept as methods on the TargetIsa trait as
+        [unsigned_add_overflow_condition][isa::TargetIsa::unsigned_add_overflow_condition] and
+        [unsigned_sub_overflow_condition][isa::TargetIsa::unsigned_sub_overflow_condition].
 
         When this instruction compares integer vectors, it returns a boolean
         vector of lane-wise comparisons.
@@ -1780,6 +1820,38 @@ pub(crate) fn define(
 
     ig.push(
         Inst::new(
+            "uadd_sat",
+            r#"
+        Add with unsigned saturation.
+
+        This is similar to `iadd` but the operands are interpreted as unsigned integers and their 
+        summed result, instead of wrapping, will be saturated to the highest unsigned integer for
+        the controlling type (e.g. `0xFF` for i8).
+        "#,
+        )
+        .operands_in(vec![x, y])
+        .operands_out(vec![a]),
+    );
+
+    ig.push(
+        Inst::new(
+            "sadd_sat",
+            r#"
+        Add with signed saturation.
+
+        This is similar to `iadd` but the operands are interpreted as signed integers and their 
+        summed result, instead of wrapping, will be saturated to the lowest or highest 
+        signed integer for the controlling type (e.g. `0x80` or `0x7F` for i8). For example, 
+        since an `iadd_ssat.i8` of `0x70` and `0x70` is greater than `0x7F`, the result will be 
+        clamped to `0x7F`.
+        "#,
+        )
+        .operands_in(vec![x, y])
+        .operands_out(vec![a]),
+    );
+
+    ig.push(
+        Inst::new(
             "isub",
             r#"
         Wrapping integer subtraction: `a := x - y \pmod{2^B}`.
@@ -1794,13 +1866,53 @@ pub(crate) fn define(
 
     ig.push(
         Inst::new(
+            "usub_sat",
+            r#"
+        Subtract with unsigned saturation.
+
+        This is similar to `isub` but the operands are interpreted as unsigned integers and their 
+        difference, instead of wrapping, will be saturated to the lowest unsigned integer for
+        the controlling type (e.g. `0x00` for i8).
+        "#,
+        )
+        .operands_in(vec![x, y])
+        .operands_out(vec![a]),
+    );
+
+    ig.push(
+        Inst::new(
+            "ssub_sat",
+            r#"
+        Subtract with signed saturation.
+
+        This is similar to `isub` but the operands are interpreted as signed integers and their 
+        difference, instead of wrapping, will be saturated to the lowest or highest 
+        signed integer for the controlling type (e.g. `0x80` or `0x7F` for i8).
+        "#,
+        )
+        .operands_in(vec![x, y])
+        .operands_out(vec![a]),
+    );
+
+    ig.push(
+        Inst::new(
+            "ineg",
+            r#"
+        Integer negation: `a := -x \pmod{2^B}`.
+        "#,
+        )
+        .operands_in(vec![x])
+        .operands_out(vec![a]),
+    );
+
+    ig.push(
+        Inst::new(
             "imul",
             r#"
         Wrapping integer multiplication: `a := x y \pmod{2^B}`.
 
         This instruction does not depend on the signed/unsigned interpretation
-        of the
-        operands.
+        of the operands.
 
         Polymorphic over all integer types (vector and scalar).
         "#,

@@ -6,10 +6,10 @@
 //! A large part of this module is auto-generated from the instruction descriptions in the meta
 //! directory.
 
+use alloc::vec::Vec;
 use core::fmt::{self, Display, Formatter};
 use core::ops::{Deref, DerefMut};
 use core::str::FromStr;
-use std::vec::Vec;
 
 use crate::ir;
 use crate::ir::types;
@@ -18,7 +18,6 @@ use crate::isa;
 
 use crate::bitset::BitSet;
 use crate::entity;
-use crate::ref_slice::{ref_slice, ref_slice_mut};
 
 /// Some instructions use an external list of argument values because there is not enough space in
 /// the 16-byte `InstructionData` struct. These value lists are stored in a memory pool in
@@ -607,7 +606,7 @@ pub enum ResolvedConstraint {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::string::ToString;
+    use alloc::string::ToString;
 
     #[test]
     fn opcodes() {
