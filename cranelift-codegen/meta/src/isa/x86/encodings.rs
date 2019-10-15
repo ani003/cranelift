@@ -993,7 +993,7 @@ pub(crate) fn define<'defs>(
     for recipe in &[rec_st_reg, rec_stDisp8_reg, rec_stDisp32_reg] {
         eprintln!("loop");
 
-        let template = recipe.opcodes(vec![0x89]);
+        let template = recipe.opcodes(&MOV_STORE);
 
         e.enc32(copy_reg_to_mem.clone().bind(I32), template.clone());
 
@@ -1056,7 +1056,7 @@ pub(crate) fn define<'defs>(
     for recipe in &[rec_ld_reg, rec_ldDisp8_reg, rec_ldDisp32_reg] {
         // e.enc_i32_i64_ld_st(load, true, recipe.opcodes(vec![0x8b]));
 
-        let template = recipe.opcodes(vec![0x8b]);
+        let template = recipe.opcodes(&MOV_LOAD);
         
         e.enc32(copy_mem_to_reg.clone().bind(I32), template.clone());
 
@@ -1310,7 +1310,7 @@ pub(crate) fn define<'defs>(
     let f_read_ip = formats.get(formats.by_name("ReadIp"));
     e.enc64(
         ip_to_rax,
-        rec_ip_to_rax.opcodes(vec![0x8d]).rex().w()
+        rec_ip_to_rax.opcodes(&LEA).rex().w()
         // is_colocated_func,
     );
 
@@ -1463,7 +1463,7 @@ pub(crate) fn define<'defs>(
     // reg_jmp
     e.enc_x86_64(
         reg_jmp,
-        rec_reg_jmp.opcodes(vec![0xff]).rrr(4),
+        rec_reg_jmp.opcodes(&JUMP_ABSOLUTE).rrr(4),
     );
 
     // Trap as ud2
