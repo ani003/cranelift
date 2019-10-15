@@ -237,6 +237,18 @@ pub trait FuncEnvironment {
         Ok(pos.ins().call(callee, call_args))
     }
 
+
+    /// STUFF
+    fn translate_setjmp(
+        &mut self,
+        pos: FuncCursor,
+        index: MemoryIndex,
+        heap: ir::Heap,
+        addr: ir::Value,
+        offset: i32
+    ) -> WasmResult<ir::Value>;
+
+
     /// Translate a `memory.grow` WebAssembly instruction.
     ///
     /// The `index` provided identifies the linear memory to grow, and `heap` is the heap reference

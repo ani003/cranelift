@@ -426,6 +426,21 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             let heap = state.get_heap(builder.func, *reserved, environ)?;
             state.push1(environ.translate_memory_size(builder.cursor(), heap_index, heap)?);
         }
+        
+        /******************************* setjmp / longjmp ************************************
+         * 
+         ************************************************************************************/
+        Operator::Setjmp { 
+            memarg: MemoryImmediate { flags: _, offset },
+        } => {
+            let heap_index = MemoryIndex::from_u32(0);
+            let heap = state.get_heap(builder.func, 0, environ)?;
+            let addr32 = state.pop1();
+            let (base, offset) = get_heap_addr(heap, addr32, *offset, environ.pointer_type(), builder);
+            state.push1(environ.translate_setjmp(builder.cursor(), heap_index, heap, base, offset)?);
+        }
+
+
         /******************************* Load instructions ***********************************
          * Wasm specifies an integer alignment flag but we drop it in Cranelift.
          * The memory base address is provided by the environment.
