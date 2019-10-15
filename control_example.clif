@@ -71,6 +71,8 @@ ebb0:
 	; v1 = setjmp v0
 	v1 = call fn0(v0)
 
+	; print v1
+
 	v2 = iconst.i64 42
 	call fn1(v0, v2)
 
