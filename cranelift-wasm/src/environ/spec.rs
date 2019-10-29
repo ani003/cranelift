@@ -241,7 +241,7 @@ pub trait FuncEnvironment {
     /// STUFF
     fn translate_setjmp(
         &mut self,
-        pos: FuncCursor,
+        mut pos: FuncCursor,
         index: MemoryIndex,
         heap: ir::Heap,
         addr: ir::Value,
