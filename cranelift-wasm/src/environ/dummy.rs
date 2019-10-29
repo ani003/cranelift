@@ -364,6 +364,18 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
         unimplemented!()
     }
 
+    fn translate_longjmp(
+        &mut self,
+        pos: FuncCursor,
+        index: MemoryIndex,
+        heap: ir::Heap,
+        addr: ir::Value,
+        offset: i32,
+        arg: ir::Value
+    ) -> WasmResult<ir::Inst> {
+        unimplemented!()
+    }
+
     fn translate_memory_grow(
         &mut self,
         mut pos: FuncCursor,

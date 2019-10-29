@@ -511,6 +511,20 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         }
 
 
+        Operator::Longjmp { 
+            memarg: MemoryImmediate { flags: _, offset },
+        } => {
+            
+            let heap_index = MemoryIndex::from_u32(0);
+            let heap = state.get_heap(builder.func, 0, environ)?;
+            let (addr32, arg) = state.pop2();
+            println!("LONGJMP: Offset: {:}, addr32: {:}, addr32_type: {:}, arg: {:}, arg_type: {:}", offset, addr32, builder.func.dfg.value_type(addr32), arg, builder.func.dfg.value_type(arg));
+            // panic!();
+            let (base, offset) = get_heap_addr(heap, addr32, *offset, environ.pointer_type(), builder);
+            environ.translate_longjmp(builder.cursor(), heap_index, heap, base, offset, arg)?;
+        }
+
+
         /******************************* Load instructions ***********************************
          * Wasm specifies an integer alignment flag but we drop it in Cranelift.
          * The memory base address is provided by the environment.
