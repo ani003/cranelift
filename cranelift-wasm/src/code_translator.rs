@@ -54,6 +54,10 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         return Ok(());
     }
 
+    // panic!();
+
+    println!("op = {:?}", op);
+
     // This big match treats all Wasm code operators.
     match op {
         /********************************** Locals ****************************************
@@ -496,9 +500,12 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         Operator::Setjmp { 
             memarg: MemoryImmediate { flags: _, offset },
         } => {
+            
             let heap_index = MemoryIndex::from_u32(0);
             let heap = state.get_heap(builder.func, 0, environ)?;
             let addr32 = state.pop1();
+            println!("Offset: {:}, addr32: {:}", offset, addr32);
+            // panic!();
             let (base, offset) = get_heap_addr(heap, addr32, *offset, environ.pointer_type(), builder);
             state.push1(environ.translate_setjmp(builder.cursor(), heap_index, heap, base, offset)?);
         }
