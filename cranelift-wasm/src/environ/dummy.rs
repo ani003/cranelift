@@ -376,6 +376,30 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
         unimplemented!()
     }
 
+    fn translate_control(
+        &mut self,
+        mut pos: FuncCursor,
+        _callee_index: FuncIndex,
+        callee: ir::FuncRef,
+        call_args: &[ir::Value],
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst> {
+        unimplemented!("dummy translate_control")
+    }
+
+
+    fn translate_restore(
+        &mut self,
+        pos: FuncCursor,
+        index: MemoryIndex,
+        heap: ir::Heap,
+        addr: ir::Value,
+        offset: i32,
+        arg: ir::Value
+    ) -> WasmResult<ir::Inst> {
+        unimplemented!()
+    }
+
     fn translate_memory_grow(
         &mut self,
         mut pos: FuncCursor,

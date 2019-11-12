@@ -259,6 +259,41 @@ pub trait FuncEnvironment {
         arg: ir::Value
     ) -> WasmResult<ir::Inst>;
 
+    // STUFF
+    // fn translate_control(
+    //     &mut self,
+    //     mut pos: FuncCursor,
+    //     index: MemoryIndex,
+    //     heap: ir::Heap,
+    //     addr: ir::Value,
+    //     offset: i32,
+    //     arg: ir::Value
+    // ) -> WasmResult<ir::Inst>;
+
+    /// STUFF
+    fn translate_control(
+        &mut self,
+        mut pos: FuncCursor,
+        _callee_index: FuncIndex,
+        callee: ir::FuncRef,
+        call_args: &[ir::Value],
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst> {
+        unimplemented!("spec: translate_control")
+        // Ok(pos.ins().call(callee, call_args))
+    }
+
+    /// STUFF
+    fn translate_restore(
+        &mut self,
+        mut pos: FuncCursor,
+        index: MemoryIndex,
+        heap: ir::Heap,
+        addr: ir::Value,
+        offset: i32,
+        arg: ir::Value
+    ) -> WasmResult<ir::Inst>;
+
 
     /// Translate a `memory.grow` WebAssembly instruction.
     ///

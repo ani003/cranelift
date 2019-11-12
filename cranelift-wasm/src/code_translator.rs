@@ -524,6 +524,33 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             environ.translate_longjmp(builder.cursor(), heap_index, heap, base, offset, arg)?;
         }
 
+        Operator::Control { function_index } => {
+            let heap_index = MemoryIndex::from_u32(0);
+            let (fref, num_args) = state.get_direct_func(builder.func, *function_index, environ)?;
+            let call = environ.translate_control(
+                builder.cursor(),
+                FuncIndex::from_u32(*function_index),
+                fref,
+                state.peekn(num_args),
+                heap_index
+            )?;
+            let inst_results = builder.inst_results(call);
+            println!("inst_results = {:?}", inst_results);
+            // assert_eq!(
+            //     inst_results.len(),
+            //     builder.func.dfg.signatures[builder.func.dfg.ext_funcs[fref].signature]
+            //         .returns
+            //         .len(),
+            //     "translate_control results should match the call signature"
+            // );
+            // state.popn(num_args - 1);
+            state.pushn(inst_results);
+        }
+
+        Operator::Restore => {
+            unimplemented!("[wasmtime] code_translator, Operator::Control")
+        }
+
 
         /******************************* Load instructions ***********************************
          * Wasm specifies an integer alignment flag but we drop it in Cranelift.
