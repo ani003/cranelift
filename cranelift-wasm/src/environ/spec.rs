@@ -286,12 +286,10 @@ pub trait FuncEnvironment {
     /// STUFF
     fn translate_restore(
         &mut self,
-        mut pos: FuncCursor,
-        index: MemoryIndex,
-        heap: ir::Heap,
-        addr: ir::Value,
-        offset: i32,
-        arg: ir::Value
+        pos: FuncCursor,
+        kid: ir::Value,
+        arg: ir::Value,
+        mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst>;
 
 

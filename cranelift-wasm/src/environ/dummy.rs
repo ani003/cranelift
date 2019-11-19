@@ -391,11 +391,9 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
     fn translate_restore(
         &mut self,
         pos: FuncCursor,
-        index: MemoryIndex,
-        heap: ir::Heap,
-        addr: ir::Value,
-        offset: i32,
-        arg: ir::Value
+        kid: ir::Value,
+        arg: ir::Value,
+        mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst> {
         unimplemented!()
     }

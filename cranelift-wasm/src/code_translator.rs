@@ -548,7 +548,14 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         }
 
         Operator::Restore => {
-            unimplemented!("[wasmtime] code_translator, Operator::Control")
+            let heap_index = MemoryIndex::from_u32(0);
+            let (kid, arg) = state.pop2();
+            environ.translate_restore(
+                builder.cursor(),
+                kid,
+                arg,
+                heap_index
+            )?;
         }
 
 
