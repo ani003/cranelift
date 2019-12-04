@@ -531,7 +531,8 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
                 builder.cursor(),
                 FuncIndex::from_u32(*function_index),
                 fref,
-                state.peekn(num_args),
+                // state.peekn(num_args),
+                &[],
                 heap_index
             )?;
             let inst_results = builder.inst_results(call);
