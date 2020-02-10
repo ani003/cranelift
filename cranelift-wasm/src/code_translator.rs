@@ -54,10 +54,6 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         return Ok(());
     }
 
-    // panic!();
-
-    println!("op = {:?}", op);
-
     // This big match treats all Wasm code operators.
     match op {
         /********************************** Locals ****************************************
@@ -536,7 +532,6 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
                 heap_index
             )?;
             let inst_results = builder.inst_results(call);
-            println!("inst_results = {:?}", inst_results);
             // assert_eq!(
             //     inst_results.len(),
             //     builder.func.dfg.signatures[builder.func.dfg.ext_funcs[fref].signature]
