@@ -244,7 +244,7 @@ pub trait FuncEnvironment {
         mut pos: FuncCursor,
         _callee_index: FuncIndex,
         callee: ir::FuncRef,
-        call_args: &[ir::Value],
+        call_arg: ir::Value,
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst> {
         unimplemented!("spec: translate_control")

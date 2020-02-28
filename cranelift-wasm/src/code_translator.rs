@@ -497,13 +497,13 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
 
         Operator::Control { function_index } => {
             let heap_index = MemoryIndex::from_u32(0);
+            let arg = state.pop1();
             let (fref, num_args) = state.get_direct_func(builder.func, *function_index, environ)?;
             let call = environ.translate_control(
                 builder.cursor(),
                 FuncIndex::from_u32(*function_index),
                 fref,
-                // state.peekn(num_args),
-                &[],
+                arg,
                 heap_index
             )?;
             let inst_results = builder.inst_results(call);

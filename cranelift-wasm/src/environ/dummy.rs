@@ -359,7 +359,7 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
         mut pos: FuncCursor,
         _callee_index: FuncIndex,
         callee: ir::FuncRef,
-        call_args: &[ir::Value],
+        call_arg: ir::Value,
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst> {
         unimplemented!("dummy translate_control")
