@@ -239,38 +239,6 @@ pub trait FuncEnvironment {
 
 
     /// STUFF
-    fn translate_setjmp(
-        &mut self,
-        mut pos: FuncCursor,
-        index: MemoryIndex,
-        heap: ir::Heap,
-        addr: ir::Value,
-        offset: i32
-    ) -> WasmResult<ir::Value>;
-
-    /// STUFF
-    fn translate_longjmp(
-        &mut self,
-        mut pos: FuncCursor,
-        index: MemoryIndex,
-        heap: ir::Heap,
-        addr: ir::Value,
-        offset: i32,
-        arg: ir::Value
-    ) -> WasmResult<ir::Inst>;
-
-    // STUFF
-    // fn translate_control(
-    //     &mut self,
-    //     mut pos: FuncCursor,
-    //     index: MemoryIndex,
-    //     heap: ir::Heap,
-    //     addr: ir::Value,
-    //     offset: i32,
-    //     arg: ir::Value
-    // ) -> WasmResult<ir::Inst>;
-
-    /// STUFF
     fn translate_control(
         &mut self,
         mut pos: FuncCursor,

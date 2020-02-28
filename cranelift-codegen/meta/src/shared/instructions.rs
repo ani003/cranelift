@@ -499,35 +499,9 @@ pub(crate) fn define(
 
     let a64_v = &operand("a64_v", a64);
 
-    ig.push(
-        Inst::new(
-            "setjmp",
-            r#"
-        Transfer control to handler function.
-        "#,
-        )
-        .operands_in(vec![garbage])
-        .operands_out(vec![a64_v])
-        .is_control(true)
-        .other_side_effects(true),
-    );
 
     // let k = &operand("k", Int);
 
-    ig.push(
-        Inst::new(
-            "longjmp",
-            r#"
-        Transfer control to given continuation.
-        "#,
-        )
-        // .operands_in(vec![FN, args])
-        .operands_in(vec![garbage, a64_v])
-        // .is_return(true)
-        .is_terminator(true)
-        .is_restore(true),
-        // .is_ghost(true),
-    );
 
     // let SIG = &operand_doc("SIG", sig_ref, "function signature");
     // let callee = &operand_doc("callee", iAddr, "address of function to call");

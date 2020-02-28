@@ -353,28 +353,6 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
         Ok(pos.ins().Call(ir::Opcode::Call, INVALID, callee, args).0)
     }
 
-    fn translate_setjmp(
-        &mut self,
-        pos: FuncCursor,
-        index: MemoryIndex,
-        heap: ir::Heap,
-        addr: ir::Value,
-        offset: i32
-    ) -> WasmResult<ir::Value> {
-        unimplemented!()
-    }
-
-    fn translate_longjmp(
-        &mut self,
-        pos: FuncCursor,
-        index: MemoryIndex,
-        heap: ir::Heap,
-        addr: ir::Value,
-        offset: i32,
-        arg: ir::Value
-    ) -> WasmResult<ir::Inst> {
-        unimplemented!()
-    }
 
     fn translate_control(
         &mut self,
