@@ -260,6 +260,13 @@ pub trait FuncEnvironment {
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst>;
 
+    /// STUFF
+    fn translate_continuation_copy(
+        &mut self,
+        pos: FuncCursor,
+        kid: ir::Value,
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst>;
 
     /// Translate a `memory.grow` WebAssembly instruction.
     ///

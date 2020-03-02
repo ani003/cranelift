@@ -529,6 +529,18 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             )?;
         }
 
+        Operator::ContinuationCopy => {
+            let heap_index = MemoryIndex::from_u32(0);
+            let kid = state.pop1();
+            let call = environ.translate_continuation_copy(
+                builder.cursor(),
+                kid,
+                heap_index
+            )?;
+            let inst_results = builder.inst_results(call);
+            state.pushn(inst_results);
+        }
+
 
         /******************************* Load instructions ***********************************
          * Wasm specifies an integer alignment flag but we drop it in Cranelift.

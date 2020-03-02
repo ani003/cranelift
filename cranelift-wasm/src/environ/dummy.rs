@@ -376,6 +376,15 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
         unimplemented!()
     }
 
+    fn translate_continuation_copy(
+        &mut self,
+        pos: FuncCursor,
+        kid: ir::Value,
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst> {
+        unimplemented!()
+    }
+
     fn translate_memory_grow(
         &mut self,
         mut pos: FuncCursor,
