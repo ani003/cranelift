@@ -385,6 +385,14 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
         unimplemented!()
     }
 
+    fn translate_prompt(
+        &mut self,
+        pos: FuncCursor,
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst> {
+        unimplemented!()
+    }
+
     fn translate_memory_grow(
         &mut self,
         mut pos: FuncCursor,

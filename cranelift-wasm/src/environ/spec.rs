@@ -268,6 +268,13 @@ pub trait FuncEnvironment {
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst>;
 
+    /// STUFF
+    fn translate_prompt(
+        &mut self,
+        pos: FuncCursor,
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst>;
+
     /// Translate a `memory.grow` WebAssembly instruction.
     ///
     /// The `index` provided identifies the linear memory to grow, and `heap` is the heap reference
