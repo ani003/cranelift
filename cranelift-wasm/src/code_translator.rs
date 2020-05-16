@@ -549,6 +549,16 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             )?;
         }
 
+        Operator::ContinuationDelete => {
+            let heap_index = MemoryIndex::from_u32(0);
+            let kid = state.pop1();
+            environ.translate_continuation_delete(
+                builder.cursor(),
+                kid,
+                heap_index
+            )?;
+        }
+
 
         /******************************* Load instructions ***********************************
          * Wasm specifies an integer alignment flag but we drop it in Cranelift.

@@ -275,6 +275,14 @@ pub trait FuncEnvironment {
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst>;
 
+    /// STUFF
+    fn translate_continuation_delete(
+        &mut self,
+        pos: FuncCursor,
+        kid: ir::Value,
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst>;
+
     /// Translate a `memory.grow` WebAssembly instruction.
     ///
     /// The `index` provided identifies the linear memory to grow, and `heap` is the heap reference
