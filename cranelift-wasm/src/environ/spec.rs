@@ -269,7 +269,14 @@ pub trait FuncEnvironment {
     ) -> WasmResult<ir::Inst>;
 
     /// STUFF
-    fn translate_prompt(
+    fn translate_prompt_begin(
+        &mut self,
+        pos: FuncCursor,
+        mem_index: MemoryIndex,
+    ) -> WasmResult<ir::Inst>;
+
+    /// STUFF
+    fn translate_prompt_end(
         &mut self,
         pos: FuncCursor,
         mem_index: MemoryIndex,

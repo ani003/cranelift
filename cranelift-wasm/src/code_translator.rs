@@ -50,7 +50,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
     environ: &mut FE,
 ) -> WasmResult<()> {
     if !state.reachable {
-        translate_unreachable_operator(module_translation_state, &op, builder, state)?;
+        translate_unreachable_operator(module_translation_state, &op, builder, state, environ)?;
         return Ok(());
     }
 
@@ -263,28 +263,38 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         Operator::End => {
             let frame = state.control_stack.pop().unwrap();
 
-            if !builder.is_unreachable() || !builder.is_pristine() {
-                let return_count = frame.num_return_values();
-                builder
-                    .ins()
-                    .jump(frame.following_code(), state.peekn(return_count));
-                // You might expect that if we just finished an `if` block that
-                // didn't have a corresponding `else` block, then we would clean
-                // up our duplicate set of parameters that we pushed earlier
-                // right here. However, we don't have to explicitly do that,
-                // since we truncate the stack back to the original height
-                // below.
-            }
-            builder.switch_to_block(frame.following_code());
-            builder.seal_block(frame.following_code());
-            // If it is a loop we also have to seal the body loop block
-            if let ControlStackFrame::Loop { header, .. } = frame {
-                builder.seal_block(header)
+            if !frame.is_prompt() {
+                if !builder.is_unreachable() || !builder.is_pristine() {
+                    let return_count = frame.num_return_values();
+                    builder
+                        .ins()
+                        .jump(frame.following_code(), state.peekn(return_count));
+                    // You might expect that if we just finished an `if` block that
+                    // didn't have a corresponding `else` block, then we would clean
+                    // up our duplicate set of parameters that we pushed earlier
+                    // right here. However, we don't have to explicitly do that,
+                    // since we truncate the stack back to the original height
+                    // below.
+                }
+                builder.switch_to_block(frame.following_code());
+                builder.seal_block(frame.following_code());
+                // If it is a loop we also have to seal the body loop block
+                if let ControlStackFrame::Loop { header, .. } = frame {
+                    builder.seal_block(header)
+                }
+            } else {
+                let heap_index = MemoryIndex::from_u32(0);
+                environ.translate_prompt_end(
+                    builder.cursor(),
+                    heap_index
+                )?;
             }
             state.stack.truncate(frame.original_stack_size());
-            state
-                .stack
-                .extend_from_slice(builder.ebb_params(frame.following_code()));
+            if !frame.is_prompt() {
+                state
+                    .stack
+                    .extend_from_slice(builder.ebb_params(frame.following_code()));
+            }
         }
         /**************************** Branch instructions *********************************
          * The branch instructions all have as arguments a target nesting level, which
@@ -541,12 +551,23 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             state.pushn(inst_results);
         }
 
-        Operator::Prompt => {
+        // Operator::Prompt => {
+        //     let heap_index = MemoryIndex::from_u32(0);
+        //     environ.translate_prompt(
+        //         builder.cursor(),
+        //         heap_index
+        //     )?;
+        // }
+
+        Operator::Prompt { ty } => {
             let heap_index = MemoryIndex::from_u32(0);
-            environ.translate_prompt(
+            environ.translate_prompt_begin(
                 builder.cursor(),
                 heap_index
             )?;
+
+            let (params, results) = blocktype_params_results(module_translation_state, *ty)?;
+            state.push_prompt(params.len(), results.len());
         }
 
         Operator::ContinuationDelete => {
@@ -1288,11 +1309,12 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
 /// Deals with a Wasm instruction located in an unreachable portion of the code. Most of them
 /// are dropped but special ones like `End` or `Else` signal the potential end of the unreachable
 /// portion so the translation state must be updated accordingly.
-fn translate_unreachable_operator(
+fn translate_unreachable_operator<FE: FuncEnvironment + ?Sized>(
     module_translation_state: &ModuleTranslationState,
     op: &Operator,
     builder: &mut FunctionBuilder,
     state: &mut FuncTranslationState,
+    environ: &mut FE,
 ) -> WasmResult<()> {
     debug_assert!(!state.reachable);
     match *op {
@@ -1392,7 +1414,7 @@ fn translate_unreachable_operator(
                 _ => false,
             };
 
-            if frame.exit_is_branched_to() || reachable_anyway {
+            if (frame.exit_is_branched_to() || reachable_anyway) && frame.is_prompt() {
                 builder.switch_to_block(frame.following_code());
                 builder.seal_block(frame.following_code());
 
@@ -1400,6 +1422,12 @@ fn translate_unreachable_operator(
                 // (which corresponds to testing if the stack depth is 1)
                 stack.extend_from_slice(builder.ebb_params(frame.following_code()));
                 state.reachable = true;
+            } else if frame.is_prompt() {
+                let heap_index = MemoryIndex::from_u32(0);
+                environ.translate_prompt_end(
+                    builder.cursor(),
+                    heap_index
+                )?;
             }
         }
         _ => {
