@@ -86,11 +86,11 @@ pub enum ControlStackFrame {
         original_stack_size: usize,
     },
     Prompt {
-        // destination: Ebb,
+        destination: Ebb,
         num_param_values: usize,
         num_return_values: usize,
         original_stack_size: usize,
-        // exit_is_branched_to: bool,
+        exit_is_branched_to: bool,
     }
 }
 
@@ -132,16 +132,16 @@ impl ControlStackFrame {
         match *self {
             ControlStackFrame::If { destination, .. }
             | ControlStackFrame::Block { destination, .. }
-            | ControlStackFrame::Loop { destination, .. } => destination,
-            ControlStackFrame::Prompt { .. } => panic!("No basic block for prompt (1)")
+            | ControlStackFrame::Loop { destination, .. }
+            | ControlStackFrame::Prompt { destination, .. } => destination,
         }
     }
     pub fn br_destination(&self) -> Ebb {
         match *self {
             ControlStackFrame::If { destination, .. }
-            | ControlStackFrame::Block { destination, .. } => destination,
+            | ControlStackFrame::Block { destination, .. } 
+            | ControlStackFrame::Prompt { destination, .. } => destination,
             ControlStackFrame::Loop { header, .. } => header,
-            ControlStackFrame::Prompt { .. } => panic!("No basic block for prompt (2)")
         }
     }
     pub fn original_stack_size(&self) -> usize {
@@ -189,9 +189,12 @@ impl ControlStackFrame {
             | ControlStackFrame::Block {
                 exit_is_branched_to,
                 ..
+            }
+            | ControlStackFrame::Prompt {
+                exit_is_branched_to,
+                ..
             } => exit_is_branched_to,
             ControlStackFrame::Loop { .. } => false,
-            ControlStackFrame::Prompt { .. } => false,
         }
     }
 
@@ -204,9 +207,12 @@ impl ControlStackFrame {
             | ControlStackFrame::Block {
                 ref mut exit_is_branched_to,
                 ..
+            }
+            | ControlStackFrame::Prompt {
+                ref mut exit_is_branched_to,
+                ..
             } => *exit_is_branched_to = true,
             ControlStackFrame::Loop { .. } => {},
-            ControlStackFrame::Prompt { .. } => {}
         }
     }
 }
@@ -435,15 +441,17 @@ impl FuncTranslationState {
     /// Push a prompt on the control stack.
     pub(crate) fn push_prompt(
         &mut self,
+        following_code: Ebb,
         num_param_types: usize,
         num_result_types: usize,
     ) {
         debug_assert!(num_param_types <= self.stack.len());
         self.control_stack.push(ControlStackFrame::Prompt {
+            destination: following_code,
             original_stack_size: self.stack.len() - num_param_types,
             num_param_values: num_param_types,
             num_return_values: num_result_types,
-            // exit_is_branched_to: false,
+            exit_is_branched_to: false
         });
     }
 }

@@ -263,38 +263,40 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         Operator::End => {
             let frame = state.control_stack.pop().unwrap();
 
-            if !frame.is_prompt() {
-                if !builder.is_unreachable() || !builder.is_pristine() {
-                    let return_count = frame.num_return_values();
-                    builder
-                        .ins()
-                        .jump(frame.following_code(), state.peekn(return_count));
-                    // You might expect that if we just finished an `if` block that
-                    // didn't have a corresponding `else` block, then we would clean
-                    // up our duplicate set of parameters that we pushed earlier
-                    // right here. However, we don't have to explicitly do that,
-                    // since we truncate the stack back to the original height
-                    // below.
-                }
-                builder.switch_to_block(frame.following_code());
-                builder.seal_block(frame.following_code());
-                // If it is a loop we also have to seal the body loop block
-                if let ControlStackFrame::Loop { header, .. } = frame {
-                    builder.seal_block(header)
-                }
-            } else {
+            if !builder.is_unreachable() || !builder.is_pristine() {
+                let return_count = frame.num_return_values();
+                builder
+                    .ins()
+                    .jump(frame.following_code(), state.peekn(return_count));
+                // You might expect that if we just finished an `if` block that
+                // didn't have a corresponding `else` block, then we would clean
+                // up our duplicate set of parameters that we pushed earlier
+                // right here. However, we don't have to explicitly do that,
+                // since we truncate the stack back to the original height
+                // below.
+            }
+            builder.switch_to_block(frame.following_code());
+            builder.seal_block(frame.following_code());
+
+            if frame.is_prompt() {
                 let heap_index = MemoryIndex::from_u32(0);
                 environ.translate_prompt_end(
                     builder.cursor(),
                     heap_index
                 )?;
             }
+
+            // If it is a loop we also have to seal the body loop block
+            if let ControlStackFrame::Loop { header, .. } = frame {
+                builder.seal_block(header)
+            }
+            
             state.stack.truncate(frame.original_stack_size());
-            if !frame.is_prompt() {
+            // if !frame.is_prompt() {
                 state
                     .stack
                     .extend_from_slice(builder.ebb_params(frame.following_code()));
-            }
+            // }
         }
         /**************************** Branch instructions *********************************
          * The branch instructions all have as arguments a target nesting level, which
@@ -559,6 +561,17 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         //     )?;
         // }
 
+        // Operator::Prompt { ty } => {
+        //     let heap_index = MemoryIndex::from_u32(0);
+        //     environ.translate_prompt_begin(
+        //         builder.cursor(),
+        //         heap_index
+        //     )?;
+
+        //     let (params, results) = blocktype_params_results(module_translation_state, *ty)?;
+        //     state.push_prompt(params.len(), results.len());
+        // }
+
         Operator::Prompt { ty } => {
             let heap_index = MemoryIndex::from_u32(0);
             environ.translate_prompt_begin(
@@ -567,7 +580,8 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             )?;
 
             let (params, results) = blocktype_params_results(module_translation_state, *ty)?;
-            state.push_prompt(params.len(), results.len());
+            let next = ebb_with_params(builder, results)?;
+            state.push_prompt(next, params.len(), results.len());
         }
 
         Operator::ContinuationDelete => {
@@ -1414,20 +1428,22 @@ fn translate_unreachable_operator<FE: FuncEnvironment + ?Sized>(
                 _ => false,
             };
 
-            if (frame.exit_is_branched_to() || reachable_anyway) && frame.is_prompt() {
+            if frame.exit_is_branched_to() || reachable_anyway {
                 builder.switch_to_block(frame.following_code());
                 builder.seal_block(frame.following_code());
+
+                if frame.is_prompt() {
+                    let heap_index = MemoryIndex::from_u32(0);
+                    environ.translate_prompt_end(
+                        builder.cursor(),
+                        heap_index
+                    )?;
+                }
 
                 // And add the return values of the block but only if the next block is reachable
                 // (which corresponds to testing if the stack depth is 1)
                 stack.extend_from_slice(builder.ebb_params(frame.following_code()));
                 state.reachable = true;
-            } else if frame.is_prompt() {
-                let heap_index = MemoryIndex::from_u32(0);
-                environ.translate_prompt_end(
-                    builder.cursor(),
-                    heap_index
-                )?;
             }
         }
         _ => {

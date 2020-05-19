@@ -387,18 +387,22 @@ impl<'dummy_environment> FuncEnvironment for DummyFuncEnvironment<'dummy_environ
 
     fn translate_prompt_begin(
         &mut self,
-        pos: FuncCursor,
+        mut pos: FuncCursor<'_>,
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst> {
-        unimplemented!()
+        // unimplemented!()
+        pos.ins().iconst(I32, 1234);
+        Ok(pos.ins().nop())    
     }
 
     fn translate_prompt_end(
         &mut self,
-        pos: FuncCursor,
+        mut pos: FuncCursor<'_>,
         mem_index: MemoryIndex,
     ) -> WasmResult<ir::Inst> {
-        unimplemented!()
+        // unimplemented!()
+        pos.ins().iconst(I32, 2345);
+        Ok(pos.ins().nop())
     }
 
     fn translate_continuation_delete(
