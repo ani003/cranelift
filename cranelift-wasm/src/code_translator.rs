@@ -49,6 +49,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
     state: &mut FuncTranslationState,
     environ: &mut FE,
 ) -> WasmResult<()> {
+    println!("TRANSLATE OPERATOR START");
     if !state.reachable {
         translate_unreachable_operator(module_translation_state, &op, builder, state, environ)?;
         return Ok(());
@@ -508,6 +509,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         
 
         Operator::Control { function_index } => {
+            println!("TRANSLATE CONTROL START");
             let heap_index = MemoryIndex::from_u32(0);
             let arg = state.pop1();
             let (fref, num_args) = state.get_direct_func(builder.func, *function_index, environ)?;
@@ -528,9 +530,11 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             // );
             // state.popn(num_args - 1);
             state.pushn(inst_results);
+            println!("TRANSLATE CONTROL END");
         }
 
         Operator::Restore => {
+            println!("TRANSLATE RESTORE START");
             let heap_index = MemoryIndex::from_u32(0);
             let (kid, arg) = state.pop2();
             environ.translate_restore(
@@ -539,9 +543,11 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
                 arg,
                 heap_index
             )?;
+            println!("TRANSLATE RESTORE END");
         }
 
         Operator::ContinuationCopy => {
+            println!("TRANSLATE CONT COPY START");
             let heap_index = MemoryIndex::from_u32(0);
             let kid = state.pop1();
             let call = environ.translate_continuation_copy(
@@ -551,6 +557,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             )?;
             let inst_results = builder.inst_results(call);
             state.pushn(inst_results);
+            println!("TRANSLATE CONT COPY END");
         }
 
         // Operator::Prompt => {
@@ -573,6 +580,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
         // }
 
         Operator::Prompt { ty } => {
+            println!("TRANSLATE PROMPT START");
             let heap_index = MemoryIndex::from_u32(0);
             environ.translate_prompt_begin(
                 builder.cursor(),
@@ -582,9 +590,11 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             let (params, results) = blocktype_params_results(module_translation_state, *ty)?;
             let next = ebb_with_params(builder, results)?;
             state.push_prompt(next, params.len(), results.len());
+            println!("TRANSLATE PROMPT END");
         }
 
         Operator::ContinuationDelete => {
+            println!("TRANSLATE CONT DELETE START");
             let heap_index = MemoryIndex::from_u32(0);
             let kid = state.pop1();
             environ.translate_continuation_delete(
@@ -592,6 +602,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
                 kid,
                 heap_index
             )?;
+            println!("TRANSLATE CONT DELETE END");
         }
 
 
@@ -1315,6 +1326,7 @@ pub fn translate_operator<FE: FuncEnvironment + ?Sized>(
             return Err(wasm_unsupported!("proposed SIMD operator {:?}", op));
         }
     };
+    println!("TRANSLATE OPERATOR END");
     Ok(())
 }
 

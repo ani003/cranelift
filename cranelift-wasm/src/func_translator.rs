@@ -61,6 +61,7 @@ impl FuncTranslator {
         func: &mut ir::Function,
         environ: &mut FE,
     ) -> WasmResult<()> {
+        println!("TRANSLATE 4");
         self.translate_from_reader(
             module_translation_state,
             BinaryReader::new_with_offset(code, code_offset),
@@ -77,6 +78,7 @@ impl FuncTranslator {
         func: &mut ir::Function,
         environ: &mut FE,
     ) -> WasmResult<()> {
+        println!("TRANSLATE FROM READER START");
         let _tt = timing::wasm_translate_function();
         info!(
             "translate({} bytes, {}{})",
@@ -108,6 +110,7 @@ impl FuncTranslator {
         self.state.initialize(&builder.func.signature, exit_block);
 
         parse_local_decls(&mut reader, &mut builder, num_params, environ)?;
+        println!("TRANSLATE FUNC START");
         parse_function_body(
             module_translation_state,
             reader,
@@ -115,8 +118,11 @@ impl FuncTranslator {
             &mut self.state,
             environ,
         )?;
+        println!("TRANSLATE FUNC END");
 
         builder.finalize();
+
+        println!("TRANSLATE FROM READER END");
         Ok(())
     }
 }
@@ -219,16 +225,25 @@ fn parse_function_body<FE: FuncEnvironment + ?Sized>(
     environ: &mut FE,
 ) -> WasmResult<()> {
     // The control stack is initialized with a single block representing the whole function.
+    println!("PARSE FUNC BODY START");
     debug_assert_eq!(state.control_stack.len(), 1, "State not initialized");
 
+    println!("BLOCK1 START");
     // Keep going until the final `End` operator which pops the outermost block.
     while !state.control_stack.is_empty() {
+        //println!("CP1");
         builder.set_srcloc(cur_srcloc(&reader));
+        //println!("CP2");
         let op = reader.read_operator()?;
+        //println!("CP3");
         environ.before_translate_operator(&op, builder, state)?;
+        //println!("CP4");
         translate_operator(module_translation_state, &op, builder, state, environ)?;
+        //println!("CP5");
         environ.after_translate_operator(&op, builder, state)?;
+        //println!("CP6");
     }
+    println!("BLOCK1 END");
 
     // The final `End` operator left us in the exit block where we need to manually add a return
     // instruction.
@@ -251,6 +266,7 @@ fn parse_function_body<FE: FuncEnvironment + ?Sized>(
 
     debug_assert!(reader.eof());
 
+    println!("PARSE FUNC BODY END");
     Ok(())
 }
 
